@@ -16,13 +16,22 @@ export default function Menu() {
   return (
     <div
       className={`${
-        isMenuOpen ? "w-65 border-r-4" : "w-10 border-r-2"
-      } h-screen bg-white-100 flex flex-col items-center transition-all duration-200 ease-in-out border-gray-100`}
+        isMenuOpen ? "w-65 border-r-4" : "w-11 border-r-2"
+      } h-screen bg-white-100 flex flex-col items-center transition-all duration-250 ease-in-out border-gray-100 @container`}
     >
-      <div className="flex w-50 justify-between my-8">
-        <img src="/logo/dips-next.svg" alt="DIPS-NEXTロゴ" className="w-30" />
+      {/* ロゴと開閉用ボタン */}
+      <div className="flex justify-between my-8">
+        <img
+          src="/logo/dips-next.svg"
+          alt="DIPS-NEXTロゴ"
+          className={`${
+            isMenuOpen ? "w-30" : "hidden"
+          } mr-10 transition-all duration-250 ease-in-out`}
+        />
         <IconLayoutSidebarRightExpand
-          style={{ color: "#2e2f2e" }}
+          className={`${
+            isMenuOpen ? "" : "rotate-180"
+          } transition-all duration-250 ease-in-out text-gray-300 hover:text-gray-400`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         />
       </div>
@@ -33,9 +42,9 @@ export default function Menu() {
         <FeatureButton text={"Map Setting"} icon={IconSettings} />
       </div>
       {/* 下側のデフォルトメニュー */}
-      <div className="w-65 flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3  items-center">
+      <div className="w-full flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3  items-center">
         <FeatureButton text={"Document"} icon={IconBook} />
-        <FeatureButton text={"Your Account"} icon={IconUser} />
+        <FeatureButton text={"Account"} icon={IconUser} />
       </div>
     </div>
   );
