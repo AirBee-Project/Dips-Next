@@ -1,1 +1,28 @@
+/*フォントの読み込み*/
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+
+/*TailwindCSSの導入*/
 @import "tailwindcss";
+
+/*デフォルトフォントの設定*/
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 700;
+}
+
+/*デフォルトカラーの設定*/
+@theme {
+  /*黒系の色の設定*/
+  --color-gray-100: #d6d6d6;
+  --color-gray-200: #545454;
+  --color-gray-300: #444444;
+  --color-gray-400: #2e2f2e;
+
+  /*白系の色の設定*/
+  --color-white-100: #f9f9f9;
+
+  /*角丸の設定*/
+  --border-radius-1xl: 18px;
+}

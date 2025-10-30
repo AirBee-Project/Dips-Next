@@ -1,3 +1,9 @@
+import Menu from "../components/common/Menu/Menu";
+
 export default function Index() {
-  return <p className="text-white bg-black w-20">Hello world!</p>;
+  return (
+    <div>
+      <Menu />
+    </div>
+  );
 }
