@@ -10,13 +10,16 @@ import {
 import FeatureButton from "./FeatureButton";
 import { useState } from "react";
 
-export default function Menu() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+type Props = {
+  isMenuOpen: Boolean;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
+export default function Menu(props: Props) {
   return (
     <div
       className={`${
-        isMenuOpen ? "w-65 border-r-4" : "w-11 border-r-2"
+        props.isMenuOpen ? "w-65 border-r-4" : "w-11 border-r-2"
       } h-screen bg-white-100 flex flex-col items-center transition-all duration-250 ease-in-out border-gray-100 @container`}
     >
       {/* ロゴと開閉用ボタン */}
@@ -25,14 +28,14 @@ export default function Menu() {
           src="/logo/dips-next.svg"
           alt="DIPS-NEXTロゴ"
           className={`${
-            isMenuOpen ? "w-30" : "hidden"
+            props.isMenuOpen ? "w-30" : "hidden"
           } mr-10 transition-all duration-250 ease-in-out`}
         />
         <IconLayoutSidebarRightExpand
           className={`${
-            isMenuOpen ? "" : "rotate-180"
+            props.isMenuOpen ? "" : "rotate-180"
           } transition-all duration-250 ease-in-out text-gray-300 hover:text-gray-400`}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => props.setIsMenuOpen(!props.isMenuOpen)}
         />
       </div>
       {/* ユーザーが主要に使うメニュー */}
