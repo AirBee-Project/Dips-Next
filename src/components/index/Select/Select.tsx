@@ -1,6 +1,7 @@
 import { useState, type SetStateAction } from "react";
 import SearchBox from "../../common/SearchBox";
 import { ResizableBox } from "react-resizable";
+import Asset from "./Asset";
 
 type Props = {
   isMenuOpen: Boolean;
@@ -9,7 +10,7 @@ type Props = {
 
 type Pattern = "function" | "assets";
 
-export default function Assets(props: Props) {
+export default function Select(props: Props) {
   //モードに関する状態
   const [Pattern, setPattern] = useState("assets");
 
@@ -53,6 +54,9 @@ export default function Assets(props: Props) {
         setSearch={setAssetsSearch}
         className="w-[80%]"
       />
+
+      {/* 選択肢 */}
+      <Asset title={"天候"} assetsType={"String"} />
     </ResizableBox>
   );
 }
