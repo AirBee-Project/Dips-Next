@@ -1,7 +1,3 @@
 export default function Index() {
-  return (
-    <div>
-      <h1>DIPS-NEXT</h1>
-    </div>
-  );
+  return <p className="text-white bg-black w-20">Hello world!</p>;
 }
