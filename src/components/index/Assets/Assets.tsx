@@ -1,5 +1,6 @@
 import { useState, type SetStateAction } from "react";
 import SearchBox from "../../common/SearchBox";
+import { ResizableBox } from "react-resizable";
 
 type Props = {
   isMenuOpen: Boolean;
@@ -16,14 +17,29 @@ export default function Assets(props: Props) {
   const [functionSearch, setFunctionSearch] = useState("");
   const [assetsSearch, setAssetsSearch] = useState("");
 
+  //横幅
+  const [width, setWidth] = useState(280);
+
   return (
-    <div
+    <ResizableBox
+      width={width}
+      axis="x"
+      onResize={(e, data) => setWidth(data.size.width)}
+      minConstraints={[240, 200]}
+      maxConstraints={[500, 200]}
+      handle={
+        <span
+          className="absolute top-0 right-0 h-full w-2 cursor-ew-resize"
+          onClick={(e) => e.stopPropagation()} // 選択防止
+        />
+      }
+      handleSize={[10, 10]} // ドラッグ範囲
       className={`${
-        props.isMenuOpen ? "w-65 border-r-4" : "hidden"
-      } h-screen bg-white-100 flex flex-col items-center transition-all duration-250 ease-in-out border-gray-100 @container`}
+        props.isMenuOpen ? "w-70 border-r-4" : "hidden"
+      } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
     >
       {/* 属性か関数かの選択 */}
-      <div className="flex my-7 w-45 justify-between">
+      <div className="flex mt-7 mb-4 w-45 justify-between">
         <p className="text-gray-400 border-b-3 border-gray-100 px-6 pb-0.5">
           属性
         </p>
@@ -35,7 +51,8 @@ export default function Assets(props: Props) {
         placeholder={"属性を検索"}
         search={assetsSearch}
         setSearch={setAssetsSearch}
+        className="w-[80%]"
       />
-    </div>
+    </ResizableBox>
   );
 }

@@ -6,6 +6,7 @@ export default function Index() {
   // ページ内でMenuの開閉状況を管理する
   // Menu以外にもMenuの開閉と連動するコンポーネントにはステートを与える
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [width, setWidth] = useState(200);
 
   return (
     <div className="flex">

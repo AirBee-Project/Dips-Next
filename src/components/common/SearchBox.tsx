@@ -1,13 +1,23 @@
+import { IconSearch } from "@tabler/icons-react";
+
 type Props = {
   placeholder: string;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 };
 
 export default function SearchBox(props: Props) {
   return (
-    <div className="px-2 py-1.5 border-gray-100 border-3 rounded-md w-52">
-      <input type="text" placeholder={props.placeholder} />
+    <div
+      className={`py-1.5 border-gray-100 border-3 rounded-md flex ${props.className}`}
+    >
+      <IconSearch className="text-gray-100 w-[20%]" stroke={3} />
+      <input
+        type="text"
+        placeholder={props.placeholder}
+        className="w-[75%] text-gray-300 border-0 focus:outline-0"
+      />
     </div>
   );
 }
