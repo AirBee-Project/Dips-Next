@@ -33,7 +33,7 @@ let layer = [
 
 export default function Map() {
   return (
-    <div>
+    <div className="">
       <DeckGL initialViewState={INITIAL_VIEW_STATE} controller layers={layer} />
     </div>
   );

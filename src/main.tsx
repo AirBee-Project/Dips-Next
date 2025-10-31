@@ -5,7 +5,7 @@ import { AnimatePresence, easeInOut, motion } from "framer-motion";
 // 各ページ
 import Index from "./pages";
 import MapSetting from "./pages/map-setting";
-import Overview from "./pages/overview";
+import Overview from "./pages/map-object";
 
 // CSS
 import "./index.css";
@@ -70,7 +70,7 @@ const AnimatedRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/overview"
+            path="/map-object"
             element={
               <PageWrapper>
                 <Overview />

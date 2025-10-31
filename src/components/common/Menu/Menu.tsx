@@ -1,7 +1,10 @@
 import {
   IconBook,
+  IconBrandLaravel,
   IconDatabase,
   IconLayoutSidebarRightExpand,
+  IconMap,
+  IconObjectScan,
   IconSettings,
   IconUser,
   IconWorld,
@@ -37,12 +40,16 @@ export default function Menu() {
 
       {/* ユーザーが主要に使うメニュー */}
       <div className="w-65 flex flex-col gap-2 items-center">
-        <FeatureButton link="/overview" text={"Overview"} icon={IconDatabase} />
-        <FeatureButton link="/" text={"Preview"} icon={IconWorld} />
+        <FeatureButton link="/" text={"Overview"} icon={IconWorld} />
+        <FeatureButton
+          link="/map-object"
+          text={"Map Object"}
+          icon={IconBrandLaravel}
+        />
         <FeatureButton
           link="/map-setting"
           text={"Map Setting"}
-          icon={IconSettings}
+          icon={IconMap}
         />
       </div>
 
