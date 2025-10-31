@@ -41,11 +41,14 @@ export default function Menu() {
       {/* ユーザーが主要に使うメニュー */}
       <div className="w-65 flex flex-col gap-2 items-center">
         <FeatureButton link="/" text={"Overview"} icon={IconWorld} />
+        <FeatureButton link="/mydata" text={"MyData"} icon={IconDatabase} />
+
         <FeatureButton
           link="/map-object"
           text={"Map Object"}
           icon={IconBrandLaravel}
         />
+
         <FeatureButton
           link="/map-setting"
           text={"Map Setting"}

@@ -3,9 +3,9 @@ import { BrowserRouter, useLocation, Routes, Route } from "react-router";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
 // 各ページ
-import Index from "./pages";
+import Overview from "./pages/overview";
 import MapSetting from "./pages/map-setting";
-import Overview from "./pages/map-object";
+import MapObject from "./pages/map-object";
 
 // CSS
 import "./index.css";
@@ -57,7 +57,7 @@ const AnimatedRoutes: React.FC = () => {
             path="/"
             element={
               <PageWrapper>
-                <Index />
+                <Overview />
               </PageWrapper>
             }
           />
@@ -73,7 +73,7 @@ const AnimatedRoutes: React.FC = () => {
             path="/map-object"
             element={
               <PageWrapper>
-                <Overview />
+                <MapObject />
               </PageWrapper>
             }
           />

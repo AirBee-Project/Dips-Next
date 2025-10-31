@@ -1,7 +1,7 @@
-import Select from "../components/index/Select/Select";
-import Map from "../components/index/Map/Map";
+import Select from "../components/overview/Select/Select";
+import Map from "../components/overview/Map/Map";
 
-export default function Index() {
+export default function Overview() {
   return (
     <div className="flex overflow-x-hidden">
       <div className="flex z-10">
