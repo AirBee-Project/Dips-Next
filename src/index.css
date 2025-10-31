@@ -42,3 +42,7 @@ body {
     display: none;
   }
 }
+
+.cesium-widget-credits {
+  display: none !important;
+}
