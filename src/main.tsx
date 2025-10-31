@@ -45,7 +45,12 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 const AnimatedRoutes: React.FC = () => {
   const location = useLocation();
   return (
-    <div style={{ flex: 1, position: "relative", minWidth: "100%" }}>
+    <div
+      style={{
+        flex: 1,
+        position: "relative",
+      }}
+    >
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route

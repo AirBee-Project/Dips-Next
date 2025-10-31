@@ -1,4 +1,5 @@
 import DeckGL, { BitmapLayer, TileLayer } from "deck.gl";
+import { div } from "motion/react-client";
 
 const INITIAL_VIEW_STATE = {
   longitude: 135.6917,
@@ -32,7 +33,7 @@ let layer = [
 
 export default function Map() {
   return (
-    <div className="w-90 z-0">
+    <div>
       <DeckGL initialViewState={INITIAL_VIEW_STATE} controller layers={layer} />
     </div>
   );
