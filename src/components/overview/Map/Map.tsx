@@ -1,7 +1,8 @@
-import React, { useMemo, useEffect, useRef } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
 import { Viewer as CesiumViewer, UrlTemplateImageryProvider } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
+import { div } from "motion/react-client";
 
 export default function Map() {
   // ref の型を CesiumViewer にする
@@ -22,21 +23,22 @@ export default function Map() {
   }, []);
 
   return (
-    <Viewer
-      full
-      ref={viewerRef}
-      timeline={false}
-      animation={false}
-      baseLayerPicker={false}
-      geocoder={false}
-      homeButton={false}
-      infoBox={false}
-      sceneModePicker={false}
-      navigationHelpButton={false}
-      fullscreenButton={false}
-      vrButton={false}
-    >
-      <ImageryLayer imageryProvider={osmProvider} />
-    </Viewer>
+    <div className="w-full h-full overflow-clip">
+      <Viewer
+        full
+        animation={false}
+        ref={viewerRef}
+        baseLayerPicker={false}
+        geocoder={false}
+        homeButton={false}
+        infoBox={false}
+        sceneModePicker={false}
+        navigationHelpButton={false}
+        fullscreenButton={false}
+        vrButton={false}
+      >
+        <ImageryLayer imageryProvider={osmProvider} />
+      </Viewer>
+    </div>
   );
 }

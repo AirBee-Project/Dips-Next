@@ -59,9 +59,8 @@ export default function Menu() {
 
       {/* 下側のデフォルトメニュー */}
       <div className="w-full flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3 items-center">
-        <FeatureButton text={"Document"} icon={IconBook} link={""} />
         <FeatureButton text={"License"} icon={IconLicense} link={""} />
-
+        <FeatureButton text={"Document"} icon={IconBook} link={""} />
         <FeatureButton text={"Account"} icon={IconUser} link={""} />
       </div>
     </div>
