@@ -1,9 +1,9 @@
 import DeckGL, { BitmapLayer, TileLayer } from "deck.gl";
 
 const INITIAL_VIEW_STATE = {
-  longitude: 139.6917,
+  longitude: 135.6917,
   latitude: 35.6895,
-  zoom: 15,
+  zoom: 6,
   pitch: 60,
   bearing: 0,
 };

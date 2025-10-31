@@ -2,17 +2,15 @@ import { useState } from "react";
 import SearchBox from "../../common/SearchBox";
 import { ResizableBox } from "react-resizable";
 import Asset from "./Asset";
-
-type Props = {
-  isMenuOpen: Boolean;
-  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { useMenu } from "../../../context/Menu";
 
 type Pattern = "function" | "assets";
 
-export default function Select(props: Props) {
+export default function Select() {
+  const { isMenuOpen } = useMenu(); // 👈 Contextから取得
+
   //モードに関する状態
-  const [Pattern, setPattern] = useState("assets");
+  const [pattern, setPattern] = useState<Pattern>("assets");
 
   //検索の文字列
   const [functionSearch, setFunctionSearch] = useState("");
@@ -37,7 +35,7 @@ export default function Select(props: Props) {
         }
         handleSize={[10, 10]} // ドラッグ範囲
         className={`${
-          props.isMenuOpen ? "w-70 border-r-4" : "hidden"
+          isMenuOpen ? "w-70 border-r-4" : "hidden"
         } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
       >
         {/* 属性か関数かの選択 */}
@@ -47,6 +45,7 @@ export default function Select(props: Props) {
           </p>
           <p className="text-gray-400 px-6">関数</p>
         </div>
+
         {/* 検索 */}
         <SearchBox
           placeholder={"属性を検索"}
@@ -54,6 +53,7 @@ export default function Select(props: Props) {
           setSearch={setAssetsSearch}
           className="w-[80%]"
         />
+
         {/* 選択肢 */}
         <div className="w-full flex flex-col gap-2 items-center mt-4 overflow-y-scroll hidden-scrollbar">
           <Asset
