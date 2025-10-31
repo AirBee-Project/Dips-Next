@@ -25,7 +25,7 @@ export default function Map() {
   return (
     <div className="w-full h-full overflow-clip">
       <Viewer
-        full
+        className="h-screen"
         animation={false}
         ref={viewerRef}
         baseLayerPicker={false}
