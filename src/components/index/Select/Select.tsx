@@ -1,4 +1,4 @@
-import { useState, type SetStateAction } from "react";
+import { useState } from "react";
 import SearchBox from "../../common/SearchBox";
 import { ResizableBox } from "react-resizable";
 import Asset from "./Asset";
@@ -22,7 +22,7 @@ export default function Select(props: Props) {
   const [width, setWidth] = useState(280);
 
   return (
-    <div className="flex">
+    <div className="flex z-50">
       <ResizableBox
         width={width}
         axis="x"
@@ -70,25 +70,6 @@ export default function Select(props: Props) {
           <Asset title={"昼間"} assetsType={"Boolean"} className="w-[80%]" />
           <Asset title={"高速道路"} assetsType={"String"} className="w-[80%]" />
         </div>
-      </ResizableBox>
-      <ResizableBox
-        width={width}
-        axis="x"
-        onResize={(e, data) => setWidth(data.size.width)}
-        minConstraints={[240, 200]}
-        maxConstraints={[500, 200]}
-        handle={
-          <span
-            className="absolute top-0 right-0 h-full w-2 cursor-ew-resize"
-            onClick={(e) => e.stopPropagation()} // 選択防止
-          />
-        }
-        handleSize={[10, 10]} // ドラッグ範囲
-        className={`${
-          props.isMenuOpen ? "w-70 border-r-4" : "hidden"
-        } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
-      >
-        {/* こちら側にドラッグアンドドロップする */}
       </ResizableBox>
     </div>
   );

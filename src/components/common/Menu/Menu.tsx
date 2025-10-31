@@ -2,13 +2,11 @@ import {
   IconBook,
   IconDatabase,
   IconLayoutSidebarRightExpand,
-  IconNotification,
   IconSettings,
   IconUser,
   IconWorld,
 } from "@tabler/icons-react";
 import FeatureButton from "./FeatureButton";
-import { useState } from "react";
 
 type Props = {
   isMenuOpen: Boolean;

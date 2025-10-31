@@ -1,4 +1,3 @@
-import { useDraggable } from "@dnd-kit/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -19,32 +18,14 @@ type Props = {
 };
 
 export default function Asset(props: Props) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: props.title,
-  });
-
-  const style: React.CSSProperties = {
-    transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-      : undefined,
-    zIndex: transform ? 9999 : "auto",
-    position: transform ? "relative" : "static",
-  };
-
   const [isOpenAsset, setIsOpenAsset] = useState(false);
 
   return (
     <div
-      ref={setNodeRef}
-      style={style}
       className={`group border-gray-100 border-3 rounded-md px-4.5 pt-2.5 transition-all ${props.className} hover:border-gray-200`}
     >
       <div className="flex items-center justify-between">
-        <div
-          {...listeners}
-          {...attributes}
-          className="cursor-grab active:cursor-grabbing"
-        >
+        <div className="cursor-grab active:cursor-grabbing">
           <p className="text-2xl text-gray-400 truncate">{props.title}</p>
           <p className="text-1xl text-gray-200 mb-2">
             値の種類：{assetsTypeInfo[props.assetsType].text}
