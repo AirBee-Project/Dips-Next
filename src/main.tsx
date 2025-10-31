@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, useLocation, Routes, Route } from "react-router";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
 // 各ページ
 import Index from "./pages";
@@ -23,8 +23,8 @@ const pageVariants = {
 };
 
 const pageTransition = {
-  duration: 0.2,
-  ease: "easeInOut",
+  duration: 0.1,
+  ease: easeInOut,
 };
 
 /* --- ページラッパー --- */
@@ -34,6 +34,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     animate="in"
     exit="out"
     variants={pageVariants}
+    transition={pageTransition}
     style={{ width: "100%", height: "100%" }}
   >
     {children}

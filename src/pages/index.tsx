@@ -1,5 +1,3 @@
-import { useState } from "react";
-import Menu from "../components/common/Menu/Menu";
 import Select from "../components/index/Select/Select";
 import Map from "../components/index/Map/Map";
 
