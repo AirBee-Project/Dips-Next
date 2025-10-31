@@ -12,7 +12,7 @@ export default function SearchBox(props: Props) {
     <div
       className={`py-1.5 border-gray-100 border-3 rounded-md flex ${props.className}`}
     >
-      <IconSearch className="text-gray-100 w-[20%]" stroke={3} />
+      <IconSearch className="text-gray-100 aspect-square mx-1.5" stroke={3} />
       <input
         type="text"
         placeholder={props.placeholder}

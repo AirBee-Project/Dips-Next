@@ -1,6 +1,7 @@
 import { useState, type SetStateAction } from "react";
 import Menu from "../components/common/Menu/Menu";
 import Select from "../components/index/Select/Select";
+import Operation from "../components/index/Operation/Operation";
 
 export default function Index() {
   // ページ内でMenuの開閉状況を管理する
@@ -12,6 +13,7 @@ export default function Index() {
     <div className="flex">
       <Menu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       <Select isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
+      <Operation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
     </div>
   );
 }

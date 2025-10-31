@@ -56,7 +56,21 @@ export default function Select(props: Props) {
       />
 
       {/* 選択肢 */}
-      <Asset title={"天候"} assetsType={"String"} />
+      <div className="w-full flex flex-col gap-2 items-center mt-4 overflow-y-scroll hidden-scrollbar">
+        <Asset
+          title={"天気予報"}
+          assetsType={"String"}
+          className="w-[80%]"
+          detail="テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
+          info={[
+            { title: "オーナー", text: "AirBee" },
+            { title: "更新日", text: "2025/10/4" },
+          ]}
+        />
+        <Asset title={"気温"} assetsType={"Number"} className="w-[80%]" />
+        <Asset title={"昼間"} assetsType={"Boolean"} className="w-[80%]" />
+        <Asset title={"高速道路"} assetsType={"String"} className="w-[80%]" />
+      </div>
     </ResizableBox>
   );
 }

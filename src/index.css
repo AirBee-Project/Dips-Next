@@ -25,4 +25,19 @@ body {
 
   /*角丸の設定*/
   --border-radius-1xl: 18px;
+
+  /* 最も小さな文字の設定 */
+  --text-1xl: 12px;
+}
+
+/* スクロールバーの非表示 */
+@layer utilities {
+  .hidden-scrollbar {
+    -ms-overflow-style: none; /* IE, Edge 対応 */
+    scrollbar-width: none; /* Firefox 対応 */
+  }
+  .hidden-scrollbar::-webkit-scrollbar {
+    /* Chrome, Safari 対応 */
+    display: none;
+  }
 }
