@@ -7,9 +7,6 @@ export default function Index() {
   return (
     <div className="flex">
       <div className="flex z-10">
-        {/* デフォルトのメニュー */}
-        <Menu />
-
         {/* ドラッグアンドドロップが可能なエリア */}
         <Select />
       </div>
