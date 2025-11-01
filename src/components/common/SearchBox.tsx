@@ -2,8 +2,8 @@ import { IconSearch } from "@tabler/icons-react";
 
 type Props = {
   placeholder: string;
-  search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  search?: string;
+  setSearch?: React.Dispatch<React.SetStateAction<string>>;
   className?: string;
 };
 

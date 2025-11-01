@@ -27,7 +27,7 @@ export default function Asset(props: Props) {
       <div className="flex items-center justify-between">
         <div className="cursor-grab active:cursor-grabbing">
           <p className="text-2xl text-gray-400 truncate">{props.title}</p>
-          <p className="text-1xl text-gray-200 mb-2">
+          <p className="text-1xl font-medium text-gray-200 mb-2">
             値の種類：{assetsTypeInfo[props.assetsType].text}
           </p>
         </div>
@@ -53,7 +53,9 @@ export default function Asset(props: Props) {
       {isOpenAsset && (
         <div>
           {props.detail && (
-            <p className="text-1xl text-gray-200 pb-3">{props.detail}</p>
+            <p className="text-1xl text-gray-200 pb-3  font-medium">
+              {props.detail}
+            </p>
           )}
           {props.info && (
             <div className="text-1xl text-gray-200 py-2 border-t-2 border-gray-100">
@@ -61,9 +63,9 @@ export default function Asset(props: Props) {
                 <tbody>
                   {props.info.map((item, index) => (
                     <tr key={index} className="text-left">
-                      <td>{item.title}</td>
+                      <td className="font-medium">{item.title}</td>
                       <th>：</th>
-                      <th>{item.text}</th>
+                      <th className="font-medium">{item.text}</th>
                     </tr>
                   ))}
                 </tbody>
