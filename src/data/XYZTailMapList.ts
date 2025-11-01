@@ -2,7 +2,10 @@ export const XYZTailMapList = [
   {
     id: "",
     name: "",
-    detail: "",
-    url: "",
+    XYZUrl: "",
+    detailText: "",
+    detailUrl: "",
+    sampleUrl: "",
+    credit: "",
   },
 ];

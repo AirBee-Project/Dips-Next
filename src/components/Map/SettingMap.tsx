@@ -2,16 +2,26 @@ import SearchBox from "../common/SearchBox";
 import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMap } from "../../context/Map";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export default function SettingMap() {
   const { windowMode, setWindowMode, sceneMode, setSceneMode } = useMap();
 
+  //外側のクリックで閉じるように
+  const ref = useRef<HTMLDivElement | null>(null);
+  useClickOutside(ref, () => {
+    if (windowMode === "Map") setWindowMode("Hide");
+  });
+
   return (
     <div
-      className={`${
-        windowMode === "Map" ? "visible opacity-100" : "hidden opacity-0"
+      ref={ref}
+      className={` ${
+        windowMode === "Map"
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
     >
       {/* 地図のテクスチャ設定 */}
