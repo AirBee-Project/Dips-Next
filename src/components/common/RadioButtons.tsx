@@ -8,7 +8,6 @@ interface RadioButtonsProps {
   options: RadioOption[];
   value: string;
   onChange: (value: string) => void;
-  direction?: "horizontal" | "vertical";
 }
 
 export default function RadioButtons({
@@ -16,18 +15,13 @@ export default function RadioButtons({
   options,
   value,
   onChange,
-  direction = "vertical",
 }: RadioButtonsProps) {
   return (
-    <div
-      className={`flex ${
-        direction === "horizontal" ? "flex-row space-x-4" : "flex-col space-y-2"
-      }`}
-    >
+    <div className="flex flex-col gap-1">
       {options.map((opt) => (
         <label
           key={opt.value}
-          className="flex items-center space-x-2 cursor-pointer select-none"
+          className="flex items-center space-x-3 cursor-pointer select-none"
         >
           <input
             type="radio"
@@ -35,9 +29,9 @@ export default function RadioButtons({
             value={opt.value}
             checked={value === opt.value}
             onChange={() => onChange(opt.value)}
-            className="accent-blue-600 cursor-pointer"
+            className="accent-gray-200 cursor-pointer"
           />
-          <span className="text-gray-700 text-sm">{opt.label}</span>
+          <span className="text-gray-300 font-medium">{opt.label}</span>
         </label>
       ))}
     </div>

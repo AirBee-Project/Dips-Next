@@ -31,12 +31,16 @@ body {
   /*白系の色の設定*/
   --color-white-100: #f9f9f9;
 
+  /* アクセントカラーの設定 */
+  --color-accent-100: #a1dbe5;
+  --color-accent-200: #8fd4db;
+  --color-accent-300: #4ea8b7;
+
   /*角丸の設定*/
   --border-radius-1xl: 18px;
 
   /* 文字の設定 */
   --text-2xl: 20px;
-
   --text-1xl: 12px;
 }
 

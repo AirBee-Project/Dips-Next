@@ -6,15 +6,18 @@ type Props = {
   text: string;
   className?: string;
   link?: string;
+  now?: boolean;
 };
 
 export default function SettingMapPattern(props: Props) {
   return (
     <div
-      className={`flex items-center justify-baseline ${props.className} w-full`}
+      className={`flex items-center justify-baseline ${props.className} w-full cursor-pointer`}
     >
       <img
-        className="h-15 aspect-square rounded-md mr-4 border-gray-100 border-2"
+        className={`h-15 aspect-square rounded-md mr-4 border-gray-100 border-2 hover:border-gray-200 transition-all duration-100 ${
+          props.now && "border-gray-200"
+        }`}
         src={props.img}
         alt={props.title + "サンプル画像"}
       />
