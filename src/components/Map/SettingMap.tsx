@@ -2,22 +2,15 @@ import SearchBox from "../common/SearchBox";
 import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
-import { useRef, useState } from "react";
 import { useMap } from "../../context/Map";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { XYZTileMapList } from "../../data/XYZTailMapList";
 
 export default function SettingMap() {
-  const { windowMode, setWindowMode, sceneMode, setSceneMode } = useMap();
-
-  //外側のクリックで閉じるように
-  const ref = useRef<HTMLDivElement | null>(null);
-  useClickOutside(ref, () => {
-    if (windowMode === "Map") setWindowMode("Hide");
-  });
+  const { windowMode, setWindowMode, sceneMode, setSceneMode, tileId } =
+    useMap();
 
   return (
     <div
-      ref={ref}
       className={` ${
         windowMode === "Map"
           ? "opacity-100 pointer-events-auto"
@@ -42,80 +35,24 @@ export default function SettingMap() {
 
         <div className="flex flex-col gap-4 max-h-64 overflow-y-auto">
           <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-            now
+            id={tileId}
+            img={XYZTileMapList[tileId].sampleUrl}
+            title={XYZTileMapList[tileId].name}
+            text={XYZTileMapList[tileId].detailText || "説明なし"}
+            link={XYZTileMapList[tileId].detailUrl}
           />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-            link="/aa"
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-            link="/aa"
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-            link="/aa"
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-          />
-          <SettingMapPattern
-            img={"https://cyberjapandata.gsi.go.jp/xyz/std/11/1817/808.png"}
-            title={"基本調査地図"}
-            text={
-              "テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            }
-            link="/aa"
-          />
+          {Object.values(XYZTileMapList).map(
+            (mapItem) =>
+              tileId != mapItem.id && (
+                <SettingMapPattern
+                  id={mapItem.id}
+                  img={mapItem.sampleUrl}
+                  title={mapItem.name}
+                  text={mapItem.detailText || "説明なし"}
+                  link={mapItem.detailUrl}
+                />
+              )
+          )}
         </div>
       </div>
 

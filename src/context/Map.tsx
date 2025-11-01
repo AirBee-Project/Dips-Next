@@ -11,8 +11,8 @@ interface MapContextType {
   sceneMode: SceneMode;
   setSceneMode: (mode: SceneMode) => void;
 
-  tileUrl: string;
-  setTileUrl: (url: string) => void;
+  tileId: number;
+  setTileId: (id: number) => void;
 
   currentTime: Date;
   setCurrentTime: (time: Date) => void;
@@ -38,8 +38,8 @@ const defaultValues: MapContextType = {
   sceneMode: "3D",
   setSceneMode: () => {},
 
-  tileUrl: "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
-  setTileUrl: () => {},
+  tileId: 1,
+  setTileId: () => {},
 
   currentTime: new Date(),
   setCurrentTime: () => {},
@@ -66,9 +66,7 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [windowMode, setWindowMode] = useState<WindowMode>("Hide");
   const [sceneMode, setSceneMode] = useState<SceneMode>("3D");
-  const [tileUrl, setTileUrl] = useState(
-    "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
-  );
+  const [tileId, setTileId] = useState(1);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timeSpeed, setTimeSpeed] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
@@ -84,8 +82,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setWindowMode,
         sceneMode,
         setSceneMode,
-        tileUrl,
-        setTileUrl,
+        tileId,
+        setTileId,
         currentTime,
         setCurrentTime,
         timeSpeed,

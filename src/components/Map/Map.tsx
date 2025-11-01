@@ -6,17 +6,21 @@ import Time from "./Time";
 import SettingButtons from "./SettingButtons";
 import SettingMap from "./SettingMap";
 import { useMap } from "../../context/Map";
+import { XYZTileMapList } from "../../data/XYZTailMapList";
 
 export default function Map() {
+  //Mapの状態を取得する
+  const { sceneMode, tileId } = useMap();
+
   // ref の型を CesiumViewer にする
   const viewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
 
   const osmProvider = useMemo(() => {
     return new UrlTemplateImageryProvider({
-      url: "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
-      credit: "",
+      url: XYZTileMapList[tileId].XYZUrl,
+      credit: XYZTileMapList[tileId].credit,
     });
-  }, []);
+  }, [tileId]);
 
   useEffect(() => {
     if (viewerRef.current?.cesiumElement) {
@@ -24,9 +28,6 @@ export default function Map() {
       viewerRef.current.cesiumElement.imageryLayers.removeAll();
     }
   }, []);
-
-  //Mapの状態を取得する
-  const { sceneMode } = useMap();
 
   //状態を変更する
   useEffect(() => {
