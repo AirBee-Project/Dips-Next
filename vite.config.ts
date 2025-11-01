@@ -6,6 +6,10 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   define: {
-    CESIUM_BASE_URL: JSON.stringify("/node_modules/cesium/Build/Cesium"),
+    CESIUM_BASE_URL: JSON.stringify(
+      process.env.NODE_ENV === "production"
+        ? "/Cesium"
+        : "/node_modules/cesium/Build/Cesium"
+    ),
   },
 });
