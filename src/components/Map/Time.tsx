@@ -2,11 +2,8 @@ import { formatInTimeZone } from "date-fns-tz";
 import { useMap } from "../../context/Map";
 import { useEffect } from "react";
 import {
-  IconPlayerPlay,
   IconPlayerPlayFilled,
-  IconPlayerStop,
   IconPlayerStopFilled,
-  IconStepOut,
 } from "@tabler/icons-react";
 
 export default function Time() {

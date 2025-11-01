@@ -39,7 +39,6 @@ export default function SettingMap() {
           : "opacity-0 pointer-events-none hidden"
       } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
     >
-      {/* 地図のテクスチャ設定 */}
       <div>
         <div className="flex items-center justify-between mb-5">
           <p className="text-2xl text-gray-300">地図の詳細</p>
@@ -48,7 +47,6 @@ export default function SettingMap() {
           </div>
         </div>
 
-        {/* 🔍 検索ボックス */}
         <div className="mb-5">
           <SearchBox
             placeholder={"地図を検索"}

@@ -1,3 +1,4 @@
+import { tr } from "motion/react-client";
 import React, { createContext, useContext, useState, useCallback } from "react";
 
 // === 型定義 ===
@@ -47,7 +48,7 @@ const defaultValues: MapContextType = {
   currentTime: new Date(),
   setCurrentTime: () => {},
 
-  timeSpeed: 1,
+  timeSpeed: 2,
   setTimeSpeed: () => {},
 
   isPaused: false,

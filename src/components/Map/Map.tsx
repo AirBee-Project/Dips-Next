@@ -1,3 +1,4 @@
+// Map.tsx
 import { useMemo, useEffect, useRef } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
 import {
@@ -21,6 +22,7 @@ export default function Map() {
     isPaused,
     setCurrentTime,
     timeSpeed,
+    setIsPaused,
   } = useMap();
 
   const viewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
@@ -57,47 +59,31 @@ export default function Map() {
     }
   }, [sceneMode]);
 
-  // Context → Viewer の時間反映
+  // Cesium Clock 制御: currentTime / isPaused / timeSpeed 同期
   useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
 
-    const newJulian = JulianDate.fromDate(currentTime);
-    if (!JulianDate.equals(newJulian, viewer.clock.currentTime)) {
-      viewer.clock.currentTime = newJulian;
-    }
-  }, [currentTime]);
+    const clock = viewer.clock;
 
-  // 時間を進める（自動再生）
-  useEffect(() => {
-    if (isPaused) return;
+    // 初回でも必ず現在時刻・再生状態・速度を設定
+    clock.startTime = JulianDate.fromDate(currentTime);
+    clock.currentTime = JulianDate.fromDate(currentTime);
+    clock.shouldAnimate = !isPaused;
+    clock.multiplier = timeSpeed;
 
-    const interval = setInterval(() => {
-      setCurrentTime((prev) => new Date(prev.getTime() + 1000 * timeSpeed));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isPaused, timeSpeed, setCurrentTime]);
-
-  // Viewer → Context 同期（タイムライン操作にも対応）
-  useEffect(() => {
-    const viewer = viewerRef.current?.cesiumElement;
-    if (!viewer) return;
-
+    // タイムライン操作や時計更新を React 側に同期
     const handleTick = () => {
-      const newDate = JulianDate.toDate(viewer.clock.currentTime);
-      // 差分があるときだけ更新
-      if (Math.abs(newDate.getTime() - currentTime.getTime()) > 1000) {
-        setCurrentTime(newDate);
-      }
+      const newDate = JulianDate.toDate(clock.currentTime);
+      setCurrentTime(newDate);
     };
 
-    viewer.clock.onTick.addEventListener(handleTick);
+    clock.onTick.addEventListener(handleTick);
 
     return () => {
-      viewer.clock.onTick.removeEventListener(handleTick);
+      clock.onTick.removeEventListener(handleTick);
     };
-  }, [setCurrentTime, currentTime]);
+  }, [currentTime]);
 
   return (
     <div className="w-full h-full overflow-clip relative">

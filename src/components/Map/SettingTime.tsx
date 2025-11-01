@@ -4,9 +4,17 @@ import { useMap } from "../../context/Map";
 import { useState, useMemo } from "react";
 import RadioButtons from "../common/RadioButtons";
 import { TimeZoneList } from "../../data/TimeZone";
+import RangeInput from "../common/RangeInput";
 
 export default function SettingTime() {
-  const { windowMode, setWindowMode, timeZone, setTimeZone } = useMap();
+  const {
+    windowMode,
+    setWindowMode,
+    timeZone,
+    setTimeZone,
+    timeSpeed,
+    setTimeSpeed,
+  } = useMap();
   const [search, setSearch] = useState("");
 
   // タイムゾーンの検索結果
@@ -63,6 +71,21 @@ export default function SettingTime() {
             <p className="text-gray-400">該当するタイムゾーンがありません</p>
           )}
         </div>
+      </div>
+      {/* 間の線 */}
+      <div className="border border-gray-100 w-full mt-5"></div>
+
+      {/* 描画方法の設定 */}
+      <div>
+        <p className="text-2xl text-gray-300 mt-5">再生速度</p>
+        <RangeInput
+          label="音量"
+          value={timeSpeed}
+          min={-100}
+          max={100}
+          step={1}
+          onChange={(v: number) => setTimeSpeed(v)}
+        />
       </div>
     </div>
   );
