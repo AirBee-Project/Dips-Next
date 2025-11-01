@@ -77,15 +77,16 @@ export default function SettingTime() {
 
       {/* 描画方法の設定 */}
       <div>
-        <p className="text-2xl text-gray-300 mt-5">再生速度</p>
-        <RangeInput
-          label="音量"
-          value={timeSpeed}
-          min={-100}
-          max={100}
-          step={1}
-          onChange={(v: number) => setTimeSpeed(v)}
-        />
+        <p className="text-2xl text-gray-300 mt-5 mb-5">再生速度</p>
+        <div className="w-full flex items-center justify-center pb-4">
+          <RangeInput
+            value={timeSpeed}
+            min={-100}
+            max={100}
+            step={1}
+            onChange={(v: number) => setTimeSpeed(v)}
+          />
+        </div>
       </div>
     </div>
   );

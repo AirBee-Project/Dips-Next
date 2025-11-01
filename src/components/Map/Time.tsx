@@ -15,6 +15,7 @@ export default function Time() {
     isPaused,
     setIsPaused,
   } = useMap();
+
   return (
     <div
       className={` text-sm rounded px-2 py-1 cursor-pointer flex items-center ${

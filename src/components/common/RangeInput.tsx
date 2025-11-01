@@ -8,22 +8,84 @@ type Props = {
   label?: string; // アクセシビリティ向け
   id?: string;
   className?: string; // スタイリング用
+  trackColor?: string; // 棒の色
+  thumbColor?: string; // 円の色
 };
 
 export default function RangeInput(props: Props) {
+  const {
+    value,
+    min = 0,
+    max = 100,
+    step = 1,
+    onChange,
+    disabled,
+    label,
+    id,
+    className,
+    trackColor = "#ddd",
+    thumbColor = "#007bff",
+  } = props;
+
+  const percentage = ((value - min) / (max - min)) * 100;
+
   return (
-    <div className={props.className}>
-      {props.label && <label htmlFor={props.id}>{props.label}</label>}
+    <div className={className} style={{ width: "90%" }}>
+      {label && <label htmlFor={id}>{label}</label>}
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: 12,
+        }}
+      >
+        <span>{min}</span>
+        <span>{value}</span>
+        <span>{max}</span>
+      </div>
+
       <input
         type="range"
-        id={props.id}
-        min={props.min}
-        max={props.max}
-        step={props.step}
-        value={props.value}
-        disabled={props.disabled}
-        onChange={(e) => props.onChange(Number(e.target.value))}
+        id={id}
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(Number(e.target.value))}
+        style={{
+          width: "100%",
+          appearance: "none",
+          height: 8,
+          borderRadius: 4,
+          background: `linear-gradient(to right, ${trackColor} 0%, ${trackColor} ${percentage}%, #ccc ${percentage}%, #ccc 100%)`,
+          outline: "none",
+        }}
       />
+      <style>
+        {`
+          input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: ${thumbColor};
+            cursor: pointer;
+            border: none;
+            margin-top: 0px; /* トラックの中央に配置 */
+          }
+          input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: ${thumbColor};
+            cursor: pointer;
+            border: none;
+          }
+        `}
+      </style>
     </div>
   );
 }

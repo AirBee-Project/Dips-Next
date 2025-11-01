@@ -1,5 +1,5 @@
 // Map.tsx
-import { useMemo, useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
 import {
   Viewer as CesiumViewer,
@@ -18,11 +18,10 @@ export default function Map() {
   const {
     sceneMode,
     tileId,
-    currentTime,
-    isPaused,
     setCurrentTime,
+    isPaused,
     timeSpeed,
-    setIsPaused,
+    currentTime,
   } = useMap();
 
   const viewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
@@ -59,31 +58,34 @@ export default function Map() {
     }
   }, [sceneMode]);
 
-  // Cesium Clock 制御: currentTime / isPaused / timeSpeed 同期
+  // 初期 currentTime を Cesium Clock から取得
+  useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+    setCurrentTime(JulianDate.toDate(viewer.clock.currentTime));
+  }, []);
+
+  // Clock tick の監視で React 側に同期
+  useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+
+    const interval = setInterval(() => {
+      setCurrentTime(JulianDate.toDate(viewer.clock.currentTime));
+    }, 1000); // 1秒に1回更新
+
+    return () => clearInterval(interval);
+  }, [setCurrentTime]);
+
+  // isPaused / timeSpeed の変更反映
   useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
 
     const clock = viewer.clock;
-
-    // 初回でも必ず現在時刻・再生状態・速度を設定
-    clock.startTime = JulianDate.fromDate(currentTime);
-    clock.currentTime = JulianDate.fromDate(currentTime);
     clock.shouldAnimate = !isPaused;
     clock.multiplier = timeSpeed;
-
-    // タイムライン操作や時計更新を React 側に同期
-    const handleTick = () => {
-      const newDate = JulianDate.toDate(clock.currentTime);
-      setCurrentTime(newDate);
-    };
-
-    clock.onTick.addEventListener(handleTick);
-
-    return () => {
-      clock.onTick.removeEventListener(handleTick);
-    };
-  }, [currentTime]);
+  }, [isPaused, timeSpeed]);
 
   return (
     <div className="w-full h-full overflow-clip relative">
