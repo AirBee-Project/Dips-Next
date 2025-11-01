@@ -6,8 +6,7 @@ import { useState } from "react";
 import { useMap } from "../../context/Map";
 
 export default function SettingMap() {
-  const [drawMode, setDrawMode] = useState("day");
-  const { windowMode, setWindowMode } = useMap();
+  const { windowMode, setWindowMode, sceneMode, setSceneMode } = useMap();
 
   return (
     <div
@@ -119,8 +118,8 @@ export default function SettingMap() {
         <div className="mt-3">
           <RadioButtons
             name="map-mode"
-            value={drawMode}
-            onChange={setDrawMode}
+            value={sceneMode}
+            onChange={setSceneMode}
             options={[
               { label: "球体表示", value: "3D" },
               { label: "平面表示", value: "2D" },

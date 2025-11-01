@@ -32,7 +32,7 @@ interface MapContextType {
 
 // === デフォルト値 ===
 const defaultValues: MapContextType = {
-  windowMode: "Hide",
+  windowMode: "Map",
   setWindowMode: () => {},
 
   sceneMode: "3D",
