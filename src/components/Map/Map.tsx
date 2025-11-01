@@ -22,19 +22,19 @@ export default function Map() {
     });
   }, [tileId]);
 
+  // デフォルトのBingMapを削除
   useEffect(() => {
     if (viewerRef.current?.cesiumElement) {
-      // デフォルトのBingMapを削除
       viewerRef.current.cesiumElement.imageryLayers.removeAll();
     }
   }, []);
 
-  //状態を変更する
+  //描画の状態を変更
   useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
 
-    const duration = 1; // 秒（アニメーション時間）
+    const duration = 1;
 
     switch (sceneMode) {
       case "2D":

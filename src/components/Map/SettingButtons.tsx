@@ -1,5 +1,4 @@
 import { IconClock, IconMinus, IconPlus, IconWorld } from "@tabler/icons-react";
-import SettingMap from "./SettingMap";
 import { useMap } from "../../context/Map";
 
 export default function SettingButtons() {
@@ -30,12 +29,12 @@ export default function SettingButtons() {
 
         {/* ZoomIn and ZoomOut */}
         <div className="bg-white rounded-[3px]">
-          <div className="p-1 text-gray-300 hover:bg-gray-100  duration-100">
+          <div className="p-1 text-gray-300 hover:bg-gray-100  duration-100 rounded-[3px]">
             <IconPlus stroke={2.5} size={20} />
           </div>
           {/* 間の中間棒 */}
           <div className="border-t mx-1 border-gray-300"></div>
-          <div className="p-1 text-gray-300 hover:bg-gray-100  duration-100">
+          <div className="p-1 text-gray-300 hover:bg-gray-100  duration-100 rounded-[3px]">
             <IconMinus stroke={2.5} size={20} />
           </div>
         </div>

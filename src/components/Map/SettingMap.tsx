@@ -29,6 +29,8 @@ export default function SettingMap() {
     return results.map((r) => r.item);
   }, [search, fuse]);
 
+  //横幅の管理
+
   return (
     <div
       className={`${
