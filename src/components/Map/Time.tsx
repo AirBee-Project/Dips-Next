@@ -7,23 +7,9 @@ export default function Time() {
     clockTheme,
     setClockTheme,
     currentTime,
-    isPaused,
-    setCurrentTime,
-    timeSpeed,
+
     timeZone,
   } = useMap();
-  useEffect(() => {
-    if (isPaused) return; // 停止中は何もしない
-
-    const interval = setInterval(() => {
-      setCurrentTime((prev) => {
-        const next = new Date(prev.getTime() + 1000 * timeSpeed); // 1秒ごとに進める
-        return next;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isPaused, timeSpeed, setCurrentTime]);
   return (
     <div
       onClick={() => setClockTheme(clockTheme === "light" ? "dark" : "light")}

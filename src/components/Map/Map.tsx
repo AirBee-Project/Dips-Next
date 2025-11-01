@@ -9,16 +9,20 @@ import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
 import SettingMap from "./SettingMap";
+import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMapList";
-import SettingTime from "./SettingTime";
-import { view } from "motion/react-client";
 
 export default function Map() {
-  //Mapの状態を取得する
-  const { sceneMode, tileId, currentTime } = useMap();
+  const {
+    sceneMode,
+    tileId,
+    currentTime,
+    isPaused,
+    setCurrentTime,
+    timeSpeed,
+  } = useMap();
 
-  // ref の型を CesiumViewer にする
   const viewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
 
   const osmProvider = useMemo(() => {
@@ -28,20 +32,18 @@ export default function Map() {
     });
   }, [tileId]);
 
-  // デフォルトのBingMapを削除
+  // BingMap削除
   useEffect(() => {
-    if (viewerRef.current?.cesiumElement) {
-      viewerRef.current.cesiumElement.imageryLayers.removeAll();
-    }
+    const viewer = viewerRef.current?.cesiumElement;
+    if (viewer) viewer.imageryLayers.removeAll();
   }, []);
 
-  //描画の状態を変更
+  // SceneMode変更
   useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
 
     const duration = 1;
-
     switch (sceneMode) {
       case "2D":
         viewer.scene.morphTo2D(duration);
@@ -55,20 +57,55 @@ export default function Map() {
     }
   }, [sceneMode]);
 
-  //時間を設定
+  // Context → Viewer の時間反映
   useEffect(() => {
     const viewer = viewerRef.current?.cesiumElement;
     if (!viewer) return;
-    viewer.clock.currentTime = JulianDate.fromDate(currentTime);
-    viewer?.timeline.container;
+
+    const newJulian = JulianDate.fromDate(currentTime);
+    if (!JulianDate.equals(newJulian, viewer.clock.currentTime)) {
+      viewer.clock.currentTime = newJulian;
+    }
   }, [currentTime]);
+
+  // 時間を進める（自動再生）
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentTime((prev) => new Date(prev.getTime() + 1000 * timeSpeed));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPaused, timeSpeed, setCurrentTime]);
+
+  // Viewer → Context 同期（タイムライン操作にも対応）
+  useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+
+    const handleTick = () => {
+      const newDate = JulianDate.toDate(viewer.clock.currentTime);
+      // 差分があるときだけ更新
+      if (Math.abs(newDate.getTime() - currentTime.getTime()) > 1000) {
+        setCurrentTime(newDate);
+      }
+    };
+
+    viewer.clock.onTick.addEventListener(handleTick);
+
+    return () => {
+      viewer.clock.onTick.removeEventListener(handleTick);
+    };
+  }, [setCurrentTime, currentTime]);
 
   return (
     <div className="w-full h-full overflow-clip relative">
       <Viewer
         className="h-screen"
-        animation={false}
         ref={viewerRef}
+        timeline={true}
+        animation={false}
         baseLayerPicker={false}
         geocoder={false}
         homeButton={false}
@@ -81,22 +118,18 @@ export default function Map() {
         <ImageryLayer imageryProvider={osmProvider} />
       </Viewer>
 
-      {/* 時刻表示 */}
       <div className="absolute bottom-7 left-0 z-10">
         <Time />
       </div>
 
-      {/* 地図の操作ボタン */}
       <div className="absolute bottom-10 right-3 z-10">
         <SettingButtons />
       </div>
 
-      {/* 実際の地図の設定画面 */}
       <div className="absolute bottom-10 right-12 z-10 w-80">
         <SettingMap />
       </div>
 
-      {/* 実際の時間の設定画面 */}
       <div className="absolute bottom-10 right-12 z-10 w-80">
         <SettingTime />
       </div>

@@ -35,7 +35,7 @@ export default function SettingTime() {
     >
       <div>
         <div className="flex items-center justify-between mb-5">
-          <p className="text-2xl text-gray-300">時間の詳細</p>
+          <p className="text-2xl text-gray-300">時計の詳細</p>
           <div onClick={() => setWindowMode("Hide")}>
             <IconX className="hover:text-accent-300 cursor-pointer" />
           </div>
