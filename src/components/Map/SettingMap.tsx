@@ -1,20 +1,20 @@
-import SearchBox from "../../common/SearchBox";
+import SearchBox from "../common/SearchBox";
 import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
-import RadioButtons from "../../common/RadioButtons";
+import RadioButtons from "../common/RadioButtons";
 import { useState } from "react";
 
 export default function SettingMap() {
   const [drawMode, setDrawMode] = useState("day");
 
   return (
-    <div className="bg-white rounded-md w-full pt-5 pb-7 px-5">
+    <div className="bg-white-100 rounded-md w-full pt-5 pb-7 px-5">
       {/* 地図のテクスチャ設定 */}
       <div>
         <div className="flex items-center justify-between mb-5">
           <p className="text-2xl text-gray-300">地図の詳細</p>
           <div>
-            <IconX />
+            <IconX className="hover:text-accent-300 cursor-pointer" />
           </div>
         </div>
         <div className="mb-5">

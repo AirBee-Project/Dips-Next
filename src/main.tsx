@@ -14,6 +14,7 @@ import "react-resizable/css/styles.css";
 // メニューの状態管理
 import { MenuProvider } from "./context/Menu";
 import Menu from "./components/common/Menu/Menu";
+import { CesiumProvider } from "./context/Map";
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
@@ -86,12 +87,14 @@ const AnimatedRoutes: React.FC = () => {
 createRoot(document.getElementById("root")!).render(
   <MenuProvider>
     <BrowserRouter>
-      <div className="flex">
-        <div>
-          <Menu />
+      <CesiumProvider>
+        <div className="flex">
+          <div>
+            <Menu />
+          </div>
+          <AnimatedRoutes />
         </div>
-        <AnimatedRoutes />
-      </div>
+      </CesiumProvider>
     </BrowserRouter>
   </MenuProvider>
 );
