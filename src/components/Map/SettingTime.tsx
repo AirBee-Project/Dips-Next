@@ -81,8 +81,8 @@ export default function SettingTime() {
         <div className="w-full flex items-center justify-center pb-4">
           <RangeInput
             value={timeSpeed}
-            min={-100}
-            max={100}
+            min={-1000}
+            max={1000}
             step={1}
             onChange={(v: number) => setTimeSpeed(v)}
           />

@@ -106,7 +106,7 @@ export default function Map() {
         <ImageryLayer imageryProvider={osmProvider} />
       </Viewer>
 
-      <div className="absolute bottom-7 left-0 z-10">
+      <div className="absolute bottom-8 left-1 z-11">
         <Time />
       </div>
 

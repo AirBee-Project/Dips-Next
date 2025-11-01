@@ -14,8 +14,8 @@ export default function FeatureButton(props: Props) {
   return (
     <Link to={props.link}>
       <div
-        className={`flex text-gray-400 px-2 py-1.5 rounded-md 
-          transition-all duration-100 ease-in-out cursor-pointer w-52 @max-[10rem]:w-10
+        className={`flex text-gray-400 py-1.5 rounded-md px-2 @max-[10rem]:justify-center @max-[10rem]:px-0
+          transition-all duration-100 ease-in-out cursor-pointer w-52 @max-[10rem]:w-10 
           ${
             isActive ? "bg-gray-100" : "hover:bg-gray-100 hover:text-gray-400"
           }`}
