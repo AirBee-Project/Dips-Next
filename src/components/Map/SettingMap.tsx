@@ -4,14 +4,34 @@ import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
 import { useMap } from "../../context/Map";
 import { XYZTileMapList } from "../../data/XYZTailMapList";
+import { useState, useMemo } from "react";
+import Fuse from "fuse.js";
 
 export default function SettingMap() {
   const { windowMode, setWindowMode, sceneMode, setSceneMode, tileId } =
     useMap();
+  const [search, setSearch] = useState("");
+
+  const fuse = useMemo(() => {
+    const list = Object.values(XYZTileMapList);
+    return new Fuse(list, {
+      keys: ["name", "detailText"], // 検索対象フィールド
+      threshold: 0.3, // 0.0〜1.0（低いほど厳密）
+      distance: 100, // 単語間距離の許容範囲
+      includeScore: true, // スコアを含める
+    });
+  }, []);
+
+  const filteredList = useMemo(() => {
+    if (!search.trim()) return Object.values(XYZTileMapList);
+
+    const results = fuse.search(search.trim());
+    return results.map((r) => r.item);
+  }, [search, fuse]);
 
   return (
     <div
-      className={` ${
+      className={`${
         windowMode === "Map"
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none"
@@ -21,38 +41,43 @@ export default function SettingMap() {
       <div>
         <div className="flex items-center justify-between mb-5">
           <p className="text-2xl text-gray-300">地図の詳細</p>
-          <div
-            onClick={() => {
-              setWindowMode("Hide");
-            }}
-          >
+          <div onClick={() => setWindowMode("Hide")}>
             <IconX className="hover:text-accent-300 cursor-pointer" />
           </div>
         </div>
+
+        {/* 🔍 検索ボックス */}
         <div className="mb-5">
-          <SearchBox placeholder={"地図を検索"} className="" />
+          <SearchBox
+            placeholder={"地図を検索"}
+            search={search}
+            setSearch={setSearch}
+          />
         </div>
 
-        <div className="flex flex-col gap-4 max-h-64 overflow-y-auto">
-          <SettingMapPattern
-            id={tileId}
-            img={XYZTileMapList[tileId].sampleUrl}
-            title={XYZTileMapList[tileId].name}
-            text={XYZTileMapList[tileId].detailText || "説明なし"}
-            link={XYZTileMapList[tileId].detailUrl}
-          />
-          {Object.values(XYZTileMapList).map(
-            (mapItem) =>
-              tileId != mapItem.id && (
-                <SettingMapPattern
-                  id={mapItem.id}
-                  img={mapItem.sampleUrl}
-                  title={mapItem.name}
-                  text={mapItem.detailText || "説明なし"}
-                  link={mapItem.detailUrl}
-                />
-              )
+        <div className="flex flex-col gap-4 h-64 overflow-y-auto">
+          {XYZTileMapList[tileId] && (
+            <SettingMapPattern
+              id={tileId}
+              img={XYZTileMapList[tileId].sampleUrl}
+              title={XYZTileMapList[tileId].name}
+              text={XYZTileMapList[tileId].detailText || "説明なし"}
+              link={XYZTileMapList[tileId].detailUrl}
+            />
           )}
+
+          {filteredList
+            .filter((mapItem) => mapItem.id !== tileId)
+            .map((mapItem) => (
+              <SettingMapPattern
+                key={mapItem.id}
+                id={mapItem.id}
+                img={mapItem.sampleUrl}
+                title={mapItem.name}
+                text={mapItem.detailText || "説明なし"}
+                link={mapItem.detailUrl}
+              />
+            ))}
         </div>
       </div>
 
