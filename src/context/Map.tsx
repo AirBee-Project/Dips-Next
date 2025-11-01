@@ -2,8 +2,12 @@ import React, { createContext, useContext, useState, useCallback } from "react";
 
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
+export type WindowMode = "Hide" | "Map" | "Time";
 
 interface MapContextType {
+  windowMode: WindowMode;
+  setWindowMode: (mode: WindowMode) => void;
+
   sceneMode: SceneMode;
   setSceneMode: (mode: SceneMode) => void;
 
@@ -13,7 +17,7 @@ interface MapContextType {
   currentTime: Date;
   setCurrentTime: (time: Date) => void;
 
-  timeSpeed: number; // 倍速（例：1.0, 2.0, -1.0など）
+  timeSpeed: number;
   setTimeSpeed: (speed: number) => void;
 
   isPaused: boolean;
@@ -28,6 +32,9 @@ interface MapContextType {
 
 // === デフォルト値 ===
 const defaultValues: MapContextType = {
+  windowMode: "Hide",
+  setWindowMode: () => {},
+
   sceneMode: "3D",
   setSceneMode: () => {},
 
@@ -57,6 +64,7 @@ const MapContext = createContext<MapContextType>(defaultValues);
 export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [windowMode, setWindowMode] = useState<WindowMode>("Hide");
   const [sceneMode, setSceneMode] = useState<SceneMode>("3D");
   const [tileUrl, setTileUrl] = useState(
     "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png"
@@ -69,18 +77,11 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [clockTheme, setClockTheme] = useState<"light" | "dark">("light");
 
-  // 時間の更新関数（例：外部から操作したいとき）
-  const tickTime = useCallback(() => {
-    if (isPaused) return;
-    setCurrentTime((prev) => {
-      const delta = timeSpeed * (timeDirection === "forward" ? 1 : -1);
-      return new Date(prev.getTime() + delta * 1000);
-    });
-  }, [isPaused, timeSpeed, timeDirection]);
-
   return (
     <MapContext.Provider
       value={{
+        windowMode,
+        setWindowMode,
         sceneMode,
         setSceneMode,
         tileUrl,

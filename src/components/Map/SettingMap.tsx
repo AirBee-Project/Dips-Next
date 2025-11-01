@@ -3,17 +3,27 @@ import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
 import { useState } from "react";
+import { useMap } from "../../context/Map";
 
 export default function SettingMap() {
   const [drawMode, setDrawMode] = useState("day");
+  const { windowMode, setWindowMode } = useMap();
 
   return (
-    <div className="bg-white-100 rounded-md w-full pt-5 pb-7 px-5">
+    <div
+      className={`${
+        windowMode === "Map" ? "visible opacity-100" : "hidden opacity-0"
+      } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
+    >
       {/* 地図のテクスチャ設定 */}
       <div>
         <div className="flex items-center justify-between mb-5">
           <p className="text-2xl text-gray-300">地図の詳細</p>
-          <div>
+          <div
+            onClick={() => {
+              setWindowMode("Hide");
+            }}
+          >
             <IconX className="hover:text-accent-300 cursor-pointer" />
           </div>
         </div>
@@ -112,9 +122,9 @@ export default function SettingMap() {
             value={drawMode}
             onChange={setDrawMode}
             options={[
-              { label: "球体表示", value: "day" },
-              { label: "平面表示", value: "night" },
-              { label: "斜め表示", value: "auto" },
+              { label: "球体表示", value: "3D" },
+              { label: "平面表示", value: "2D" },
+              { label: "斜め表示", value: "Columbus" },
             ]}
           />
         </div>

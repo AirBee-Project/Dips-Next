@@ -4,9 +4,6 @@ import {
   IconDatabase,
   IconLayoutSidebarRightExpand,
   IconLicense,
-  IconMap,
-  IconObjectScan,
-  IconSettings,
   IconUser,
   IconWorld,
 } from "@tabler/icons-react";
@@ -48,12 +45,6 @@ export default function Menu() {
           link="/map-object"
           text={"Map Object"}
           icon={IconBrandLaravel}
-        />
-
-        <FeatureButton
-          link="/map-setting"
-          text={"Map Setting"}
-          icon={IconMap}
         />
       </div>
 

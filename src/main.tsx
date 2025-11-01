@@ -4,7 +4,6 @@ import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
 // 各ページ
 import Overview from "./pages/overview";
-import MapSetting from "./pages/map-setting";
 import MapObject from "./pages/map-object";
 
 // CSS
@@ -59,14 +58,6 @@ const AnimatedRoutes: React.FC = () => {
             element={
               <PageWrapper>
                 <Overview />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/map-setting"
-            element={
-              <PageWrapper>
-                <MapSetting />
               </PageWrapper>
             }
           />

@@ -1,7 +1,9 @@
 import { IconClock, IconMinus, IconPlus, IconWorld } from "@tabler/icons-react";
 import SettingMap from "./SettingMap";
+import { useMap } from "../../context/Map";
 
 export default function SettingButtons() {
+  const { setWindowMode, windowMode } = useMap();
   return (
     <div className="relative">
       <div className="transition-all">
@@ -13,8 +15,15 @@ export default function SettingButtons() {
         </div>
 
         {/* 地図の設定 */}
-        <div className="bg-white rounded-[3px] mb-2 hover:bg-gray-100  duration-100">
-          <div className="p-1 text-gray-300">
+        <div
+          onClick={() => {
+            windowMode === "Map" ? setWindowMode("Hide") : setWindowMode("Map");
+          }}
+          className={`bg-white rounded-[3px] mb-2 cursor-pointer hover:bg-gray-100 duration-100 ${
+            windowMode === "Map" && "bg-gray-100"
+          }`}
+        >
+          <div className={`p-1 text-gray-300`}>
             <IconWorld stroke={2.5} size={20} />
           </div>
         </div>
