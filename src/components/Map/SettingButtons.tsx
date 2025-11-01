@@ -7,7 +7,16 @@ export default function SettingButtons() {
     <div className="relative">
       <div className="transition-all">
         {/* 時間の設定 */}
-        <div className="bg-white rounded-[3px] mb-2 hover:bg-gray-100  duration-100">
+        <div
+          onClick={() => {
+            windowMode === "Time"
+              ? setWindowMode("Hide")
+              : setWindowMode("Time");
+          }}
+          className={`bg-white rounded-[3px] mb-2 hover:bg-gray-100  duration-100 ${
+            windowMode === "Time" && "bg-gray-100"
+          }`}
+        >
           <div className="p-1 text-gray-300">
             <IconClock stroke={2.5} size={20} />
           </div>

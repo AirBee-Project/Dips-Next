@@ -3,7 +3,7 @@ import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
 import { useMap } from "../../context/Map";
-import { XYZTileMapList } from "../../data/XYZTailMapList";
+import { ZXYTileMapList } from "../../data/ZXYTailMapList";
 import { useState, useMemo } from "react";
 import Fuse from "fuse.js";
 
@@ -13,7 +13,7 @@ export default function SettingMap() {
   const [search, setSearch] = useState("");
 
   const fuse = useMemo(() => {
-    const list = Object.values(XYZTileMapList);
+    const list = Object.values(ZXYTileMapList);
     return new Fuse(list, {
       keys: ["name", "detailText"], // 検索対象フィールド
       threshold: 0.3, // 0.0〜1.0（低いほど厳密）
@@ -23,7 +23,7 @@ export default function SettingMap() {
   }, []);
 
   const filteredList = useMemo(() => {
-    if (!search.trim()) return Object.values(XYZTileMapList);
+    if (!search.trim()) return Object.values(ZXYTileMapList);
 
     const results = fuse.search(search.trim());
     return results.map((r) => r.item);
@@ -36,7 +36,7 @@ export default function SettingMap() {
       className={`${
         windowMode === "Map"
           ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
+          : "opacity-0 pointer-events-none hidden"
       } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
     >
       {/* 地図のテクスチャ設定 */}
@@ -57,14 +57,14 @@ export default function SettingMap() {
           />
         </div>
 
-        <div className="flex flex-col gap-4 h-64 overflow-y-auto">
-          {XYZTileMapList[tileId] && (
+        <div className="flex flex-col gap-4 h-64 overflow-y-scroll">
+          {ZXYTileMapList[tileId] && (
             <SettingMapPattern
               id={tileId}
-              img={XYZTileMapList[tileId].sampleUrl}
-              title={XYZTileMapList[tileId].name}
-              text={XYZTileMapList[tileId].detailText || "説明なし"}
-              link={XYZTileMapList[tileId].detailUrl}
+              img={ZXYTileMapList[tileId].sampleUrl}
+              title={ZXYTileMapList[tileId].name}
+              text={ZXYTileMapList[tileId].detailText || "説明なし"}
+              link={ZXYTileMapList[tileId].detailUrl}
             />
           )}
 

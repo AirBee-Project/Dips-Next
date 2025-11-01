@@ -1,4 +1,4 @@
-type XYZTileMap = {
+type ZXYTileMap = {
   id: number;
   name: string;
   XYZUrl: string;
@@ -8,7 +8,7 @@ type XYZTileMap = {
   credit?: string;
 };
 
-export const XYZTileMapList: Record<number, XYZTileMap> = {
+export const ZXYTileMapList: Record<number, ZXYTileMap> = {
   1: {
     id: 1,
     name: "標準地図",

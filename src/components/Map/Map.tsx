@@ -1,24 +1,30 @@
 import { useMemo, useEffect, useRef } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
-import { Viewer as CesiumViewer, UrlTemplateImageryProvider } from "cesium";
+import {
+  Viewer as CesiumViewer,
+  JulianDate,
+  UrlTemplateImageryProvider,
+} from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
 import SettingMap from "./SettingMap";
 import { useMap } from "../../context/Map";
-import { XYZTileMapList } from "../../data/XYZTailMapList";
+import { ZXYTileMapList } from "../../data/ZXYTailMapList";
+import SettingTime from "./SettingTime";
+import { view } from "motion/react-client";
 
 export default function Map() {
   //Mapの状態を取得する
-  const { sceneMode, tileId } = useMap();
+  const { sceneMode, tileId, currentTime } = useMap();
 
   // ref の型を CesiumViewer にする
   const viewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
 
   const osmProvider = useMemo(() => {
     return new UrlTemplateImageryProvider({
-      url: XYZTileMapList[tileId].XYZUrl,
-      credit: XYZTileMapList[tileId].credit,
+      url: ZXYTileMapList[tileId].XYZUrl,
+      credit: ZXYTileMapList[tileId].credit,
     });
   }, [tileId]);
 
@@ -48,6 +54,14 @@ export default function Map() {
         break;
     }
   }, [sceneMode]);
+
+  //時間を設定
+  useEffect(() => {
+    const viewer = viewerRef.current?.cesiumElement;
+    if (!viewer) return;
+    viewer.clock.currentTime = JulianDate.fromDate(currentTime);
+    viewer?.timeline.container;
+  }, [currentTime]);
 
   return (
     <div className="w-full h-full overflow-clip relative">
@@ -80,6 +94,11 @@ export default function Map() {
       {/* 実際の地図の設定画面 */}
       <div className="absolute bottom-10 right-12 z-10 w-80">
         <SettingMap />
+      </div>
+
+      {/* 実際の時間の設定画面 */}
+      <div className="absolute bottom-10 right-12 z-10 w-80">
+        <SettingTime />
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ interface MapContextType {
   setTileId: (id: number) => void;
 
   currentTime: Date;
-  setCurrentTime: (time: Date) => void;
+  setCurrentTime: React.Dispatch<React.SetStateAction<Date>>;
 
   timeSpeed: number;
   setTimeSpeed: (speed: number) => void;
@@ -28,6 +28,9 @@ interface MapContextType {
 
   clockTheme: "light" | "dark";
   setClockTheme: (theme: "light" | "dark") => void;
+
+  timeZone: string;
+  setTimeZone: (timezone: string) => void;
 }
 
 // === デフォルト値 ===
@@ -55,6 +58,9 @@ const defaultValues: MapContextType = {
 
   clockTheme: "light",
   setClockTheme: () => {},
+
+  timeZone: "Asia/Tokyo",
+  setTimeZone: () => {},
 };
 
 // === Context作成 ===
@@ -74,6 +80,7 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
     "forward"
   );
   const [clockTheme, setClockTheme] = useState<"light" | "dark">("light");
+  const [timeZone, setTimeZone] = useState("Asia/Tokyo");
 
   return (
     <MapContext.Provider
@@ -94,6 +101,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setTimeDirection,
         clockTheme,
         setClockTheme,
+        timeZone,
+        setTimeZone,
       }}
     >
       {children}

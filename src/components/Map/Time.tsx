@@ -1,7 +1,29 @@
+import { formatInTimeZone } from "date-fns-tz";
 import { useMap } from "../../context/Map";
+import { useEffect } from "react";
 
 export default function Time() {
-  const { clockTheme, setClockTheme } = useMap();
+  const {
+    clockTheme,
+    setClockTheme,
+    currentTime,
+    isPaused,
+    setCurrentTime,
+    timeSpeed,
+    timeZone,
+  } = useMap();
+  useEffect(() => {
+    if (isPaused) return; // 停止中は何もしない
+
+    const interval = setInterval(() => {
+      setCurrentTime((prev) => {
+        const next = new Date(prev.getTime() + 1000 * timeSpeed); // 1秒ごとに進める
+        return next;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isPaused, timeSpeed, setCurrentTime]);
   return (
     <div
       onClick={() => setClockTheme(clockTheme === "light" ? "dark" : "light")}
@@ -12,9 +34,9 @@ export default function Time() {
           clockTheme === "light" && "bg-gray-300 text-white"
         }`}
       >
-        2025/10/31
+        {formatInTimeZone(currentTime, timeZone, "yyyy-MM-dd")}
         <br />
-        13:52:02 UTC
+        {formatInTimeZone(currentTime, timeZone, "HH:mm:ss zzz")}
       </p>
     </div>
   );
