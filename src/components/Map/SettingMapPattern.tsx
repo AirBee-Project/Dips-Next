@@ -41,7 +41,7 @@ export default function SettingMapPattern(props: Props) {
             {props.title}
           </p>
           {props.link && (
-            <Link to={props.link}>
+            <Link to={props.link} target="_blank" rel="noopener noreferrer">
               <IconLink
                 className="text-gray-200 hover:text-accent-300 ml-1"
                 size={18}

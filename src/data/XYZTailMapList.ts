@@ -837,4 +837,70 @@ export const XYZTileMapList: Record<number, XYZTileMap> = {
       "https://maps.gsi.go.jp/development/ichiran.html#t20110311_tohoku_shinsui",
     credit: "国土地理院",
   },
+  81: {
+    id: 81,
+    name: "OpenStreetMap Standard",
+    XYZUrl: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    sampleUrl: "https://tile.openstreetmap.org/14/14552/6439.png",
+    detailText:
+      "OpenStreetMap財団が提供する公式タイル。データはODbL、タイル画像はCC BY-SA 2.0。商用利用はライセンス上可能ですが、公式サーバーへの高負荷アクセス（商用アプリでの大量利用など）は利用ポリシーで固く禁止されています。",
+    detailUrl: "https://www.openstreetmap.org/copyright",
+    credit: "© OpenStreetMap contributors",
+  },
+  82: {
+    id: 82,
+    name: "Wikimedia Maps",
+    XYZUrl: "https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png",
+    sampleUrl: "https://maps.wikimedia.org/osm-intl/14/14552/6439.png",
+    detailText:
+      "Wikimedia財団が提供するタイル（CC BY-SA 4.0）。商用利用可能（クレジット表記・ライセンス継承必須）。高負荷な利用は禁止されており、HTTPリクエスト時にUser-Agentの送信が必須です。",
+    detailUrl: "https://foundation.wikimedia.org/wiki/Maps_Terms_of_Use",
+    credit: "© OpenStreetMap contributors, Wikimedia Maps",
+  },
+  83: {
+    id: 83,
+    name: "OpenTopoMap",
+    XYZUrl: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png",
+    sampleUrl: "https://a.tile.opentopomap.org/14/14552/6439.png",
+    detailText:
+      "地形表現（等高線）が詳細なオープン地図。タイルはCC BY-SA 4.0。商用利用可能（クレジット表記・ライセンス継承必須）。高負荷な利用は禁止されています。(サブドメイン a, b, c が利用可能)",
+    detailUrl: "https://opentopomap.org/",
+    credit: "© OpenTopoMap (CC-BY-SA 4.0), © OpenStreetMap contributors, SRTM",
+  },
+  84: {
+    id: 84,
+    name: "Esri World Imagery (衛星写真)",
+    XYZUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    sampleUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/14/6439/14552",
+    detailText:
+      "Esriが提供する全球の衛星写真。{y}/{x}の順序に注意。商用利用にはEsriの利用規約の確認が必須です。多くの場合、ArcGISプラットフォーム（APIキー取得）経由での利用が想定されており、有料サブスクリプションが必要な場合があります。",
+    detailUrl: "https://www.esri.com/en-us/legal/terms/master-agreement",
+    credit: "Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+  },
+  85: {
+    id: 85,
+    name: "Esri World Topographic Map (地形図)",
+    XYZUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+    sampleUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/14/6439/14552",
+    detailText:
+      "Esriが提供する全球の地形図。{y}/{x}の順序に注意。商用利用にはEsriの利用規約の確認が必須です。World Imageryと同様、ArcGISプラットフォーム経由での利用が基本です。",
+    detailUrl: "https://www.esri.com/en-us/legal/terms/master-agreement",
+    credit:
+      "Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), © OpenStreetMap contributors, and the GIS User Community",
+  },
+  86: {
+    id: 86,
+    name: "Esri National Geographic World Map",
+    XYZUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
+    sampleUrl:
+      "https://services.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/14/6439/14552",
+    detailText:
+      "Esriが提供するNational Geographicスタイルの地図。{y}/{x}の順序に注意。商用利用の条件はEsriの利用規約に従います。",
+    detailUrl: "https://www.esri.com/en-us/legal/terms/master-agreement",
+  },
 };
