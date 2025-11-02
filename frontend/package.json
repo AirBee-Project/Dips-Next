@@ -1,5 +1,5 @@
 {
-  "name": "dips-next",
+  "name": "dips-next-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,6 +16,7 @@
     "cesium": "^1.134.1",
     "date-fns-tz": "^3.2.0",
     "fuse.js": "^7.1.0",
+    "hono": "^4.10.4",
     "motion": "^12.23.24",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
