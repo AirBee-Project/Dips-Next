@@ -1,9 +1,16 @@
-import { tr } from "motion/react-client";
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
+export interface CameraView {
+  longitude: number; // 経度（degrees）
+  latitude: number; // 緯度（degrees）
+  height: number; // 高度（m）
+  heading: number; // 方位角（radians）
+  pitch: number; // 傾き（radians）
+  roll: number; // ロール（radians）
+}
 
 interface MapContextType {
   windowMode: WindowMode;
@@ -32,6 +39,9 @@ interface MapContextType {
 
   timeZone: string;
   setTimeZone: (timezone: string) => void;
+
+  cameraView: CameraView;
+  setCameraView: React.Dispatch<React.SetStateAction<CameraView>>;
 }
 
 // === デフォルト値 ===
@@ -62,6 +72,16 @@ const defaultValues: MapContextType = {
 
   timeZone: "Asia/Tokyo",
   setTimeZone: () => {},
+
+  cameraView: {
+    longitude: 139.767, // 東京駅付近
+    latitude: 35.681,
+    height: 1500,
+    heading: 0,
+    pitch: -0.5,
+    roll: 0,
+  },
+  setCameraView: () => {},
 };
 
 // === Context作成 ===
@@ -82,6 +102,15 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [clockTheme, setClockTheme] = useState<"light" | "dark">("light");
   const [timeZone, setTimeZone] = useState("Asia/Tokyo");
+
+  const [cameraView, setCameraView] = useState<CameraView>({
+    longitude: 139.767,
+    latitude: 35.681,
+    height: 1500,
+    heading: 0,
+    pitch: -0.5,
+    roll: 0,
+  });
 
   return (
     <MapContext.Provider
@@ -104,6 +133,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setClockTheme,
         timeZone,
         setTimeZone,
+        cameraView,
+        setCameraView,
       }}
     >
       {children}
