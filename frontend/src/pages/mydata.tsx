@@ -1,14 +1,19 @@
 import { useEffect } from "react";
-import Select from "../components/overview/Select/Select";
 import { useMap } from "../context/Map";
+import xySpaceId from "../ulits/cesiumu/xySpaceID";
 
 export default function MyData() {
-  const { setMapVisible } = useMap();
+  const { setMapVisible, viewerRef } = useMap();
 
   //最初にMapを非表示にする
   useEffect(() => {
     setMapVisible(true);
-  }, []);
+
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+
+    xySpaceId(viewer, 8);
+  }, [viewerRef.current]);
 
   return (
     <div className="flex overflow-x-hidden">
