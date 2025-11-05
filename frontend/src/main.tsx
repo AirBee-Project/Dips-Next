@@ -16,6 +16,7 @@ import Menu from "./components/common/Menu/Menu";
 import { CesiumProvider } from "./context/Map";
 import License from "./pages/license";
 import Map from "./components/Map/Map";
+import MyData from "./pages/mydata";
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
@@ -68,6 +69,14 @@ const AnimatedRoutes: React.FC = () => {
             element={
               <PageWrapper>
                 <MapObject />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/mydata"
+            element={
+              <PageWrapper>
+                <MyData />
               </PageWrapper>
             }
           />
