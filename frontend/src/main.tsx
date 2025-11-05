@@ -14,6 +14,7 @@ import "react-resizable/css/styles.css";
 import { MenuProvider } from "./context/Menu";
 import Menu from "./components/common/Menu/Menu";
 import { CesiumProvider } from "./context/Map";
+import License from "./pages/license";
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
@@ -66,6 +67,14 @@ const AnimatedRoutes: React.FC = () => {
             element={
               <PageWrapper>
                 <MapObject />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/license"
+            element={
+              <PageWrapper>
+                <License />
               </PageWrapper>
             }
           />
