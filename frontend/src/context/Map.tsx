@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
+import type { Viewer as CesiumViewer } from "cesium";
+import React, { createContext, useContext, useState, useRef } from "react";
 
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
+
 export interface CameraView {
   longitude: number; // 経度（degrees）
   latitude: number; // 緯度（degrees）
@@ -31,9 +33,6 @@ interface MapContextType {
   isPaused: boolean;
   setIsPaused: (paused: boolean) => void;
 
-  timeDirection: "forward" | "backward";
-  setTimeDirection: (dir: "forward" | "backward") => void;
-
   clockTheme: "light" | "dark";
   setClockTheme: (theme: "light" | "dark") => void;
 
@@ -42,6 +41,9 @@ interface MapContextType {
 
   cameraView: CameraView;
   setCameraView: React.Dispatch<React.SetStateAction<CameraView>>;
+
+  /** Cesium Viewer インスタンス共有用 */
+  viewerRef: React.MutableRefObject<CesiumViewer | null>;
 }
 
 // === デフォルト値 ===
@@ -64,9 +66,6 @@ const defaultValues: MapContextType = {
   isPaused: false,
   setIsPaused: () => {},
 
-  timeDirection: "forward",
-  setTimeDirection: () => {},
-
   clockTheme: "light",
   setClockTheme: () => {},
 
@@ -82,6 +81,8 @@ const defaultValues: MapContextType = {
     roll: 0,
   },
   setCameraView: () => {},
+
+  viewerRef: { current: null },
 };
 
 // === Context作成 ===
@@ -97,9 +98,6 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentTime, setCurrentTime] = useState(new Date());
   const [timeSpeed, setTimeSpeed] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
-  const [timeDirection, setTimeDirection] = useState<"forward" | "backward">(
-    "forward"
-  );
   const [clockTheme, setClockTheme] = useState<"light" | "dark">("light");
   const [timeZone, setTimeZone] = useState("Asia/Tokyo");
 
@@ -111,6 +109,9 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
     pitch: -0.5,
     roll: 0,
   });
+
+  // Viewerインスタンスを共有（useRefで再レンダリング防止）
+  const viewerRef = useRef<CesiumViewer | null>(null);
 
   return (
     <MapContext.Provider
@@ -127,14 +128,13 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setTimeSpeed,
         isPaused,
         setIsPaused,
-        timeDirection,
-        setTimeDirection,
         clockTheme,
         setClockTheme,
         timeZone,
         setTimeZone,
         cameraView,
         setCameraView,
+        viewerRef,
       }}
     >
       {children}
