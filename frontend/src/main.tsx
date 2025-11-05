@@ -93,7 +93,9 @@ createRoot(document.getElementById("root")!).render(
           <div>
             <Menu />
           </div>
-          <AnimatedRoutes />
+          <div>
+            <AnimatedRoutes />
+          </div>
           <Map />
         </div>
       </CesiumProvider>

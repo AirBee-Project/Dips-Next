@@ -31,9 +31,6 @@ export default function Map() {
 
     //ContextにViewerを格納
     viewerRef.current = viewer;
-
-    // BingMap削除
-    viewer.imageryLayers.removeAll();
   };
 
   // === SceneMode変更 ===
@@ -56,11 +53,7 @@ export default function Map() {
   }, [sceneMode, viewerRef]);
 
   return (
-    <div
-      className={`w-full h-full overflow-clip relative ${
-        !mapVisible && "hidden"
-      }`}
-    >
+    <div className={`w-full h-full overflow-clip relative`}>
       <Viewer
         className="h-screen"
         ref={handleViewerRef}

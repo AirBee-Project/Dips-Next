@@ -1,6 +1,6 @@
 import { IconClock, IconMinus, IconPlus, IconWorld } from "@tabler/icons-react";
 import { useMap } from "../../context/Map";
-import { Cartesian3, Cartographic, EasingFunction } from "cesium";
+import { Cartesian3, Cartographic } from "cesium";
 import { zoomInAdaptive, zoomOutAdaptive } from "../../ulits/CesiumuZoom";
 
 export default function SettingButtons() {
