@@ -7,7 +7,6 @@ export default function Overview() {
       <div className="flex z-10">
         <Select />
       </div>
-      <Map />
     </div>
   );
 }

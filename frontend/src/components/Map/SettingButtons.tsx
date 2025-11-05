@@ -30,7 +30,7 @@ export default function SettingButtons() {
         pitch: camera.pitch,
         roll: camera.roll,
       },
-      duration: 0.5,
+      duration: 0.3,
       easingFunction: EasingFunction.QUADRATIC_IN_OUT,
     });
   }
@@ -60,7 +60,7 @@ export default function SettingButtons() {
         pitch: camera.pitch,
         roll: camera.roll,
       },
-      duration: 0.5,
+      duration: 0.3,
       easingFunction: EasingFunction.QUADRATIC_IN_OUT,
     });
   }

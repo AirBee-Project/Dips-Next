@@ -15,6 +15,7 @@ import { MenuProvider } from "./context/Menu";
 import Menu from "./components/common/Menu/Menu";
 import { CesiumProvider } from "./context/Map";
 import License from "./pages/license";
+import Map from "./components/Map/Map";
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
@@ -93,6 +94,7 @@ createRoot(document.getElementById("root")!).render(
             <Menu />
           </div>
           <AnimatedRoutes />
+          <Map />
         </div>
       </CesiumProvider>
     </BrowserRouter>

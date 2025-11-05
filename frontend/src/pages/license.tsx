@@ -8,8 +8,9 @@ export default function License() {
       <div className="w-[40%] pt-30">
         <p className="text-5xl text-gray-400">License</p>
         <div className="mt-20">
-          {LicenseList.map((item) => (
+          {LicenseList.map((item, index) => (
             <UsedLicense
+              key={index}
               name={item.name}
               url={item.url}
               license={item.license}
@@ -17,8 +18,9 @@ export default function License() {
             />
           ))}
 
-          {Object.entries(ZXYTileMapList).map(([key, item]) => (
+          {Object.entries(ZXYTileMapList).map(([key, item], index) => (
             <UsedLicense
+              key={key + index}
               name={item.name}
               url={item.detailUrl}
               license={item.credit}

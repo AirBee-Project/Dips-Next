@@ -2,7 +2,6 @@ import { useEffect, useRef, useMemo } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
 import {
   Viewer as CesiumViewer,
-  JulianDate,
   UrlTemplateImageryProvider,
   Math as CesiumMath,
   Cartesian3,
@@ -13,22 +12,12 @@ import Time from "./Time";
 import SettingButtons from "./SettingButtons";
 import SettingMap from "./SettingMap";
 import SettingTime from "./SettingTime";
-import { useMap } from "../../context/Map"; // ✅ Contextを利用
+import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMapList";
 
 export default function Map() {
-  const {
-    sceneMode,
-    tileId,
-    setCurrentTime,
-    isPaused,
-    timeSpeed,
-    cameraView,
-    setCameraView,
-    viewerRef, // ✅ ここを追加！
-  } = useMap();
+  const { sceneMode, tileId, cameraView, setCameraView, viewerRef } = useMap();
 
-  const localViewerRef = useRef<CesiumComponentRef<CesiumViewer>>(null);
   const isUpdatingFromCesium = useRef(false);
   const isInitialized = useRef(false);
   const lastUpdateTime = useRef(0);
@@ -109,29 +98,6 @@ export default function Map() {
         break;
     }
   }, [sceneMode, viewerRef]);
-
-  // === currentTime同期 ===
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    setCurrentTime(JulianDate.toDate(viewer.clock.currentTime));
-
-    const interval = setInterval(() => {
-      setCurrentTime(JulianDate.toDate(viewer.clock.currentTime));
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [setCurrentTime, viewerRef]);
-
-  // === 時間系 ===
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    viewer.clock.shouldAnimate = !isPaused;
-    viewer.clock.multiplier = timeSpeed;
-  }, [isPaused, timeSpeed, viewerRef]);
 
   // === Context → Cesium反映 ===
   useEffect(() => {
