@@ -1,6 +1,6 @@
 import { IconClock, IconMinus, IconPlus, IconWorld } from "@tabler/icons-react";
 import { useMap } from "../../context/Map";
-import { Cartesian3, EasingFunction } from "cesium";
+import { Cartesian3, Cartographic, EasingFunction } from "cesium";
 import { zoomInAnimated, zoomOutAnimated } from "../../ulits/CesiumuZoom";
 
 export default function SettingButtons() {
@@ -46,7 +46,11 @@ export default function SettingButtons() {
               stroke={2.5}
               size={20}
               onClick={() => {
-                zoomInAnimated(viewerRef.current, 1000, 0.5);
+                if (!viewerRef.current || viewerRef.current.isDestroyed())
+                  return null;
+                const position = viewerRef.current.camera.position;
+                const cartographic = Cartographic.fromCartesian(position);
+                zoomInAnimated(viewerRef.current, cartographic.height, 0.5);
               }}
             />
           </div>
@@ -57,7 +61,11 @@ export default function SettingButtons() {
               stroke={2.5}
               size={20}
               onClick={() => {
-                zoomOutAnimated(viewerRef.current, 1000, 0.5);
+                if (!viewerRef.current || viewerRef.current.isDestroyed())
+                  return null;
+                const position = viewerRef.current.camera.position;
+                const cartographic = Cartographic.fromCartesian(position);
+                zoomOutAnimated(viewerRef.current, cartographic.height, 0.5);
               }}
             />
           </div>
