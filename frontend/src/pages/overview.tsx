@@ -1,7 +1,15 @@
+import { useEffect } from "react";
 import Select from "../components/overview/Select/Select";
-import Map from "../components/Map/Map";
+import { useMap } from "../context/Map";
 
 export default function Overview() {
+  const { setMapVisible } = useMap();
+
+  //最初にMapを非表示にする
+  useEffect(() => {
+    setMapVisible(true);
+  }, []);
+
   return (
     <div className="flex overflow-x-hidden">
       <div className="flex z-10">

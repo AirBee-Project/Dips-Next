@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import UsedLicense from "../components/license/UsedLicense";
+import { useMap } from "../context/Map";
 import { LicenseList } from "../data/License";
 import { ZXYTileMapList } from "../data/ZXYTailMapList";
 
 export default function License() {
+  const { setMapVisible } = useMap();
+
+  //最初にMapを非表示にする
+  useEffect(() => {
+    setMapVisible(false);
+  }, []);
+
   return (
     <div className="w-full h-screen flex flex-col items-center overflow-y-scroll">
       <div className="w-[40%] pt-30">

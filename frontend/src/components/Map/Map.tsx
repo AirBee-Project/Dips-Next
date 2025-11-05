@@ -1,12 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
-import {
-  Viewer as CesiumViewer,
-  UrlTemplateImageryProvider,
-  Math as CesiumMath,
-  Cartesian3,
-  Cartographic,
-} from "cesium";
+import { Viewer as CesiumViewer, UrlTemplateImageryProvider } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
@@ -16,11 +10,9 @@ import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMapList";
 
 export default function Map() {
-  const { sceneMode, tileId, cameraView, setCameraView, viewerRef } = useMap();
+  const { sceneMode, tileId, viewerRef, mapVisible } = useMap();
 
-  const isUpdatingFromCesium = useRef(false);
   const isInitialized = useRef(false);
-  const lastUpdateTime = useRef(0);
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -37,47 +29,11 @@ export default function Map() {
     const viewer = ref.cesiumElement;
     console.log("Viewer ready!");
 
-    // ✅ ContextにViewerを格納（これがポイント！）
+    //ContextにViewerを格納
     viewerRef.current = viewer;
 
     // BingMap削除
     viewer.imageryLayers.removeAll();
-
-    // 初期カメラ位置設定
-    const { longitude, latitude, height, heading, pitch, roll } = cameraView;
-    viewer.camera.setView({
-      destination: Cartesian3.fromDegrees(longitude, latitude, height),
-      orientation: { heading, pitch, roll },
-    });
-
-    // カメラ変更イベント設定
-    const updateCamera = () => {
-      const now = Date.now();
-      if (now - lastUpdateTime.current < 150) return;
-      lastUpdateTime.current = now;
-
-      const camera = viewer.camera;
-      const pos = Cartographic.fromCartesian(camera.position);
-      isUpdatingFromCesium.current = true;
-
-      const newView = {
-        longitude: CesiumMath.toDegrees(pos.longitude),
-        latitude: CesiumMath.toDegrees(pos.latitude),
-        height: pos.height,
-        heading: camera.heading,
-        pitch: camera.pitch,
-        roll: camera.roll,
-      };
-
-      setCameraView(newView);
-      setTimeout(() => (isUpdatingFromCesium.current = false), 100);
-    };
-
-    viewer.camera.changed.addEventListener(updateCamera);
-    viewer.camera.moveEnd.addEventListener(updateCamera);
-
-    isInitialized.current = true;
-    console.log("Cesium initialization complete!");
   };
 
   // === SceneMode変更 ===
@@ -99,32 +55,12 @@ export default function Map() {
     }
   }, [sceneMode, viewerRef]);
 
-  // === Context → Cesium反映 ===
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    if (!viewer || !isInitialized.current || isUpdatingFromCesium.current)
-      return;
-
-    const { longitude, latitude, height, heading, pitch, roll } = cameraView;
-    const pos = Cartographic.fromCartesian(viewer.camera.position);
-    const lon = CesiumMath.toDegrees(pos.longitude);
-    const lat = CesiumMath.toDegrees(pos.latitude);
-
-    if (
-      Math.abs(lon - longitude) < 0.001 &&
-      Math.abs(lat - latitude) < 0.001 &&
-      Math.abs(pos.height - height) < 10
-    )
-      return;
-
-    viewer.camera.setView({
-      destination: Cartesian3.fromDegrees(longitude, latitude, height),
-      orientation: { heading, pitch, roll },
-    });
-  }, [cameraView, viewerRef]);
-
   return (
-    <div className="w-full h-full overflow-clip relative">
+    <div
+      className={`w-full h-full overflow-clip relative ${
+        !mapVisible && "hidden"
+      }`}
+    >
       <Viewer
         className="h-screen"
         ref={handleViewerRef}

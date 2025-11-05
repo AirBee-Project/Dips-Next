@@ -5,15 +5,6 @@ import React, { createContext, useContext, useState, useRef } from "react";
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
 
-export interface CameraView {
-  longitude: number; // 経度（degrees）
-  latitude: number; // 緯度（degrees）
-  height: number; // 高度（m）
-  heading: number; // 方位角（radians）
-  pitch: number; // 傾き（radians）
-  roll: number; // ロール（radians）
-}
-
 interface MapContextType {
   windowMode: WindowMode;
   setWindowMode: (mode: WindowMode) => void;
@@ -39,11 +30,11 @@ interface MapContextType {
   timeZone: string;
   setTimeZone: (timezone: string) => void;
 
-  cameraView: CameraView;
-  setCameraView: React.Dispatch<React.SetStateAction<CameraView>>;
-
   /** Cesium Viewer インスタンス共有用 */
   viewerRef: React.MutableRefObject<CesiumViewer | null>;
+
+  mapVisible: boolean;
+  setMapVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // === デフォルト値 ===
@@ -72,17 +63,10 @@ const defaultValues: MapContextType = {
   timeZone: "Asia/Tokyo",
   setTimeZone: () => {},
 
-  cameraView: {
-    longitude: 139.767, // 東京駅付近
-    latitude: 35.681,
-    height: 1500,
-    heading: 0,
-    pitch: -0.5,
-    roll: 0,
-  },
-  setCameraView: () => {},
-
   viewerRef: { current: null },
+
+  mapVisible: true,
+  setMapVisible: () => {},
 };
 
 // === Context作成 ===
@@ -100,18 +84,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isPaused, setIsPaused] = useState(false);
   const [clockTheme, setClockTheme] = useState<"light" | "dark">("light");
   const [timeZone, setTimeZone] = useState("Asia/Tokyo");
-
-  const [cameraView, setCameraView] = useState<CameraView>({
-    longitude: 139.767,
-    latitude: 35.681,
-    height: 1500,
-    heading: 0,
-    pitch: -0.5,
-    roll: 0,
-  });
-
-  // Viewerインスタンスを共有（useRefで再レンダリング防止）
   const viewerRef = useRef<CesiumViewer | null>(null);
+  const [mapVisible, setMapVisible] = useState(true);
 
   return (
     <MapContext.Provider
@@ -132,9 +106,9 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setClockTheme,
         timeZone,
         setTimeZone,
-        cameraView,
-        setCameraView,
         viewerRef,
+        mapVisible,
+        setMapVisible,
       }}
     >
       {children}

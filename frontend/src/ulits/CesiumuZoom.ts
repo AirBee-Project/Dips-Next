@@ -1,73 +1,37 @@
 import { Viewer, Cartesian3, EasingFunction, Math as CesiumMath } from "cesium";
 
-/**
- * アニメーション付きズームイン
- * @param viewer Cesium Viewer インスタンス
- * @param distance 移動距離（メートル, 正の値で前進）
- * @param duration アニメーション時間（秒）
- */
-export function zoomInAnimated(
-  viewer: Viewer | null | undefined,
-  distance: number = 1000,
-  duration: number = 0.6
-): void {
-  if (!viewer || viewer.isDestroyed()) return;
+export function zoomInAdaptive(viewer: Viewer, currentHeight: number) {
+  // 高度に応じた移動量（例: 現在の高さの30%）
+  const moveAmount = currentHeight * 0.3;
+  const newHeight = Math.max(currentHeight - moveAmount, 50); // 下限50m
 
-  const camera = viewer.camera;
-  const startPos = camera.positionWC.clone();
-  const direction = camera.directionWC.clone();
-
-  // 前方向へ移動
-  const endPos = Cartesian3.add(
-    startPos,
-    Cartesian3.multiplyByScalar(direction, distance, new Cartesian3()),
-    new Cartesian3()
-  );
-
-  camera.flyTo({
-    destination: endPos,
-    orientation: {
-      heading: camera.heading,
-      pitch: camera.pitch,
-      roll: camera.roll,
-    },
-    duration,
+  const carto = viewer.camera.positionCartographic;
+  viewer.camera.flyTo({
+    destination: Cartesian3.fromRadians(
+      carto.longitude,
+      carto.latitude,
+      newHeight
+    ),
+    duration: 0.5,
     easingFunction: EasingFunction.QUADRATIC_IN_OUT,
   });
 }
 
 /**
- * アニメーション付きズームアウト
- * @param viewer Cesium Viewer インスタンス
- * @param distance 移動距離（メートル, 正の値で後退）
- * @param duration アニメーション時間（秒）
+ * 高度に応じてズームアウト
  */
-export function zoomOutAnimated(
-  viewer: Viewer | null | undefined,
-  distance: number = 1000,
-  duration: number = 0.6
-): void {
-  if (!viewer || viewer.isDestroyed()) return;
+export function zoomOutAdaptive(viewer: Viewer, currentHeight: number) {
+  const moveAmount = currentHeight * 1.5;
+  const newHeight = Math.min(currentHeight + moveAmount, 500000000); // 上限50000m
 
-  const camera = viewer.camera;
-  const startPos = camera.positionWC.clone();
-  const direction = camera.directionWC.clone();
-
-  // 後方向へ移動
-  const endPos = Cartesian3.add(
-    startPos,
-    Cartesian3.multiplyByScalar(direction, -distance, new Cartesian3()),
-    new Cartesian3()
-  );
-
-  camera.flyTo({
-    destination: endPos,
-    orientation: {
-      heading: camera.heading,
-      pitch: camera.pitch,
-      roll: camera.roll,
-    },
-    duration,
+  const carto = viewer.camera.positionCartographic;
+  viewer.camera.flyTo({
+    destination: Cartesian3.fromRadians(
+      carto.longitude,
+      carto.latitude,
+      newHeight
+    ),
+    duration: 0.5,
     easingFunction: EasingFunction.QUADRATIC_IN_OUT,
   });
 }
