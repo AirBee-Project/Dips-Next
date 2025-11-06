@@ -1,13 +1,8 @@
 import {
   IconBook,
-  IconBrandLaravel,
-  IconDatabase,
   IconLayoutSidebarRightExpand,
   IconLicense,
-  IconPackage,
-  IconPackages,
   IconUser,
-  IconWorld,
 } from "@tabler/icons-react";
 import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
@@ -27,9 +22,9 @@ export default function Menu() {
         <img
           src="/logo/dips-next.svg"
           alt="DIPS-NEXTロゴ"
-          className={`${
-            isMenuOpen ? "w-30" : "hidden"
-          } mr-10 transition-all duration-250 ease-in-out`}
+          className={`mr-10 transition-all duration-250 ease-in-out ${
+            isMenuOpen ? "w-30" : "hidden pr-30 opacity-0"
+          }`}
         />
         <IconLayoutSidebarRightExpand
           className={`${
