@@ -1,11 +1,13 @@
 import {
+  IconBook,
   IconBrandLaravel,
   IconCalculator,
   IconDatabase,
   IconGraph,
+  IconLicense,
   IconPackages,
-  IconSquare,
   IconTable,
+  IconUser,
   IconWorld,
   type Icon,
   type IconProps,
@@ -14,53 +16,76 @@ import {
 type SubFeature = {
   name: string;
   icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
+  isOpen: boolean;
 };
 
 export type Feature = {
   name: string;
   url: string;
   icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
-  subFeatures?: SubFeature[];
+  subFeatures?: Record<string, SubFeature>;
 };
-
-export const MainFeatureList: Feature[] = [
-  {
+export const MainFeatureList: Record<string, Feature> = {
+  Overview: {
     name: "Overview",
     url: "/",
     icon: IconWorld,
-    subFeatures: [
-      {
+    subFeatures: {
+      KeyObject: {
         name: "Key Object",
         icon: IconPackages,
+        isOpen: false,
       },
-      {
+      ViewManager: {
         name: "View Manager",
         icon: IconCalculator,
+        isOpen: false,
       },
-    ],
+    },
   },
-  {
+  MyData: {
     name: "MyData",
     url: "/my-data",
     icon: IconDatabase,
   },
-  {
+  MapObject: {
     name: "Map Object",
     url: "/map-objcet",
     icon: IconBrandLaravel,
-    subFeatures: [
-      {
+    subFeatures: {
+      KeyObject: {
         name: "Key Object",
         icon: IconTable,
+        isOpen: false,
       },
-      {
+      ValueObject: {
         name: "Value Object",
         icon: IconGraph,
+        isOpen: false,
       },
-      {
+      IDObject: {
         name: "ID Object",
         icon: IconPackages,
+        isOpen: false,
       },
-    ],
+    },
   },
-];
+};
+
+export const SubFeatureList: Record<string, Feature> = {
+  License: {
+    name: "License",
+    url: "/license",
+    icon: IconLicense,
+  },
+  Document: {
+    name: "Document",
+    url: "/document",
+    icon: IconBook,
+  },
+  Account: {
+    name: "Account",
+    url: "/account",
+    icon: IconUser,
+  },
+};

@@ -6,10 +6,11 @@ import {
 } from "@tabler/icons-react";
 import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
-import { MainFeatureList } from "../../../data/Feature";
+import { MainFeatureList, SubFeatureList } from "../../../data/Feature";
+import { object } from "motion/react-client";
 
 export default function Menu() {
-  const { isMenuOpen, toggleMenu } = useMenu();
+  const { isMenuOpen, setIsMenuOpen, features } = useMenu();
 
   return (
     <div
@@ -29,28 +30,25 @@ export default function Menu() {
         <IconLayoutSidebarRightExpand
           className={`${
             isMenuOpen ? "" : "rotate-180"
-          } transition-all duration-500 ease-in-out text-gray-300 hover:text-accent-300 cursor-pointer`}
-          onClick={toggleMenu}
+          } transition-all duration-500 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer`}
+          onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+          }}
         />
       </div>
 
       {/* ユーザーが主要に使うメニュー */}
       <div className="w-65 flex flex-col gap-2 items-center">
-        {MainFeatureList.map((item) => (
-          <FeatureButton
-            name={item.name}
-            url={item.url}
-            icon={item.icon}
-            subFeatures={item.subFeatures}
-          />
+        {Object.entries(features).map(([key, item]) => (
+          <FeatureButton key={key} feature={item} />
         ))}
       </div>
 
       {/* 下側のデフォルトメニュー */}
       <div className="w-full flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3 items-center">
-        <FeatureButton name={"License"} icon={IconLicense} url={"/license"} />
-        <FeatureButton name={"Document"} icon={IconBook} url={""} />
-        <FeatureButton name={"Account"} icon={IconUser} url={""} />
+        {Object.entries(SubFeatureList).map(([key, item]) => (
+          <FeatureButton key={key} feature={item} />
+        ))}
       </div>
     </div>
   );

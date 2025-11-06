@@ -4,10 +4,17 @@ import {
   IconCircleChevronsRightFilled,
   IconTriangleInvertedFilled,
 } from "@tabler/icons-react";
+import { useMenu } from "../../../context/Menu";
 
-export default function FeatureButton(props: Feature) {
+type Props = {
+  key: string;
+  feature: Feature;
+};
+
+export default function FeatureButton(props: Props) {
   const location = useLocation();
-  const isActive = location.pathname === props.url;
+  const isActive = location.pathname === props.feature.url;
+  const { features, setFeatures } = useMenu();
 
   return (
     <div
@@ -15,29 +22,29 @@ export default function FeatureButton(props: Feature) {
         isActive ? "bg-gray-100" : "hover:bg-gray-100 hover:text-gray-400"
       }`}
     >
-      <Link to={props.url} className="group">
+      <Link to={props.feature.url} className="group">
         <div
           className={`flex text-gray-400 py-1.5 px-2 @max-[10rem]:justify-center @max-[10rem]:px-0
           cursor-pointer w-52 @max-[10rem]:w-10 items-center
           `}
         >
           <div className="h-7 aspect-square flex items-center justify-center">
-            <props.icon />
+            <props.feature.icon />
           </div>
           <p className="font-extrabold @max-[10rem]:hidden w-30 ">
-            <p className="ml-2">{props.name}</p>
+            <p className="ml-2">{props.feature.name}</p>
           </p>
           <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
             <IconTriangleInvertedFilled
               size={10}
               className={`mt-0.5 transition-all duration-300 ease-in-out ${
-                props.subFeatures ? "visible" : "hidden"
+                props.feature.subFeatures ? "visible" : "hidden"
               } ${isActive ? "-rotate-90" : "rotate-0 group-hover:-rotate-90"}`}
             />
           </div>
         </div>
       </Link>
-      {props.subFeatures ? (
+      {props.feature.subFeatures ? (
         <div
           className={`overflow-hidden transition-all ease-in-out ${
             isActive
@@ -47,10 +54,39 @@ export default function FeatureButton(props: Feature) {
         >
           <div className="w-full border border-white"></div>
           <div className="py-2">
-            {props.subFeatures?.map((item) => (
+            {Object.entries(props.feature.subFeatures).map(([subkey, item]) => (
               <div
-                className="flex items-center px-2 text-gray-200 text-1.5xl @max-[10rem]:w-10 @max-[10rem]:px-0 @max-[10rem]:justify-center w-full hover:text-gray-400 cursor-pointer
- duration-200"
+                className={`flex items-center px-2 text-1.5xl @max-[10rem]:w-10 @max-[10rem]:px-0 @max-[10rem]:justify-center w-full cursor-pointer
+ duration-200 ${
+   item.isOpen
+     ? "text-gray-400 hover:text-gray-200"
+     : "text-gray-200 hover:text-gray-400"
+ }`}
+                key={subkey}
+                onClick={() => {
+                  setFeatures((prev) => {
+                    const featureKey = props.feature.name;
+                    const subKey = subkey;
+
+                    // 既存サブ機能を取得（undefined対策も含む）
+                    const target = prev[featureKey].subFeatures?.[subKey];
+                    if (!target) return prev; // 存在しない場合はスキップ
+
+                    return {
+                      ...prev,
+                      [featureKey]: {
+                        ...prev[featureKey],
+                        subFeatures: {
+                          ...prev[featureKey].subFeatures,
+                          [subKey]: {
+                            ...target, // ← name と icon を維持する
+                            isOpen: !target.isOpen,
+                          },
+                        },
+                      },
+                    };
+                  });
+                }}
               >
                 <div className="h-7 aspect-square flex items-center justify-center">
                   <item.icon size={20} />
@@ -64,7 +100,9 @@ export default function FeatureButton(props: Feature) {
                   <div className="h-5 aspect-square flex items-center justify-center">
                     <IconCircleChevronsRightFilled
                       size={15}
-                      className={` ${props.subFeatures ? "visible" : "hidden"}`}
+                      className={`transition-all ease-in-out ${
+                        props.feature.subFeatures ? "visible" : "hidden"
+                      } ${item.isOpen ? "rotate-0" : "rotate-180"}`}
                     />
                   </div>
                 </div>

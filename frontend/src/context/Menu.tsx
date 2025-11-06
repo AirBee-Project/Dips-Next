@@ -1,30 +1,30 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { MainFeatureList, type Feature } from "../data/Feature";
 
 type MenuContextType = {
   isMenuOpen: boolean;
-  toggleMenu: () => void;
-  setMenuOpen: (value: boolean) => void;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  features: Record<string, Feature>;
+  setFeatures: React.Dispatch<React.SetStateAction<Record<string, Feature>>>;
 };
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
 export const MenuProvider = ({ children }: { children: ReactNode }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
-
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const setMenuOpen = (value: boolean) => setIsMenuOpen(value);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [features, setFeatures] = useState(MainFeatureList);
 
   return (
-    <MenuContext.Provider value={{ isMenuOpen, toggleMenu, setMenuOpen }}>
+    <MenuContext.Provider
+      value={{ isMenuOpen, setIsMenuOpen, features, setFeatures }}
+    >
       {children}
     </MenuContext.Provider>
   );
 };
 
-export const useMenu = (): MenuContextType => {
+export const useMenu = () => {
   const context = useContext(MenuContext);
-  if (!context) {
-    throw new Error("useMenu must be used within a MenuProvider");
-  }
+  if (!context) throw new Error("useMenu must be used within a MenuProvider");
   return context;
 };
