@@ -3,7 +3,7 @@ import { IconX } from "@tabler/icons-react";
 import SettingMapPattern from "./SettingMapPattern";
 import RadioButtons from "../common/RadioButtons";
 import { useMap } from "../../context/Map";
-import { ZXYTileMapList } from "../../data/ZXYTailMapList";
+import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { useState, useMemo } from "react";
 import Fuse from "fuse.js";
 

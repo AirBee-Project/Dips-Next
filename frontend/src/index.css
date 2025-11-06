@@ -41,6 +41,7 @@ body {
 
   /* 文字の設定 */
   --text-2xl: 20px;
+  --text-1.5xl: 14px;
   --text-1xl: 12px;
 }
 

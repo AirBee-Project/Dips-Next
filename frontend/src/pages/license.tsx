@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import UsedLicense from "../components/license/UsedLicense";
 import { useMap } from "../context/Map";
 import { LicenseList } from "../data/License";
-import { ZXYTileMapList } from "../data/ZXYTailMapList";
+import { ZXYTileMapList } from "../data/ZXYTailMap";
 
 export default function License() {
   const { setMapVisible } = useMap();

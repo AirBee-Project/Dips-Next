@@ -7,7 +7,7 @@ import SettingButtons from "./SettingButtons";
 import SettingMap from "./SettingMap";
 import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
-import { ZXYTileMapList } from "../../data/ZXYTailMapList";
+import { ZXYTileMapList } from "../../data/ZXYTailMap";
 
 export default function Map() {
   const { sceneMode, tileId, viewerRef, mapVisible } = useMap();

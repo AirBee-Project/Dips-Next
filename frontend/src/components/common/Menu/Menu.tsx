@@ -4,11 +4,14 @@ import {
   IconDatabase,
   IconLayoutSidebarRightExpand,
   IconLicense,
+  IconPackage,
+  IconPackages,
   IconUser,
   IconWorld,
 } from "@tabler/icons-react";
 import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
+import { MainFeatureList } from "../../../data/Feature";
 
 export default function Menu() {
   const { isMenuOpen, toggleMenu } = useMenu();
@@ -38,21 +41,21 @@ export default function Menu() {
 
       {/* ユーザーが主要に使うメニュー */}
       <div className="w-65 flex flex-col gap-2 items-center">
-        <FeatureButton link="/" text={"Overview"} icon={IconWorld} />
-        <FeatureButton link="/mydata" text={"MyData"} icon={IconDatabase} />
-
-        <FeatureButton
-          link="/map-object"
-          text={"Map Object"}
-          icon={IconBrandLaravel}
-        />
+        {MainFeatureList.map((item) => (
+          <FeatureButton
+            name={item.name}
+            url={item.url}
+            icon={item.icon}
+            subFeatures={item.subFeatures}
+          />
+        ))}
       </div>
 
       {/* 下側のデフォルトメニュー */}
       <div className="w-full flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3 items-center">
-        <FeatureButton text={"License"} icon={IconLicense} link={"/license"} />
-        <FeatureButton text={"Document"} icon={IconBook} link={""} />
-        <FeatureButton text={"Account"} icon={IconUser} link={""} />
+        <FeatureButton name={"License"} icon={IconLicense} url={"/license"} />
+        <FeatureButton name={"Document"} icon={IconBook} url={""} />
+        <FeatureButton name={"Account"} icon={IconUser} url={""} />
       </div>
     </div>
   );
