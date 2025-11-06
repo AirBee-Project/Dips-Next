@@ -7,14 +7,14 @@ import {
 import { useMenu } from "../../../context/Menu";
 
 type Props = {
-  key: string;
+  mainKey: string;
   feature: Feature;
 };
 
 export default function FeatureButton(props: Props) {
   const location = useLocation();
   const isActive = location.pathname === props.feature.url;
-  const { features, setFeatures } = useMenu();
+  const { setFeatures } = useMenu();
 
   return (
     <div
@@ -31,8 +31,8 @@ export default function FeatureButton(props: Props) {
           <div className="h-7 aspect-square flex items-center justify-center">
             <props.feature.icon />
           </div>
-          <p className="font-extrabold @max-[10rem]:hidden w-30 ">
-            <p className="ml-2">{props.feature.name}</p>
+          <p className="ml-2 font-extrabold @max-[10rem]:hidden w-30">
+            {props.feature.name}
           </p>
           <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
             <IconTriangleInvertedFilled
@@ -54,19 +54,14 @@ export default function FeatureButton(props: Props) {
         >
           <div className="w-full border border-white"></div>
           <div className="py-2">
-            {Object.entries(props.feature.subFeatures).map(([subkey, item]) => (
+            {Object.entries(props.feature.subFeatures).map(([subKey, item]) => (
               <div
                 className={`flex items-center px-2 text-1.5xl @max-[10rem]:w-10 @max-[10rem]:px-0 @max-[10rem]:justify-center w-full cursor-pointer
- duration-200 ${
-   item.isOpen
-     ? "text-gray-400 hover:text-gray-200"
-     : "text-gray-200 hover:text-gray-400"
- }`}
-                key={subkey}
+ duration-200 ${item.isOpen ? "" : "text-gray-200 hover:text-gray-400"}`}
+                key={subKey}
                 onClick={() => {
                   setFeatures((prev) => {
-                    const featureKey = props.feature.name;
-                    const subKey = subkey;
+                    const featureKey = props.mainKey;
 
                     // 既存サブ機能を取得（undefined対策も含む）
                     const target = prev[featureKey].subFeatures?.[subKey];
@@ -79,7 +74,7 @@ export default function FeatureButton(props: Props) {
                         subFeatures: {
                           ...prev[featureKey].subFeatures,
                           [subKey]: {
-                            ...target, // ← name と icon を維持する
+                            ...target,
                             isOpen: !target.isOpen,
                           },
                         },

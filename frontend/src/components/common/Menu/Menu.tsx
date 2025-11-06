@@ -40,14 +40,14 @@ export default function Menu() {
       {/* ユーザーが主要に使うメニュー */}
       <div className="w-65 flex flex-col gap-2 items-center">
         {Object.entries(features).map(([key, item]) => (
-          <FeatureButton key={key} feature={item} />
+          <FeatureButton mainKey={key} feature={item} />
         ))}
       </div>
 
       {/* 下側のデフォルトメニュー */}
       <div className="w-full flex flex-col gap-2 mt-auto py-6 border-gray-100 border-t-3 items-center">
         {Object.entries(SubFeatureList).map(([key, item]) => (
-          <FeatureButton key={key} feature={item} />
+          <FeatureButton mainKey={key} feature={item} />
         ))}
       </div>
     </div>
