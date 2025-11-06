@@ -7,7 +7,7 @@ import { useMenu } from "../../../context/Menu";
 type Pattern = "function" | "assets";
 
 export default function Select() {
-  const { isMenuOpen } = useMenu(); // 👈 Contextから取得
+  const { isMenuOpen } = useMenu();
 
   //モードに関する状態
   const [pattern, setPattern] = useState<Pattern>("assets");

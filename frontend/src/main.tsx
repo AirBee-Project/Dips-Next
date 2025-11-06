@@ -73,7 +73,7 @@ const AnimatedRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/mydata"
+            path="/my-data"
             element={
               <PageWrapper>
                 <MyData />

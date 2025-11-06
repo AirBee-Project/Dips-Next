@@ -47,28 +47,23 @@ export const MainFeatureList: Record<string, Feature> = {
     name: "MyData",
     url: "/my-data",
     icon: IconDatabase,
+    subFeatures: {
+      KeyObject: {
+        name: "属性を設定",
+        icon: IconTable,
+        isOpen: false,
+      },
+      ValueObject: {
+        name: "IDに値を設定",
+        icon: IconPackages,
+        isOpen: false,
+      },
+    },
   },
   MapObject: {
     name: "Map Object",
     url: "/map-objcet",
     icon: IconBrandLaravel,
-    subFeatures: {
-      KeyObject: {
-        name: "Key Object",
-        icon: IconTable,
-        isOpen: false,
-      },
-      ValueObject: {
-        name: "Value Object",
-        icon: IconGraph,
-        isOpen: false,
-      },
-      IDObject: {
-        name: "ID Object",
-        icon: IconPackages,
-        isOpen: false,
-      },
-    },
   },
 };
 
