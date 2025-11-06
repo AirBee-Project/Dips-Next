@@ -20,7 +20,7 @@ export default function Menu() {
     <div
       className={`${
         isMenuOpen ? "w-65 border-r-4" : "w-14 border-r-2"
-      } h-screen bg-white-100 flex flex-col items-center transition-all duration-250 ease-in-out border-gray-100 @container`}
+      } h-screen bg-white-100 flex flex-col items-center transition-all duration-500 ease-in-out border-gray-100 @container`}
     >
       {/* ロゴと開閉用ボタン */}
       <div className="flex justify-between my-8">
@@ -34,7 +34,7 @@ export default function Menu() {
         <IconLayoutSidebarRightExpand
           className={`${
             isMenuOpen ? "" : "rotate-180"
-          } transition-all duration-250 ease-in-out text-gray-300 hover:text-accent-300 cursor-pointer`}
+          } transition-all duration-500 ease-in-out text-gray-300 hover:text-accent-300 cursor-pointer`}
           onClick={toggleMenu}
         />
       </div>

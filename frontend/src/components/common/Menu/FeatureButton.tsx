@@ -1,6 +1,9 @@
 import { Link, useLocation } from "react-router";
 import type { Feature } from "../../../data/Feature";
-import { IconTriangleInvertedFilled } from "@tabler/icons-react";
+import {
+  IconCircleChevronsRightFilled,
+  IconTriangleInvertedFilled,
+} from "@tabler/icons-react";
 
 export default function FeatureButton(props: Feature) {
   const location = useLocation();
@@ -24,25 +27,43 @@ export default function FeatureButton(props: Feature) {
           <p className="font-extrabold @max-[10rem]:hidden w-30 ">
             <p className="ml-2">{props.name}</p>
           </p>
-          <IconTriangleInvertedFilled
-            size={10}
-            className={`mt-0.5 ${props.subFeatures ? "visible" : "hidden"} ${
-              isActive ? "rotate-270" : "rotate-0"
-            }`}
-          />
+          <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
+            <IconTriangleInvertedFilled
+              size={10}
+              className={`mt-0.5 transition-all duration-300 ease-in-out ${
+                props.subFeatures ? "visible" : "hidden"
+              } ${isActive ? "-rotate-90" : "rotate-0"}`}
+            />
+          </div>
         </div>
       </Link>
       {props.subFeatures ? (
-        <div>
+        <div
+          className={`overflow-hidden transition-all ease-in-out ${
+            isActive
+              ? "max-h-96 opacity-100 duration-700"
+              : "max-h-0 opacity-0 duration-700"
+          }`}
+        >
           <div className="w-full border border-white"></div>
           <div className="py-2">
             {props.subFeatures?.map((item) => (
-              <div className="flex items-center px-2 text-gray-300 text-1.5xl">
+              <div className="flex items-center px-2 text-gray-300 text-1.5xl @max-[10rem]:w-10 @max-[10rem]:px-0">
                 <div className="h-7 aspect-square flex items-center justify-center">
                   <item.icon size={20} />
                 </div>
                 <div className="w-30">
-                  <p className="ml-2">{item.name}</p>
+                  <p className="ml-2 @max-[10rem]:ml-0 @max-[10rem]:hidden">
+                    {item.name}
+                  </p>
+                </div>
+                <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
+                  <IconCircleChevronsRightFilled
+                    size={15}
+                    className={`mt-0.5 transition-all duration-300 ease-in-out ${
+                      props.subFeatures ? "visible" : "hidden"
+                    }`}
+                  />
                 </div>
               </div>
             ))}

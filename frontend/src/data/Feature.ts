@@ -1,5 +1,6 @@
 import {
   IconBrandLaravel,
+  IconCalculator,
   IconDatabase,
   IconGraph,
   IconPackages,
@@ -33,8 +34,8 @@ export const MainFeatureList: Feature[] = [
         icon: IconPackages,
       },
       {
-        name: "Key Object",
-        icon: IconPackages,
+        name: "View Manager",
+        icon: IconCalculator,
       },
     ],
   },
