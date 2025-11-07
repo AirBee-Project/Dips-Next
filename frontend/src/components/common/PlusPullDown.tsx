@@ -5,15 +5,15 @@ import { useClickOutside } from "../../hooks/useClickOutside";
 type PullDown = {
   text: string;
   icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>;
-  handleClick: () => void;
 };
 
 type Props = {
   className?: string;
-  pullDowns: PullDown[];
+  handleClick: (key: string) => void;
+  pullDowns: Record<string, PullDown>;
 };
 
-export default function PlusPullDown({ className = "", pullDowns }: Props) {
+export default function PlusPullDown(props: Props) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -23,7 +23,7 @@ export default function PlusPullDown({ className = "", pullDowns }: Props) {
   return (
     <div
       ref={containerRef}
-      className={`relative border-[3px] border-gray-100 rounded-md ${className} h-full`}
+      className={`relative border-[3px] border-gray-100 rounded-md ${props.className} h-full`}
     >
       {/* プラスボタン */}
       <button
@@ -41,11 +41,11 @@ export default function PlusPullDown({ className = "", pullDowns }: Props) {
             : "scale-95 opacity-0 pointer-events-none"
         }`}
       >
-        {pullDowns.map((item, index) => (
+        {Object.entries(props.pullDowns).map(([key, item], index) => (
           <div
-            key={index}
+            key={key}
             onClick={() => {
-              item.handleClick();
+              props.handleClick(key);
               setOpen(false); // メニューを閉じる
             }}
             className="flex items-center py-1 px-3 cursor-pointer hover:bg-gray-100 transition"

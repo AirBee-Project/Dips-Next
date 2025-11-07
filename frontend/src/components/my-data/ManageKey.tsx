@@ -15,8 +15,8 @@ export default function ManageKey() {
   //検索
   const [assetsSearch, setAssetsSearch] = useState("");
 
-  function addTextKey() {
-    console.log("押された");
+  function addTextKey(key: string) {
+    console.log(key);
   }
 
   return (
@@ -45,23 +45,21 @@ export default function ManageKey() {
             className="mr-2"
           />
           <PlusPullDown
-            pullDowns={[
-              {
+            handleClick={addTextKey}
+            pullDowns={{
+              text: {
                 text: "文字属性の追加",
                 icon: IconLetterCase,
-                handleClick: addTextKey,
               },
-              {
+              number: {
                 text: "数値属性の追加",
                 icon: IconNumber123,
-                handleClick: addTextKey,
               },
-              {
+              boolean: {
                 text: "真偽属性の追加",
                 icon: IconSquaresSelected,
-                handleClick: addTextKey,
               },
-            ]}
+            }}
           />
         </div>
       </ResizableBox>
