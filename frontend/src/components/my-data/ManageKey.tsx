@@ -2,13 +2,22 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import SearchBox from "../common/SearchBox";
 import PlusPullDown from "../common/PlusPullDown";
+import {
+  IconLetterCase,
+  IconNumber123,
+  IconSquaresSelected,
+} from "@tabler/icons-react";
 
-export default function SelectKey() {
+export default function ManageKey() {
   //横幅
   const [width, setWidth] = useState(290);
 
   //検索
   const [assetsSearch, setAssetsSearch] = useState("");
+
+  function addTextKey() {
+    console.log("押された");
+  }
 
   return (
     <div className="flex z-50">
@@ -35,7 +44,25 @@ export default function SelectKey() {
             setSearch={setAssetsSearch}
             className="mr-2"
           />
-          <PlusPullDown />
+          <PlusPullDown
+            pullDowns={[
+              {
+                text: "文字属性の追加",
+                icon: IconLetterCase,
+                handleClick: addTextKey,
+              },
+              {
+                text: "数値属性の追加",
+                icon: IconNumber123,
+                handleClick: addTextKey,
+              },
+              {
+                text: "真偽属性の追加",
+                icon: IconSquaresSelected,
+                handleClick: addTextKey,
+              },
+            ]}
+          />
         </div>
       </ResizableBox>
     </div>
