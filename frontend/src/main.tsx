@@ -16,7 +16,7 @@ import Menu from "./components/common/Menu/Menu";
 import { CesiumProvider } from "./context/Map";
 import License from "./pages/license";
 import Map from "./components/Map/Map";
-import MyData from "./pages/mydata";
+import MyData from "./pages/my-data";
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
