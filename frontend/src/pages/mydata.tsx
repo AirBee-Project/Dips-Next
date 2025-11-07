@@ -1,10 +1,10 @@
-import ManageKey from "../components/my-data/ManageKey";
+import Key from "../components/my-data/Key";
 
 export default function MyData() {
   return (
     <div className="flex overflow-x-hidden">
       <div className="flex z-10">
-        <ManageKey />
+        <Key />
       </div>
     </div>
   );
