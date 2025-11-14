@@ -13,7 +13,7 @@
     "@tabler/icons-react": "^3.35.0",
     "@tailwindcss/vite": "^4.1.16",
     "@types/react-resizable": "^3.0.8",
-    "cesium": "^1.134.1",
+    "cesium": "1.135.0",
     "date-fns-tz": "^3.2.0",
     "fuse.js": "^7.1.0",
     "hono": "^4.10.4",
