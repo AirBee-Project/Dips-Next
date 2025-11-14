@@ -13,6 +13,42 @@ import {
   IconTriangle,
 } from "@tabler/icons-react";
 import SubFeatureTab from "../common/SubFeatureTab";
+import {
+  ColoredInput,
+  type ParsedPart,
+  type Parser,
+} from "../common/ColoredInput";
+
+const spaceOrCommaParser: Parser = (text: string): ParsedPart[] => {
+  const parts: string[] = [];
+  const separators: string[] = [];
+  let currentPart = "";
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    if (char === " " || char === ",") {
+      if (currentPart) {
+        parts.push(currentPart);
+        separators.push(char);
+        currentPart = "";
+      }
+    } else {
+      currentPart += char;
+    }
+  }
+
+  // 最後の部分を追加
+  if (currentPart) {
+    parts.push(currentPart);
+  }
+
+  return parts.map(
+    (part: string, index: number): ParsedPart => ({
+      text: part,
+      separator: index < separators.length ? separators[index] : "",
+    })
+  );
+};
 
 export default function Value() {
   //横幅
@@ -25,6 +61,8 @@ export default function Value() {
   function addTextKey(key: string) {
     console.log(key);
   }
+
+  const [text, setText] = useState<string>("");
 
   return (
     <SubFeatureTab mainFeature={"MyData"} subFeature={"ValueObject"}>
@@ -50,10 +88,11 @@ export default function Value() {
               placeholder={"値を検索"}
               search={assetsSearch}
               setSearch={setAssetsSearch}
-              className="mr-2"
+              className="mr-2 w-fit z-10"
             />
             <PlusPullDown
               handleClick={addTextKey}
+              className="z-20"
               pullDowns={{
                 select: {
                   text: "IDを選択",
@@ -78,8 +117,25 @@ export default function Value() {
               }}
             />
           </div>
-          <div>
-            <div></div>
+          <div className="mt-3 w-full flex flex-col items-center">
+            <div
+              className="border-3 w-[80%] border-gray-100 rounded-md p-3 
+            "
+            >
+              <input
+                type="text"
+                className="text-2xl text-gray-400 w-full pt-1 pb-3 placeholder-gray-100 outline-none"
+                placeholder="値を入力"
+              />
+              <ColoredInput
+                value={text}
+                onChange={setText}
+                parser={spaceOrCommaParser}
+                placeholder="16/300/3/44_3600/300....."
+                colors={["#d6d6d6"]}
+                className="outline-none text-1xl w-full"
+              />
+            </div>
           </div>
         </ResizableBox>
       </div>
