@@ -33,11 +33,10 @@ export default function SettingMap() {
 
   return (
     <div
-      className={`${
-        windowMode === "Map"
+      className={`${windowMode === "Map"
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none hidden"
-      } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
+        } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
     >
       <div>
         <div className="flex items-center justify-between mb-5">
@@ -55,16 +54,19 @@ export default function SettingMap() {
           />
         </div>
 
+        {/* 選択中の地図を表示 */}
+        <SettingMapPattern
+          id={tileId}
+          img={ZXYTileMapList[tileId].sampleUrl}
+          title={ZXYTileMapList[tileId].name}
+          text={ZXYTileMapList[tileId].detailText || "説明なし"}
+          link={ZXYTileMapList[tileId].detailUrl}
+        />
+
+        {/* 間の線 */}
+        <div className="border border-gray-100 w-full mt-5 mb-5"></div>
+
         <div className="flex flex-col gap-4 h-64 overflow-y-scroll">
-          {ZXYTileMapList[tileId] && (
-            <SettingMapPattern
-              id={tileId}
-              img={ZXYTileMapList[tileId].sampleUrl}
-              title={ZXYTileMapList[tileId].name}
-              text={ZXYTileMapList[tileId].detailText || "説明なし"}
-              link={ZXYTileMapList[tileId].detailUrl}
-            />
-          )}
 
           {filteredList
             .filter((mapItem) => mapItem.id !== tileId)

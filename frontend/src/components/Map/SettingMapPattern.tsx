@@ -20,9 +20,9 @@ export default function SettingMapPattern(props: Props) {
       className={`flex items-center justify-baseline ${props.className} w-full overflow-x-clip `}
     >
       <img
-        className={`h-15 w-15 aspect-square rounded-md mr-4 border-gray-100 border-2 hover:border-accent-300 transition-all cursor-pointer duration-100 ${
-          props.id === tileId && "border-gray-200 hover:border-gray-200"
-        }`}
+        className={`h-15 w-15 aspect-square rounded-md mr-4 border-gray-100 border-2 hover:border-accent-300 transition-all cursor-pointer duration-100 
+          ${props.id === tileId && "border-gray-700 border-3"
+          }`}
         src={props.img}
         alt={props.title + "サンプル画像"}
         key={props.id}
