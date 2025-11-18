@@ -8,16 +8,9 @@ import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
 import { MainFeatureList, SubFeatureList } from "../../../data/Feature";
 import { object } from "motion/react-client";
-import { motion, useMotionValue } from "framer-motion";
 export default function Menu() {
   const { isMenuOpen, setIsMenuOpen, features } = useMenu();
-  // MenuProvider に sidebarWidth を motionValue で持たせる
 
-
-  const sidebarWidth = useMotionValue(isMenuOpen ? 260 : 56);
-
-  // サイドバー開閉時に animate で更新
-  sidebarWidth.set(isMenuOpen ? 260 : 56);
   return (
     <div
       className={`${isMenuOpen ? "w-65 border-r-4" : "w-14 border-r-2"
