@@ -1,7 +1,7 @@
 import type { Viewer as CesiumViewer } from "cesium";
 import React, { createContext, useContext, useState, useRef } from "react";
 
-import { createCesiumClockController } from "./cesiumClockController";
+import { createCesiumClockController } from "../ulits/cesiumu/cesiumClockController";
 
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
