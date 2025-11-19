@@ -8,29 +8,25 @@ import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
 import { MainFeatureList, SubFeatureList } from "../../../data/Feature";
 import { object } from "motion/react-client";
-
 export default function Menu() {
   const { isMenuOpen, setIsMenuOpen, features } = useMenu();
 
   return (
     <div
-      className={`${
-        isMenuOpen ? "w-65 border-r-4" : "w-14 border-r-2"
-      } h-screen bg-white-100 flex flex-col items-center transition-all duration-500 ease-in-out border-gray-100 @container`}
+      className={`${isMenuOpen ? "w-65 border-r-4" : "w-14 border-r-2"
+        } h-screen z-100 bg-white-100 flex flex-col items-center transition-all duration-500 ease-in-out border-gray-100 @container`}
     >
       {/* ロゴと開閉用ボタン */}
       <div className="flex justify-between my-8">
         <img
           src="/logo/dips-next.svg"
           alt="DIPS-NEXTロゴ"
-          className={`mr-10 transition-all duration-250 ease-in-out ${
-            isMenuOpen ? "w-30" : "hidden pr-30 opacity-0"
-          }`}
+          className={`mr-10 transition-all duration-250 ease-in-out ${isMenuOpen ? "w-30" : "hidden pr-30 opacity-0"
+            }`}
         />
         <IconLayoutSidebarRightExpand
-          className={`${
-            isMenuOpen ? "" : "rotate-180"
-          } transition-all duration-500 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer`}
+          className={`${isMenuOpen ? "" : "rotate-180"
+            } transition-all duration-500 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer`}
           onClick={() => {
             setIsMenuOpen(!isMenuOpen);
           }}
