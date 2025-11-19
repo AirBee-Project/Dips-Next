@@ -18,13 +18,13 @@ export const createCesiumClockController = (
   const play = () => {
     if (!exists()) return;
     viewerRef.current!.clock.shouldAnimate = true;
-    setIsPaused(true);
+    setIsPaused(false);
   };
 
   const pause = () => {
     if (!exists()) return;
     viewerRef.current!.clock.shouldAnimate = false;
-    setIsPaused(false);
+    setIsPaused(true);
   };
 
   const setSpeed = (multiplier: number) => {

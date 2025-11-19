@@ -67,6 +67,7 @@ export default function Map() {
         navigationHelpButton={false}
         fullscreenButton={false}
         vrButton={false}
+        shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
       </Viewer>
