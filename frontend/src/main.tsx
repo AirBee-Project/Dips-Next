@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, useLocation, Routes, Route } from "react-router";
-import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import { AnimatePresence, easeInOut, motion, useMotionValue } from "framer-motion";
 
 // 各ページ
 import Overview from "./pages/overview";
@@ -11,12 +11,13 @@ import "./index.css";
 import "react-resizable/css/styles.css";
 
 // メニューの状態管理
-import { MenuProvider } from "./context/Menu";
+import { MenuProvider, useMenu } from "./context/Menu";
 import Menu from "./components/common/Menu/Menu";
 import { CesiumProvider } from "./context/Map";
 import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
+
 
 /* --- ページトランジション設定 --- */
 const pageVariants = {
@@ -47,12 +48,27 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 /* --- AnimatedRoutes --- */
 const AnimatedRoutes: React.FC = () => {
   const location = useLocation();
+  const isLicensePage = location.pathname === "/license";
+
+  const { isMenuOpen } = useMenu();
+  const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4;//サイドバー分を左に開けるため
+  // License 用のアニメーション
+  const license_trans = { duration: 0.25, ease: "easeOut", delay: isMenuOpen ? 0.25 : 0 } as const;
+
   return (
-    <div
-      style={{
-        flex: 1,
-        position: "relative",
-      }}
+    <motion.div
+      className={
+        isLicensePage
+          ? "fixed top-0 bottom-0 right-0 z-15 bg-white overflow-y-auto"
+          : "flex-1 relative overflow-hidden"
+      }
+      animate={
+        isLicensePage
+          ? { left: sidebarWidth }
+          : { left: 0 }
+      }
+      transition={license_trans}
+      initial={false} // 初期状態でアニメーションしない
     >
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -90,7 +106,7 @@ const AnimatedRoutes: React.FC = () => {
           />
         </Routes>
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 
@@ -99,7 +115,7 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <CesiumProvider>
         <div className="flex">
-          <div>
+          <div className="z-200">
             <Menu />
           </div>
           <div>
