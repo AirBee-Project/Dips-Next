@@ -1,6 +1,8 @@
 import type { Viewer as CesiumViewer } from "cesium";
 import React, { createContext, useContext, useState, useRef } from "react";
 
+import { createCesiumClockController } from "./cesiumClockController";
+
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
@@ -35,38 +37,52 @@ interface MapContextType {
 
   mapVisible: boolean;
   setMapVisible: React.Dispatch<React.SetStateAction<boolean>>;
+
+  setCesiumTime: (date: Date) => void;
+  play: () => void;
+  pause: () => void;
+  setSpeed: (multiplier: number) => void;
+  syncReactTimeToCesium: (date: Date) => void;
+  syncCesiumTimeToReact: () => void;
 }
 
 // === デフォルト値 ===
 const defaultValues: MapContextType = {
   windowMode: "Map",
-  setWindowMode: () => {},
+  setWindowMode: () => { },
 
   sceneMode: "3D",
-  setSceneMode: () => {},
+  setSceneMode: () => { },
 
   tileId: 1,
-  setTileId: () => {},
+  setTileId: () => { },
 
   currentTime: new Date(),
-  setCurrentTime: () => {},
+  setCurrentTime: () => { },
 
   timeSpeed: 2,
-  setTimeSpeed: () => {},
+  setTimeSpeed: () => { },
 
   isPaused: false,
-  setIsPaused: () => {},
+  setIsPaused: () => { },
 
   clockTheme: "light",
-  setClockTheme: () => {},
+  setClockTheme: () => { },
 
   timeZone: "Asia/Tokyo",
-  setTimeZone: () => {},
+  setTimeZone: () => { },
 
   viewerRef: { current: null },
 
   mapVisible: true,
-  setMapVisible: () => {},
+  setMapVisible: () => { },
+
+  setCesiumTime: () => { },
+  play: () => { },
+  pause: () => { },
+  setSpeed: () => { },
+  syncReactTimeToCesium: () => { },
+  syncCesiumTimeToReact: () => { },
 };
 
 // === Context作成 ===
@@ -87,6 +103,19 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const viewerRef = useRef<CesiumViewer | null>(null);
   const [mapVisible, setMapVisible] = useState(true);
 
+  const {
+    setCesiumTime,
+    play,
+    pause,
+    setSpeed,
+    syncReactTimeToCesium,
+    syncCesiumTimeToReact,
+  } = createCesiumClockController(
+    viewerRef,
+    setCurrentTime,
+    setTimeSpeed,
+    setIsPaused
+  );
   return (
     <MapContext.Provider
       value={{
@@ -109,6 +138,13 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         viewerRef,
         mapVisible,
         setMapVisible,
+
+        setCesiumTime,
+        play,
+        pause,
+        setSpeed,
+        syncReactTimeToCesium,
+        syncCesiumTimeToReact,
       }}
     >
       {children}
