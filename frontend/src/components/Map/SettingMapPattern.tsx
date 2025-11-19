@@ -49,7 +49,7 @@ export default function SettingMapPattern(props: Props) {
             </Link>
           )}
         </div>
-        <p className="text-gray-200 text-1xl line-clamp-2 font-medium">
+        <p className="text-gray-200 text-1xl line-clamp-2 font-medium h-10">
           {props.text}
         </p>
       </div>
