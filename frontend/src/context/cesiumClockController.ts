@@ -27,7 +27,7 @@ export const createCesiumClockController = (
     setIsPaused(true);
   };
 
-  const setSpeed = (multiplier: number) => {
+  const setCesiumSpeed = (multiplier: number) => {
     if (!exists()) return;
     viewerRef.current!.clock.multiplier = multiplier;
     setTimeSpeed(multiplier);
@@ -48,7 +48,7 @@ export const createCesiumClockController = (
     setCesiumTime,
     play,
     pause,
-    setSpeed,
+    setCesiumSpeed,
     syncReactTimeToCesium,
     syncCesiumTimeToReact,
   };

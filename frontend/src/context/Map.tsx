@@ -41,7 +41,7 @@ interface MapContextType {
   setCesiumTime: (date: Date) => void;
   play: () => void;
   pause: () => void;
-  setSpeed: (multiplier: number) => void;
+  setCesiumSpeed: (multiplier: number) => void;
   syncReactTimeToCesium: (date: Date) => void;
   syncCesiumTimeToReact: () => void;
 }
@@ -80,7 +80,7 @@ const defaultValues: MapContextType = {
   setCesiumTime: () => { },
   play: () => { },
   pause: () => { },
-  setSpeed: () => { },
+  setCesiumSpeed: () => { },
   syncReactTimeToCesium: () => { },
   syncCesiumTimeToReact: () => { },
 };
@@ -107,7 +107,7 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
     setCesiumTime,
     play,
     pause,
-    setSpeed,
+    setCesiumSpeed,
     syncReactTimeToCesium,
     syncCesiumTimeToReact,
   } = createCesiumClockController(
@@ -142,7 +142,7 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setCesiumTime,
         play,
         pause,
-        setSpeed,
+        setCesiumSpeed,
         syncReactTimeToCesium,
         syncCesiumTimeToReact,
       }}
