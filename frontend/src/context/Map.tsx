@@ -1,8 +1,6 @@
 import type { Viewer as CesiumViewer } from "cesium";
 import React, { createContext, useContext, useState, useRef } from "react";
 
-import { createCesiumClockController } from "../ulits/cesiumu/cesiumClockController";
-
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
@@ -38,12 +36,6 @@ interface MapContextType {
   mapVisible: boolean;
   setMapVisible: React.Dispatch<React.SetStateAction<boolean>>;
 
-  setCesiumTime: (date: Date) => void;
-  play: () => void;
-  pause: () => void;
-  setCesiumSpeed: (multiplier: number) => void;
-  syncReactTimeToCesium: (date: Date) => void;
-  syncCesiumTimeToReact: () => void;
 }
 
 // === デフォルト値 ===
@@ -77,12 +69,6 @@ const defaultValues: MapContextType = {
   mapVisible: true,
   setMapVisible: () => { },
 
-  setCesiumTime: () => { },
-  play: () => { },
-  pause: () => { },
-  setCesiumSpeed: () => { },
-  syncReactTimeToCesium: () => { },
-  syncCesiumTimeToReact: () => { },
 };
 
 // === Context作成 ===
@@ -103,19 +89,6 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const viewerRef = useRef<CesiumViewer | null>(null);
   const [mapVisible, setMapVisible] = useState(true);
 
-  const {
-    setCesiumTime,
-    play,
-    pause,
-    setCesiumSpeed,
-    syncReactTimeToCesium,
-    syncCesiumTimeToReact,
-  } = createCesiumClockController(
-    viewerRef,
-    setCurrentTime,
-    setTimeSpeed,
-    setIsPaused
-  );
   return (
     <MapContext.Provider
       value={{
@@ -139,12 +112,6 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         mapVisible,
         setMapVisible,
 
-        setCesiumTime,
-        play,
-        pause,
-        setCesiumSpeed,
-        syncReactTimeToCesium,
-        syncCesiumTimeToReact,
       }}
     >
       {children}

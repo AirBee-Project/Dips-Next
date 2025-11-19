@@ -5,15 +5,17 @@ import { useState, useMemo } from "react";
 import RadioButtons from "../common/RadioButtons";
 import { TimeZoneList } from "../../data/TimeZone";
 import RangeInput from "../common/RangeInput";
+import { setCesiumSpeed } from "../../ulits/cesiumu/cesiumClockController";
 
 export default function SettingTime() {
   const {
+    viewerRef,
     windowMode,
     setWindowMode,
     timeZone,
     setTimeZone,
     timeSpeed,
-    setCesiumSpeed,
+    setTimeSpeed,
   } = useMap();
   const [search, setSearch] = useState("");
 
@@ -83,7 +85,7 @@ export default function SettingTime() {
             min={-1000}
             max={1000}
             step={1}
-            onChange={(v: number) => setCesiumSpeed(v)}
+            onChange={(v: number) => { setCesiumSpeed(viewerRef, v); setTimeSpeed(v); }}
           />
         </div>
       </div>
