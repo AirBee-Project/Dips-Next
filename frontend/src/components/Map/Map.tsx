@@ -8,9 +8,11 @@ import SettingMap from "./SettingMap";
 import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
+import { attachClockListener } from "../../ulits/cesiumu/cesiumClockController";
+
 
 export default function Map() {
-  const { sceneMode, tileId, viewerRef, mapVisible } = useMap();
+  const { sceneMode, tileId, viewerRef, mapVisible, setCurrentTime, setIsPaused } = useMap();
 
   const isInitialized = useRef(false);
 
@@ -31,6 +33,7 @@ export default function Map() {
 
     //ContextにViewerを格納
     viewerRef.current = viewer;
+    attachClockListener(viewerRef, setCurrentTime, setIsPaused);
   };
 
   // === SceneMode変更 ===
@@ -67,6 +70,7 @@ export default function Map() {
         navigationHelpButton={false}
         fullscreenButton={false}
         vrButton={false}
+        shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
       </Viewer>

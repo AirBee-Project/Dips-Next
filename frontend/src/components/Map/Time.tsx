@@ -4,6 +4,7 @@ import {
   IconPlayerPlayFilled,
   IconPlayerStopFilled,
 } from "@tabler/icons-react";
+import { playCesiumTime, pauseCesiumTime } from "../../ulits/cesiumu/cesiumClockController";
 
 export default function Time() {
   const {
@@ -13,15 +14,14 @@ export default function Time() {
     timeZone,
     isPaused,
     setIsPaused,
+    viewerRef
   } = useMap();
 
   return (
     <div
-      className={` text-sm rounded px-2 py-1 cursor-pointer flex items-center ${
-        clockTheme === "dark" && "text-gray-200"
-      } ${
-        clockTheme === "light" && "bg-gray-300 text-white"
-      } rounded-none p-0 m-0`}
+      className={` text-sm rounded px-2 py-1 cursor-pointer flex items-center ${clockTheme === "dark" && "text-gray-200"
+        } ${clockTheme === "light" && "bg-gray-300 text-white"
+        } rounded-none p-0 m-0`}
     >
       <p
         className={`code`}
@@ -31,11 +31,20 @@ export default function Time() {
         <br />
         {formatInTimeZone(currentTime, timeZone, "HH:mm:ss zzz")}
       </p>
-      <div className="pl-2 pr-1" onClick={() => setIsPaused(!isPaused)}>
+      <div className="pl-2 pr-1" onClick={() => {
+        if (isPaused) {
+          playCesiumTime(viewerRef)
+          setIsPaused(false)
+        }
+        else {
+          pauseCesiumTime(viewerRef)
+          setIsPaused(true)
+        }
+      }}>
         {isPaused ? (
-          <IconPlayerStopFilled size={25} />
-        ) : (
           <IconPlayerPlayFilled size={25} />
+        ) : (
+          <IconPlayerStopFilled size={25} />
         )}
       </div>
     </div>

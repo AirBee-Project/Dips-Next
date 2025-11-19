@@ -35,38 +35,40 @@ interface MapContextType {
 
   mapVisible: boolean;
   setMapVisible: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
 // === デフォルト値 ===
 const defaultValues: MapContextType = {
   windowMode: "Map",
-  setWindowMode: () => {},
+  setWindowMode: () => { },
 
   sceneMode: "3D",
-  setSceneMode: () => {},
+  setSceneMode: () => { },
 
   tileId: 1,
-  setTileId: () => {},
+  setTileId: () => { },
 
   currentTime: new Date(),
-  setCurrentTime: () => {},
+  setCurrentTime: () => { },
 
   timeSpeed: 2,
-  setTimeSpeed: () => {},
+  setTimeSpeed: () => { },
 
   isPaused: false,
-  setIsPaused: () => {},
+  setIsPaused: () => { },
 
   clockTheme: "light",
-  setClockTheme: () => {},
+  setClockTheme: () => { },
 
   timeZone: "Asia/Tokyo",
-  setTimeZone: () => {},
+  setTimeZone: () => { },
 
   viewerRef: { current: null },
 
   mapVisible: true,
-  setMapVisible: () => {},
+  setMapVisible: () => { },
+
 };
 
 // === Context作成 ===
@@ -109,6 +111,7 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         viewerRef,
         mapVisible,
         setMapVisible,
+
       }}
     >
       {children}
