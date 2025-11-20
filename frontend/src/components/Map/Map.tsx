@@ -8,11 +8,17 @@ import SettingMap from "./SettingMap";
 import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
-import { attachClockListener } from "../../ulits/cesiumu/cesiumClockController";
-
+import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
 
 export default function Map() {
-  const { sceneMode, tileId, viewerRef, mapVisible, setCurrentTime, setIsPaused } = useMap();
+  const {
+    sceneMode,
+    tileId,
+    viewerRef,
+    mapVisible,
+    setCurrentTime,
+    setIsPaused,
+  } = useMap();
 
   const isInitialized = useRef(false);
 
