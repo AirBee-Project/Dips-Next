@@ -40,6 +40,8 @@ export default function Map() {
     //ContextにViewerを格納
     viewerRef.current = viewer;
     attachClockListener(viewerRef, setCurrentTime, setIsPaused);
+
+    isInitialized.current = true;
   };
 
   // === SceneMode変更 ===
