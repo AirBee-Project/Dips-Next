@@ -14,14 +14,15 @@ type Props = {
 
 export default function SettingMapPattern(props: Props) {
   const { tileId, setTileId } = useMap();
+  const isSelected = props.id === tileId;
 
   return (
     <div
       className={`flex items-center justify-baseline ${props.className} w-full overflow-x-clip `}
     >
       <img
-        className={`h-15 w-15 aspect-square rounded-md mr-4 border-gray-100 border-2 hover:border-accent-300 transition-all cursor-pointer duration-100 
-          ${props.id === tileId && "border-gray-700 border-3"
+        className={`h-15 w-15 aspect-square rounded-md mr-4 transition-all cursor-pointer duration-100 
+          ${isSelected ? "border-accent-300 border-3" : "border-gray-100 border-2 hover:border-accent-300"
           }`}
         src={props.img}
         alt={props.title + "サンプル画像"}
@@ -37,7 +38,7 @@ export default function SettingMapPattern(props: Props) {
       />
       <div className="w-[80%]">
         <div className="flex items-center justify-baseline">
-          <p className="text-gray-300 text-[19px] line-clamp-1">
+          <p className="text-[19px] line-clamp-1 font-bold text-gray-300">
             {props.title}
           </p>
           {props.link && (

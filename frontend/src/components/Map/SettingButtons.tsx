@@ -16,11 +16,10 @@ export default function SettingButtons() {
               ? setWindowMode("Hide")
               : setWindowMode("Time");
           }}
-          className={`bg-white rounded-[3px] mb-2 hover:bg-gray-100  duration-100 ${
-            windowMode === "Time" && "bg-gray-100"
-          }`}
+          className={`rounded-[3px] mb-2  duration-100 ${windowMode === "Time" ? "bg-accent-100 text-accent-300" : "bg-white text-gray-300 hover:bg-accent-100 hover:text-accent-300"
+            }`}
         >
-          <div className="p-1 text-gray-300">
+          <div className={`p-1  ${windowMode === "Time" ? "text-accent-300" : "text-gray-300 hover:text-accent-300"}`}>
             <IconClock stroke={2.5} size={20} />
           </div>
         </div>
@@ -30,11 +29,10 @@ export default function SettingButtons() {
           onClick={() => {
             windowMode === "Map" ? setWindowMode("Hide") : setWindowMode("Map");
           }}
-          className={`bg-white rounded-[3px] mb-2 cursor-pointer hover:bg-gray-100 duration-100 ${
-            windowMode === "Map" && "bg-gray-100"
-          }`}
+          className={`rounded-[3px] mb-2 cursor-pointer ${windowMode === "Map" ? "bg-accent-100 text-accent-300" : "bg-white text-gray-300 hover:bg-accent-100 hover:text-accent-300"
+            }`}
         >
-          <div className={`p-1 text-gray-300`}>
+          <div className={`p-1 ${windowMode === "Map" ? "text-accent-300" : "text-gray-300 hover:text-accent-300"}`}>
             <IconWorld stroke={2.5} size={20} />
           </div>
         </div>
@@ -42,7 +40,7 @@ export default function SettingButtons() {
         {/* ZoomIn and ZoomOut */}
         <div className="bg-white rounded-[3px]">
           <div
-            className="p-1 text-gray-300 hover:bg-gray-100  duration-100 rounded-[3px]"
+            className="p-1 text-gray-300 hover:bg-accent-100 hover:text-accent-300 duration-100 rounded-[3px]"
             onClick={() => {
               if (!viewerRef.current || viewerRef.current.isDestroyed())
                 return null;
@@ -56,7 +54,7 @@ export default function SettingButtons() {
           {/* 間の中間棒 */}
           <div className="border-t mx-1 border-gray-300"></div>
           <div
-            className="p-1 text-gray-300 hover:bg-gray-100  duration-100 rounded-[3px]"
+            className="p-1 text-gray-300 hover:bg-accent-100 hover:text-accent-300 duration-100 rounded-[3px]"
             onClick={() => {
               if (!viewerRef.current || viewerRef.current.isDestroyed())
                 return null;

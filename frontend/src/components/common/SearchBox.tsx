@@ -24,7 +24,7 @@ export default function SearchBox({
 
   return (
     <div
-      className={`py-1.5 border-gray-100 border-3 rounded-md flex items-center ${className}`}
+      className={`py-1.5 border-gray-100 border-3 rounded-md flex items-center focus-within:border-accent-200/50 ${className}`}
     >
       <IconSearch
         className="text-gray-100 aspect-square mx-1.5 cursor-pointer hover:text-gray-200 transition-all duration-75"

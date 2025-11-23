@@ -18,14 +18,14 @@ export default function FeatureButton(props: Props) {
 
   return (
     <div
-      className={`transition-all duration-100 ease-in-out rounded-md ${
-        isActive ? "bg-gray-100" : "hover:bg-gray-100 hover:text-gray-400"
-      }`}
+      className={`transition-all duration-100 ease-in-out rounded-md ${isActive ? "bg-accent-100 border-accent-300" : "hover:bg-gray-100 hover:text-gray-400"
+        }`}
     >
       <Link to={props.feature.url} className="group">
         <div
-          className={`flex text-gray-400 py-1.5 px-2 @max-[10rem]:justify-center @max-[10rem]:px-0
+          className={`flex py-1.5 px-2 @max-[10rem]:justify-center @max-[10rem]:px-0
           cursor-pointer w-52 @max-[10rem]:w-10 items-center
+          ${isActive ? "text-accent-300" : "text-gray-400"}
           `}
         >
           <div className="h-7 aspect-square flex items-center justify-center">
@@ -37,20 +37,18 @@ export default function FeatureButton(props: Props) {
           <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
             <IconTriangleInvertedFilled
               size={10}
-              className={`mt-0.5 transition-all duration-300 ease-in-out ${
-                props.feature.subFeatures ? "visible" : "hidden"
-              } ${isActive ? "-rotate-90" : "rotate-0 group-hover:-rotate-90"}`}
+              className={`mt-0.5 transition-all duration-300 ease-in-out ${props.feature.subFeatures ? "visible" : "hidden"
+                } ${isActive ? "-rotate-90" : "rotate-0 group-hover:-rotate-90"}`}
             />
           </div>
         </div>
       </Link>
       {props.feature.subFeatures ? (
         <div
-          className={`overflow-hidden transition-all ease-in-out ${
-            isActive
-              ? "max-h-96 opacity-100 duration-700"
-              : "max-h-0 opacity-0 duration-700"
-          }`}
+          className={`overflow-hidden transition-all ease-in-out ${isActive
+            ? "max-h-96 opacity-100 duration-700"
+            : "max-h-0 opacity-0 duration-700"
+            }`}
         >
           <div className="w-full border border-white"></div>
           <div className="py-1">
@@ -95,9 +93,8 @@ export default function FeatureButton(props: Props) {
                   <div className="h-5 aspect-square flex items-center justify-center">
                     <IconCircleChevronsRightFilled
                       size={15}
-                      className={`transition-all ease-in-out ${
-                        props.feature.subFeatures ? "visible" : "hidden"
-                      } ${item.isOpen ? "rotate-0" : "rotate-180"}`}
+                      className={`transition-all ease-in-out ${props.feature.subFeatures ? "visible" : "hidden"
+                        } ${item.isOpen ? "rotate-0" : "rotate-180"}`}
                     />
                   </div>
                 </div>

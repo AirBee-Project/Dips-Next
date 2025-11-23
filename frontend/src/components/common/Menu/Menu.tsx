@@ -26,7 +26,7 @@ export default function Menu() {
         />
         <IconLayoutSidebarRightExpand
           className={`${isMenuOpen ? "" : "rotate-180"
-            } transition-all duration-500 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer`}
+            } transition-all duration-500 ease-in-out text-gray-300 hover:text-accent-300 cursor-pointer`}
           onClick={() => {
             setIsMenuOpen(!isMenuOpen);
           }}
