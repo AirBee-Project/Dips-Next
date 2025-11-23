@@ -38,7 +38,7 @@ export default function SettingMapPattern(props: Props) {
       />
       <div className="w-[80%]">
         <div className="flex items-center justify-baseline">
-          <p className={`text-[19px] line-clamp-1 font-bold ${isSelected ? "text-accent-300" : "text-gray-300"}`}>
+          <p className="text-[19px] line-clamp-1 font-bold text-gray-300">
             {props.title}
           </p>
           {props.link && (

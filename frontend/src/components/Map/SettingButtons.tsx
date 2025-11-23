@@ -16,10 +16,10 @@ export default function SettingButtons() {
               ? setWindowMode("Hide")
               : setWindowMode("Time");
           }}
-          className={`rounded-[3px] mb-2  duration-100 ${windowMode === "Time" ? "bg-accent-100" : "bg-white hover:bg-gray-50"
+          className={`rounded-[3px] mb-2  duration-100 ${windowMode === "Time" ? "bg-accent-100 text-accent-300" : "bg-white text-gray-300 hover:bg-accent-100 hover:text-accent-300"
             }`}
         >
-          <div className={`p-1  ${windowMode === "Time" ? "text-accent-300" : "text-gray-300 hover:text-account-300"}`}>
+          <div className={`p-1  ${windowMode === "Time" ? "text-accent-300" : "text-gray-300 hover:text-accent-300"}`}>
             <IconClock stroke={2.5} size={20} />
           </div>
         </div>
@@ -29,7 +29,7 @@ export default function SettingButtons() {
           onClick={() => {
             windowMode === "Map" ? setWindowMode("Hide") : setWindowMode("Map");
           }}
-          className={`rounded-[3px] mb-2 cursor-pointer ${windowMode === "Map" ? "bg-accent-100" : "bg-white hover:text-accent-300"
+          className={`rounded-[3px] mb-2 cursor-pointer ${windowMode === "Map" ? "bg-accent-100 text-accent-300" : "bg-white text-gray-300 hover:bg-accent-100 hover:text-accent-300"
             }`}
         >
           <div className={`p-1 ${windowMode === "Map" ? "text-accent-300" : "text-gray-300 hover:text-accent-300"}`}>
