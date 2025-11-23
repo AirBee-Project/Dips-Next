@@ -24,7 +24,7 @@ export default function RangeInput(props: Props) {
     id,
     className,
     trackColor = "#ddd",
-    thumbColor = "#007bff",
+    thumbColor = "#4599a4",
   } = props;
 
   const percentage = ((value - min) / (max - min)) * 100;
@@ -47,6 +47,7 @@ export default function RangeInput(props: Props) {
 
       <input
         type="range"
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer "
         id={id}
         min={min}
         max={max}
@@ -72,8 +73,9 @@ export default function RangeInput(props: Props) {
             height: 20px;
             border-radius: 50%;
             background: ${thumbColor};
+            border: 6px solid ${thumbColor}80;
+            background-clip: padding-box;
             cursor: pointer;
-            border: none;
             margin-top: 0px; /* トラックの中央に配置 */
           }
           input[type="range"]::-moz-range-thumb {
@@ -82,7 +84,8 @@ export default function RangeInput(props: Props) {
             border-radius: 50%;
             background: ${thumbColor};
             cursor: pointer;
-            border: none;
+            border: 6px solid ${thumbColor}80;
+            background-clip: padding-box;
           }
         `}
       </style>

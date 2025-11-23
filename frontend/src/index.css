@@ -33,9 +33,9 @@ body {
   --color-white-100: #f9f9f9;
 
   /* アクセントカラーの設定 */
-  --color-accent-100: #a1dbe5;
-  --color-accent-200: #8fd4db;
-  --color-accent-300: #4a98a0;
+  --color-accent-100: #e0f7fa;
+  --color-accent-200: #4599a4;
+  --color-accent-300: #0f766e;
 
   /*角丸の設定*/
   --border-radius-1xl: 18px;
@@ -49,9 +49,12 @@ body {
 /* スクロールバーの非表示 */
 @layer utilities {
   .hidden-scrollbar {
-    -ms-overflow-style: none; /* IE, Edge 対応 */
-    scrollbar-width: none; /* Firefox 対応 */
+    -ms-overflow-style: none;
+    /* IE, Edge 対応 */
+    scrollbar-width: none;
+    /* Firefox 対応 */
   }
+
   .hidden-scrollbar::-webkit-scrollbar {
     /* Chrome, Safari 対応 */
     display: none;

@@ -34,13 +34,12 @@ export default function Select() {
           />
         }
         handleSize={[10, 10]} // ドラッグ範囲
-        className={`${
-          isMenuOpen ? "w-70 border-r-4" : "hidden"
-        } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
+        className={`${isMenuOpen ? "w-70 border-r-4" : "hidden"
+          } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
       >
         {/* 属性か関数かの選択 */}
         <div className="flex mt-7 mb-4 w-45 justify-between">
-          <p className="text-gray-400 border-b-3 border-gray-100 px-6 pb-0.5">
+          <p className="text-gray-400 border-b-3 border-accent-200/50 px-6 pb-0.5">
             属性
           </p>
           <p className="text-gray-400 px-6">関数</p>

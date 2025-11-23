@@ -29,9 +29,9 @@ export default function RadioButtons<T>({
             value={String(opt.value)}
             checked={value === opt.value}
             onChange={() => onChange(opt.value)}
-            className="accent-gray-200 cursor-pointer"
+            className="accent-accent-200 cursor-pointer"
           />
-          <span className="text-gray-300 font-medium">{opt.label}</span>
+          <span className={`font-medium transition-colors ${value === opt.value ? "text-accent-300" : "text-gray-300 group-hover:text-gray-400"}`} >{opt.label} </span>
         </label>
       ))}
     </div>
