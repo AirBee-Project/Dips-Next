@@ -1,9 +1,6 @@
 import { Link, useLocation } from "react-router";
 import type { Feature } from "../../../data/Feature";
-import {
-  IconCircleChevronsRightFilled,
-  IconTriangleInvertedFilled,
-} from "@tabler/icons-react";
+import { IconTriangleInvertedFilled } from "@tabler/icons-react";
 import { useMenu } from "../../../context/Menu";
 
 type Props = {
@@ -18,8 +15,11 @@ export default function FeatureButton(props: Props) {
 
   return (
     <div
-      className={`transition-all duration-100 ease-in-out rounded-md ${isActive ? "bg-accent-100 border-accent-300" : "hover:bg-gray-100 hover:text-gray-400"
-        }`}
+      className={`transition-all duration-100 ease-in-out rounded-md ${
+        isActive
+          ? " border-accent-200 border-2"
+          : "hover:bg-gray-100 hover:text-gray-400"
+      }`}
     >
       <Link to={props.feature.url} className="group">
         <div
@@ -34,23 +34,17 @@ export default function FeatureButton(props: Props) {
           <p className="ml-2 font-extrabold @max-[10rem]:hidden w-28">
             {props.feature.name}
           </p>
-          <div className="h-5 aspect-square flex items-center justify-center @max-[10rem]:hidden">
-            <IconTriangleInvertedFilled
-              size={10}
-              className={`mt-0.5 transition-all duration-300 ease-in-out ${props.feature.subFeatures ? "visible" : "hidden"
-                } ${isActive ? "-rotate-90" : "rotate-0 group-hover:-rotate-90"}`}
-            />
-          </div>
         </div>
       </Link>
       {props.feature.subFeatures ? (
         <div
-          className={`overflow-hidden transition-all ease-in-out ${isActive
-            ? "max-h-96 opacity-100 duration-700"
-            : "max-h-0 opacity-0 duration-700"
-            }`}
+          className={`overflow-hidden transition-all ease-in-out ${
+            isActive
+              ? "max-h-96 opacity-100 duration-700"
+              : "max-h-0 opacity-0 duration-700"
+          }`}
         >
-          <div className="w-full border border-white"></div>
+          <div className="w-full border border-accent-200"></div>
           <div className="py-1">
             {Object.entries(props.feature.subFeatures).map(([subKey, item]) => (
               <div
@@ -91,10 +85,11 @@ export default function FeatureButton(props: Props) {
                     </p>
                   </div>
                   <div className="h-5 aspect-square flex items-center justify-center">
-                    <IconCircleChevronsRightFilled
-                      size={15}
-                      className={`transition-all ease-in-out ${props.feature.subFeatures ? "visible" : "hidden"
-                        } ${item.isOpen ? "rotate-0" : "rotate-180"}`}
+                    <IconTriangleInvertedFilled
+                      size={12}
+                      className={`transition-all ease-in-out ${
+                        props.feature.subFeatures ? "visible" : "hidden"
+                      } ${item.isOpen ? "rotate-270" : "rotate-90"}`}
                     />
                   </div>
                 </div>
