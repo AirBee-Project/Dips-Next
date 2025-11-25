@@ -7,7 +7,6 @@ import {
 import FeatureButton from "./FeatureButton";
 import { useMenu } from "../../../context/Menu";
 import { MainFeatureList, SubFeatureList } from "../../../data/Feature";
-import { object } from "motion/react-client";
 export default function Menu() {
   const { isMenuOpen, setIsMenuOpen, features } = useMenu();
 

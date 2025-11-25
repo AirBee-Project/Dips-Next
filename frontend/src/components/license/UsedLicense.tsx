@@ -1,4 +1,3 @@
-import { div } from "motion/react-client";
 import { Link } from "react-router";
 
 type Props = {
