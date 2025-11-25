@@ -22,8 +22,9 @@ import { useEffect, useState } from "react";
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [fadeIn, setFadeIn] = useState(false);
   useEffect(() => {
-    const id = requestAnimationFrame(() => setFadeIn(true));
-    return () => cancelAnimationFrame(id);
+    // マウント時にフェードインを開始
+    const timeout = setTimeout(() => setFadeIn(true), 0);
+    return () => clearTimeout(timeout);
   }, []);
   return (
     <div className={`w-full h-full transition-opacity duration-100 ease-in-out ${fadeIn ? "opacity-100" : "opacity-0"}`}>
