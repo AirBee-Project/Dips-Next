@@ -44,7 +44,7 @@ const AnimatedRoutes: React.FC = () => {
     <div
       className={
         isLicensePage
-          ? "fixed top-0 bottom-0 right-0 z-15 overflow-y-auto transitio-[left] duration-500 ease-in-out"
+          ? "fixed top-0 bottom-0 right-0 z-15 overflow-y-auto transition-[left] duration-500 ease-in-out"
           : "flex-1 relative overflow-hidden"
       }
       style={isLicensePage ? { left: sidebarWidth } : { left: 0 }}
