@@ -13,7 +13,7 @@ export default function License() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center overflow-y-scroll">
+    <div className="w-full h-screen flex flex-col items-center overflow-y-scroll bg-white">
       <div className="w-[40%] pt-30">
         <p className="text-5xl text-gray-400">License</p>
         <div className="mt-20">

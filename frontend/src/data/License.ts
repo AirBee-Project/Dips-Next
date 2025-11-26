@@ -42,11 +42,11 @@ export const LicenseList: License[] = [
     url: "https://github.com/honojs/hono",
     license: "MIT license",
   },
-  {
-    name: "motion",
-    url: "https://github.com/motiondivision/motion",
-    license: "MIT license",
-  },
+  // {
+  //   name: "motion",
+  //   url: "https://github.com/motiondivision/motion",
+  //   license: "MIT license",
+  // },
   {
     name: "react",
     url: "https://github.com/facebook/react",

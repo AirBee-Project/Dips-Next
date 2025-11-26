@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, type ReactNode } from "react";
 import { useMenu } from "../../context/Menu";
 
 type Props = {
@@ -8,6 +7,10 @@ type Props = {
   subFeature: string;
 };
 
+type AnimationState = {
+  transform: string;
+  opacity: string;
+};
 /**
  * FeatureとSubFeatureを指定すると、Contextの状態を監視してアニメーションを実行してくれる。
  */
@@ -17,24 +20,30 @@ export default function SubFeatureTab({
   subFeature,
 }: Props) {
   const { features } = useMenu();
-
+  const [style, setStyle] = useState<AnimationState>({
+    transform: "translateX(-20px)",
+    opacity: "0",
+  });
   const isOpen =
     features[mainFeature]?.subFeatures?.[subFeature]?.isOpen ?? false;
+  useEffect(() => {
+    if (isOpen) {
+      setStyle({
+        transform: "translateX(-20px)", opacity: "0"
+      });
+      requestAnimationFrame(() => setStyle({ transform: "translateX(0px)", opacity: "1" }));
+    } else {
+      setStyle({ transform: "translateX(-20px)", opacity: "0" });
+    }
+  }, [isOpen]);
 
   return (
-    <AnimatePresence>
+    <div>
       {isOpen && (
-        <motion.div
-          key={`${mainFeature}-${subFeature}`}
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -20, opacity: 0 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          className="overflow-hidden"
-        >
+        <div className="overflow-hidden transition-all duration-250 ease-in-out" style={style}>
           {children}
-        </motion.div>
+        </div>
       )}
-    </AnimatePresence>
+    </div>
   );
 }

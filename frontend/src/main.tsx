@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, useLocation, Routes, Route } from "react-router";
-import { AnimatePresence, easeInOut, motion, useMotionValue } from "framer-motion";
 
 // 各ページ
 import Overview from "./pages/overview";
@@ -17,33 +16,22 @@ import { CesiumProvider } from "./context/Map";
 import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
-
-
-/* --- ページトランジション設定 --- */
-const pageVariants = {
-  initial: { opacity: 0 },
-  in: { opacity: 1 },
-  out: { opacity: 0 },
-};
-
-const pageTransition = {
-  duration: 0.1,
-  ease: easeInOut,
-};
+import { useEffect, useState } from "react";
 
 /* --- ページラッパー --- */
-const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <motion.div
-    initial="initial"
-    animate="in"
-    exit="out"
-    variants={pageVariants}
-    transition={pageTransition}
-    style={{ width: "100%", height: "100%" }}
-  >
-    {children}
-  </motion.div>
-);
+const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [fadeIn, setFadeIn] = useState(false);
+  useEffect(() => {
+    // マウント時にフェードインを開始
+    const timeout = setTimeout(() => setFadeIn(true), 0);
+    return () => clearTimeout(timeout);
+  }, []);
+  return (
+    <div className={`w-full h-full transition-opacity duration-100 ease-in-out ${fadeIn ? "opacity-100" : "opacity-0"}`}>
+      {children}
+    </div>
+  );
+};
 
 /* --- AnimatedRoutes --- */
 const AnimatedRoutes: React.FC = () => {
@@ -52,61 +40,51 @@ const AnimatedRoutes: React.FC = () => {
 
   const { isMenuOpen } = useMenu();
   const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4;//サイドバー分を左に開けるため
-  // License 用のアニメーション
-  const license_trans = { duration: 0.25, ease: "easeOut", delay: isMenuOpen ? 0.25 : 0 } as const;
 
   return (
-    <motion.div
+    <div
       className={
         isLicensePage
-          ? "fixed top-0 bottom-0 right-0 z-15 bg-white overflow-y-auto"
+          ? "fixed top-0 bottom-0 right-0 z-15 overflow-y-auto transition-[left] duration-500 ease-in-out"
           : "flex-1 relative overflow-hidden"
       }
-      animate={
-        isLicensePage
-          ? { left: sidebarWidth }
-          : { left: 0 }
-      }
-      transition={license_trans}
-      initial={false} // 初期状態でアニメーションしない
+      style={isLicensePage ? { left: sidebarWidth } : { left: 0 }}
     >
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route
-            path="/"
-            element={
-              <PageWrapper>
-                <Overview />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/map-object"
-            element={
-              <PageWrapper>
-                <MapObject />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/my-data"
-            element={
-              <PageWrapper>
-                <MyData />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/license"
-            element={
-              <PageWrapper>
-                <License />
-              </PageWrapper>
-            }
-          />
-        </Routes>
-      </AnimatePresence>
-    </motion.div>
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <PageWrapper>
+              <Overview />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/map-object"
+          element={
+            <PageWrapper>
+              <MapObject />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/my-data"
+          element={
+            <PageWrapper>
+              <MyData />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/license"
+          element={
+            <PageWrapper>
+              <License />
+            </PageWrapper>
+          }
+        />
+      </Routes>
+    </div>
   );
 };
 
