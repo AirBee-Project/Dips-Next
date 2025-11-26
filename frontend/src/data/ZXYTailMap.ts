@@ -6,6 +6,7 @@ type ZXYTileMap = {
   detailText?: string;
   detailUrl?: string;
   credit?: string;
+  maxZoomLevel?: number;
 };
 
 export const ZXYTileMapList: Record<number, ZXYTileMap> = {
@@ -17,6 +18,7 @@ export const ZXYTileMapList: Record<number, ZXYTileMap> = {
     detailText: "最も標準的な地図。電子地形図（タイル）。ズームレベル5-18。",
     detailUrl: "https://maps.gsi.go.jp/development/ichiran.html#std",
     credit: "国土地理院",
+    maxZoomLevel: 18,
   },
   2: {
     id: 2,
