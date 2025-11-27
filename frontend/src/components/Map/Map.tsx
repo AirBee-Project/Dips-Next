@@ -9,6 +9,11 @@ import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
+import {
+  drawVoxelsInstanced,
+  type SpaceTimeID,
+} from "../../ulits/cesium/drawVoxels";
+import * as Cesium from "cesium";
 
 export default function Map() {
   const {
@@ -45,6 +50,22 @@ export default function Map() {
     attachClockListener(viewerRef, setCurrentTime, setIsPaused);
 
     isInitialized.current = true;
+
+    // === デバッグ情報 ===
+    console.log("Scene mode:", viewer.scene.mode);
+    console.log("Camera position:", viewer.camera.position);
+    console.log("Primitives collection:", viewer.scene.primitives.length);
+
+    const voxels: SpaceTimeID[] = [];
+    for (let x = 20; x < 50; x++) {
+      for (let y = 100; y < 150; y++) {
+        voxels.push({ z: 9, f: 3, x, y });
+      }
+    }
+
+    drawVoxelsInstanced(viewer, voxels);
+
+    console.log("Primitives collection:", viewer.scene.primitives.length);
   };
 
   // === SceneMode変更 ===
