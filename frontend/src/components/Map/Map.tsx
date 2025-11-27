@@ -54,10 +54,9 @@ export default function Map() {
     console.log("Primitives collection:", viewer.scene.primitives.length);
 
     const voxels: SpaceTimeID[] = [];
-    for (let x = 0; x < 8; x++) {
-      for (let y = 0; y < 8; y++) {
-        voxels.push({ z: 3, f: 0, x: x, y: y });
-        voxels.push({ z: 3, f: 1, x: x, y: y });
+    for (let x = 0; x < 100; x++) {
+      for (let y = 0; y < 100; y++) {
+        voxels.push({ z: 10, f: 0, x: x, y: y });
       }
     }
 
