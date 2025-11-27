@@ -27,6 +27,9 @@ export default function Map() {
     return new UrlTemplateImageryProvider({
       url: ZXYTileMapList[tileId].XYZUrl,
       credit: ZXYTileMapList[tileId].credit,
+      ...(ZXYTileMapList[tileId].maxZoomLevel !== undefined && {
+        maximumLevel: ZXYTileMapList[tileId].maxZoomLevel,
+      }),
     });
   }, [tileId]);
 
