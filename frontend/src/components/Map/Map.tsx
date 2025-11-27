@@ -9,10 +9,7 @@ import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
-import {
-  drawVoxelsInstanced,
-  type SpaceTimeID,
-} from "../../ulits/cesium/drawVoxels";
+import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
 import * as Cesium from "cesium";
 
 export default function Map() {
@@ -58,14 +55,14 @@ export default function Map() {
 
     const voxels: SpaceTimeID[] = [];
     for (let x = 20; x < 50; x++) {
-      for (let y = 100; y < 150; y++) {
-        voxels.push({ z: 9, f: 3, x, y });
+      for (let y = 100; y < 1050; y++) {
+        voxels.push({ z: 10, f: 3, x, y });
       }
     }
 
-    drawVoxelsInstanced(viewer, voxels);
+    drawVoxels(viewer, voxels);
 
-    console.log("Primitives collection:", viewer.scene.primitives.length);
+    console.log("Primitives collection:", viewer.scene.primitives);
   };
 
   // === SceneMode変更 ===

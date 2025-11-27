@@ -101,10 +101,7 @@ function getBoxDimensionsWithPrecision(coords: Coordinates): Cesium.Cartesian3 {
   );
 }
 
-export function drawVoxelsInstanced(
-  viewer: Cesium.Viewer,
-  spaceTimeIDs: SpaceTimeID[]
-) {
+export function drawVoxels(viewer: Cesium.Viewer, spaceTimeIDs: SpaceTimeID[]) {
   if (!spaceTimeIDs.length) return;
 
   const boxInstances: Cesium.GeometryInstance[] = [];
