@@ -18,6 +18,7 @@ import {
   type ParsedPart,
   type Parser,
 } from "../common/ColoredInput";
+import ColorPickerButton from "../common/ColorPickerButton";
 
 const spaceOrCommaParser: Parser = (text: string): ParsedPart[] => {
   const parts: string[] = [];
@@ -119,9 +120,13 @@ export default function Value() {
           </div>
           <div className="mt-3 w-full flex flex-col items-center">
             <div
-              className="border-3 w-[80%] border-gray-100 rounded-md p-3 
+              className="relative border-3 w-[80%] border-gray-100 rounded-md p-3 
             "
             >
+              <ColorPickerButton
+                storageKey="value-object-color"
+                className="!absolute top-5 right-3 z-10"
+              />
               <input
                 type="text"
                 className="text-2xl text-gray-400 w-full pt-1 pb-3 placeholder-gray-100 outline-none"
