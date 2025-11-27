@@ -38,181 +38,137 @@ function coordinates(spaceTime: SpaceTimeID): Coordinates {
   };
 }
 
-/**
- * WGS84楕円体上の2点間の距離をハバーサイン公式で計算
- * @param lat1 緯度1（度）
- * @param lon1 経度1（度）
- * @param lat2 緯度2（度）
- * @param lon2 経度2（度）
- * @returns 距離（メートル）
- */
-function haversineDistance(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number
-): number {
-  const R = 6371008.8; // WGS84地球半径（メートル）
-  const dLat = Cesium.Math.toRadians(lat2 - lat1);
-  const dLon = Cesium.Math.toRadians(lon2 - lon1);
-  const lat1_rad = Cesium.Math.toRadians(lat1);
-  const lat2_rad = Cesium.Math.toRadians(lat2);
-
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.sin(dLon / 2) *
-      Math.sin(dLon / 2) *
-      Math.cos(lat1_rad) *
-      Math.cos(lat2_rad);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
-}
-
-/**
- * ボクセルのボックスサイズを高精度で計算
- * @param coords ボクセルの座標範囲
- * @returns East-North-Up座標系でのボックスサイズ
- */
-function getBoxDimensionsWithPrecision(coords: Coordinates): Cesium.Cartesian3 {
-  // 中心緯度経度を計算
-  const latMin = coords.latitude[0];
-  const latMax = coords.latitude[1];
-  const lonMin = coords.longitude[0];
-  const lonMax = coords.longitude[1];
-
-  const latCenter = (latMin + latMax) / 2;
-  const lonCenter = (lonMin + lonMax) / 2;
-
-  // 南北方向の距離（中央経度で計算）
-  const northDist = haversineDistance(latMin, lonCenter, latMax, lonCenter);
-
-  // 東西方向の距離（中央緯度で計算）
-  const eastDist = haversineDistance(latCenter, lonMin, latCenter, lonMax);
-
-  // 高度差
-  const altDelta = coords.altitude[1] - coords.altitude[0];
-
-  // East-North-Up座標系のボックスサイズ
-  return new Cesium.Cartesian3(
-    eastDist, // 東西方向
-    northDist, // 南北方向
-    altDelta // 上下方向
-  );
-}
-
 export function drawVoxels(viewer: Cesium.Viewer, spaceTimeIDs: SpaceTimeID[]) {
   if (!spaceTimeIDs.length) return;
 
-  const boxInstances: Cesium.GeometryInstance[] = [];
+  const voxelInstances: Cesium.GeometryInstance[] = [];
   const outlineInstances: Cesium.GeometryInstance[] = [];
-  const positions: Cesium.Cartesian3[] = [];
+  const positionsForCamera: Cesium.Cartesian3[] = [];
 
   for (const stid of spaceTimeIDs) {
-    const coords = coordinates(stid);
-    const lonCenter = (coords.longitude[0] + coords.longitude[1]) / 2;
-    const latCenter = (coords.latitude[0] + coords.latitude[1]) / 2;
-    const altCenter = (coords.altitude[0] + coords.altitude[1]) / 2;
+    const { latitude, longitude, altitude } = coordinates(stid);
 
-    const position = Cesium.Cartesian3.fromDegrees(
-      lonCenter,
-      latCenter,
-      altCenter
-    );
-    positions.push(position);
+    const latMin = latitude[0],
+      latMax = latitude[1];
+    const lonMin = longitude[0],
+      lonMax = longitude[1];
+    const altMin = altitude[0],
+      altMax = altitude[1];
 
-    const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+    const topPositions = [
+      Cesium.Cartesian3.fromDegrees(lonMin, latMin, altMax),
+      Cesium.Cartesian3.fromDegrees(lonMax, latMin, altMax),
+      Cesium.Cartesian3.fromDegrees(lonMax, latMax, altMax),
+      Cesium.Cartesian3.fromDegrees(lonMin, latMax, altMax),
+    ];
 
-    // 高精度なボックスサイズを計算
-    const boxDimensions = getBoxDimensionsWithPrecision(coords);
+    const bottomPositions = [
+      Cesium.Cartesian3.fromDegrees(lonMin, latMin, altMin),
+      Cesium.Cartesian3.fromDegrees(lonMax, latMin, altMin),
+      Cesium.Cartesian3.fromDegrees(lonMax, latMax, altMin),
+      Cesium.Cartesian3.fromDegrees(lonMin, latMax, altMin),
+    ];
 
-    // 赤いボックス
-    boxInstances.push(
+    positionsForCamera.push(...topPositions, ...bottomPositions);
+
+    // *** 本体（側面＋底面を自動生成） ***
+    voxelInstances.push(
       new Cesium.GeometryInstance({
-        geometry: Cesium.BoxGeometry.fromDimensions({
-          dimensions: boxDimensions,
+        geometry: new Cesium.PolygonGeometry({
+          polygonHierarchy: new Cesium.PolygonHierarchy(topPositions),
+          perPositionHeight: true,
+          extrudedHeight: altMin,
         }),
-        modelMatrix,
         attributes: {
           color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            Cesium.Color.RED
+            Cesium.Color.RED.withAlpha(0.5)
           ),
         },
         id: `${stid.z}/${stid.x}/${stid.y}/${stid.f}`,
       })
     );
 
-    // 黒いアウトライン
-    outlineInstances.push(
-      new Cesium.GeometryInstance({
-        geometry: Cesium.BoxOutlineGeometry.fromDimensions({
-          dimensions: boxDimensions,
-        }),
-        modelMatrix,
-        attributes: {
-          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            Cesium.Color.BLACK
-          ),
-        },
-        id: `${stid.z}/${stid.x}/${stid.y}/${stid.f}-outline`,
-      })
-    );
+    // *** 全面アウトライン ***
+    for (let i = 0; i < 4; i++) {
+      const next = (i + 1) % 4;
+
+      // 上面
+      outlineInstances.push(
+        new Cesium.GeometryInstance({
+          geometry: new Cesium.PolylineGeometry({
+            positions: [topPositions[i], topPositions[next]],
+            width: 2,
+          }),
+          attributes: {
+            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+              Cesium.Color.BLACK
+            ),
+          },
+        })
+      );
+
+      // 底面
+      outlineInstances.push(
+        new Cesium.GeometryInstance({
+          geometry: new Cesium.PolylineGeometry({
+            positions: [bottomPositions[i], bottomPositions[next]],
+            width: 2,
+          }),
+          attributes: {
+            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+              Cesium.Color.BLACK
+            ),
+          },
+        })
+      );
+
+      // 垂直
+      outlineInstances.push(
+        new Cesium.GeometryInstance({
+          geometry: new Cesium.PolylineGeometry({
+            positions: [bottomPositions[i], topPositions[i]],
+            width: 2,
+          }),
+          attributes: {
+            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+              Cesium.Color.BLACK
+            ),
+          },
+        })
+      );
+    }
   }
 
-  // 赤ボックス用 Primitive
+  // ************ 描画 ************
+
   viewer.scene.primitives.add(
     new Cesium.Primitive({
-      geometryInstances: boxInstances,
+      geometryInstances: voxelInstances,
       appearance: new Cesium.PerInstanceColorAppearance({
         flat: true,
-        translucent: false,
-        closed: true,
+        translucent: true,
+        closed: false, // ← 全面透明になる重要設定
       }),
-      releaseGeometryInstances: false,
     })
   );
 
-  // アウトライン用 Primitive
   viewer.scene.primitives.add(
     new Cesium.Primitive({
       geometryInstances: outlineInstances,
-      appearance: new Cesium.PerInstanceColorAppearance({
-        flat: true,
-        translucent: false,
-      }),
-      releaseGeometryInstances: false,
+      appearance: new Cesium.PolylineColorAppearance({ translucent: false }),
     })
   );
 
-  // --- カメラを全ボクセルが見える位置に調整 ---
-  if (positions.length > 0) {
-    let minX = positions[0].x,
-      maxX = positions[0].x;
-    let minY = positions[0].y,
-      maxY = positions[0].y;
-    let minZ = positions[0].z,
-      maxZ = positions[0].z;
-
-    for (const pos of positions) {
-      minX = Math.min(minX, pos.x);
-      maxX = Math.max(maxX, pos.x);
-      minY = Math.min(minY, pos.y);
-      maxY = Math.max(maxY, pos.y);
-      minZ = Math.min(minZ, pos.z);
-      maxZ = Math.max(maxZ, pos.z);
-    }
-
-    const center = new Cesium.Cartesian3(
-      (minX + maxX) / 2,
-      (minY + maxY) / 2,
-      (minZ + maxZ) / 2
-    );
-    const radius = Math.max(maxX - minX, maxY - minY, maxZ - minZ) / 2;
-
-    const boundingSphere = new Cesium.BoundingSphere(center, radius * 2);
+  // ************ カメラ調整 ************
+  if (positionsForCamera.length > 0) {
+    const boundingSphere = Cesium.BoundingSphere.fromPoints(positionsForCamera);
     viewer.camera.viewBoundingSphere(
       boundingSphere,
-      new Cesium.HeadingPitchRange(0, -Cesium.Math.PI_OVER_FOUR, 0)
+      new Cesium.HeadingPitchRange(
+        viewer.camera.heading,
+        -Cesium.Math.PI_OVER_FOUR,
+        0
+      )
     );
   }
 }
