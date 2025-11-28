@@ -259,15 +259,4 @@ export function drawMultipleVoxelCollections(
       appearance: new Cesium.PolylineColorAppearance({ translucent: false }),
     })
   );
-
-  // カメラ調整
-  const boundingSphere = Cesium.BoundingSphere.fromPoints(positionsForCamera);
-  viewer.camera.viewBoundingSphere(
-    boundingSphere,
-    new Cesium.HeadingPitchRange(
-      viewer.camera.heading,
-      -Cesium.Math.PI_OVER_FOUR,
-      0
-    )
-  );
 }
