@@ -62,7 +62,7 @@ export const MainFeatureList: Record<string, Feature> = {
   },
   MapObject: {
     name: "Map Object",
-    url: "/map-objcet",
+    url: "/map-object",
     icon: IconBrandLaravel,
   },
 };

@@ -6,12 +6,14 @@ type Props = {
     storageKey: string;
     defaultColor?: string;
     className?: string;
+    onColorChange?: (color: string, alpha: number) => void;
 };
 
 export default function ColorPickerButton({
     storageKey,
     defaultColor = "#4599a4",
-    className = ""
+    className = "",
+    onColorChange,
 }: Props) {
 
     const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +22,13 @@ export default function ColorPickerButton({
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     const [colorState, setColor] = useSaveColor(storageKey, defaultColor);
+
+    const handleColorChange = (c:string, a: number)=> {
+        setColor(c,a);
+        if (onColorChange){
+            onColorChange(c,a);
+        }
+    };
 
     const togglePicker = () => {
         if (!isOpen && buttonRef.current) {
@@ -49,7 +58,7 @@ export default function ColorPickerButton({
                 <ColorPicker
                     color={colorState.hex}
                     alpha={colorState.alpha}
-                    onChange={(c, a) => setColor(c, a)}
+                    onChange={handleColorChange}
                     onClose={() => setIsOpen(false)}
                     lazyUpdate={true}
                     triggerRect={buttonRect}

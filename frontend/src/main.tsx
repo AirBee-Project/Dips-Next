@@ -17,6 +17,7 @@ import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
+import { MapObjectProvider } from "./context/MapObjectContext";
 
 /* --- ページラッパー --- */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -90,18 +91,20 @@ const AnimatedRoutes: React.FC = () => {
 
 createRoot(document.getElementById("root")!).render(
   <MenuProvider>
-    <BrowserRouter>
-      <CesiumProvider>
-        <div className="flex">
-          <div className="z-200">
-            <Menu />
-          </div>
-          <div>
-            <AnimatedRoutes />
-          </div>
-          <Map />
-        </div>
-      </CesiumProvider>
-    </BrowserRouter>
+    <MapObjectProvider>
+     <BrowserRouter>
+       <CesiumProvider>
+         <div className="flex">
+           <div className="z-200">
+             <Menu />
+           </div>
+           <div>
+             <AnimatedRoutes />
+           </div>
+           <Map />
+         </div>
+       </CesiumProvider>
+     </BrowserRouter>
+    </MapObjectProvider>
   </MenuProvider>
 );
