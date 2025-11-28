@@ -17,6 +17,7 @@ import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
+import Test from "./pages/test";
 
 /* --- ページラッパー --- */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,7 +28,11 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return () => clearTimeout(timeout);
   }, []);
   return (
-    <div className={`w-full h-full transition-opacity duration-100 ease-in-out ${fadeIn ? "opacity-100" : "opacity-0"}`}>
+    <div
+      className={`w-full h-full transition-opacity duration-100 ease-in-out ${
+        fadeIn ? "opacity-100" : "opacity-0"
+      }`}
+    >
       {children}
     </div>
   );
@@ -39,7 +44,7 @@ const AnimatedRoutes: React.FC = () => {
   const isLicensePage = location.pathname === "/license";
 
   const { isMenuOpen } = useMenu();
-  const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4;//サイドバー分を左に開けるため
+  const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4; //サイドバー分を左に開けるため
 
   return (
     <div
@@ -80,6 +85,14 @@ const AnimatedRoutes: React.FC = () => {
           element={
             <PageWrapper>
               <License />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <PageWrapper>
+              <Test />
             </PageWrapper>
           }
         />

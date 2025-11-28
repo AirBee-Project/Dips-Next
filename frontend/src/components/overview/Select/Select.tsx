@@ -3,20 +3,18 @@ import SearchBox from "../../common/SearchBox";
 import { ResizableBox } from "react-resizable";
 import Asset from "./Asset";
 import { useMenu } from "../../../context/Menu";
+import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
 
 type Pattern = "function" | "assets";
 
 export default function Select() {
   const { isMenuOpen } = useMenu();
 
-  //モードに関する状態
   const [pattern, setPattern] = useState<Pattern>("assets");
 
-  //検索の文字列
   const [functionSearch, setFunctionSearch] = useState("");
   const [assetsSearch, setAssetsSearch] = useState("");
 
-  //横幅
   const [width, setWidth] = useState(280);
 
   return (
@@ -30,12 +28,13 @@ export default function Select() {
         handle={
           <span
             className="absolute top-0 right-0 h-full w-2 cursor-ew-resize"
-            onClick={(e) => e.stopPropagation()} // 選択防止
+            onClick={(e) => e.stopPropagation()}
           />
         }
-        handleSize={[10, 10]} // ドラッグ範囲
-        className={`${isMenuOpen ? "w-70 border-r-4" : "hidden"
-          } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
+        handleSize={[10, 10]}
+        className={`${
+          isMenuOpen ? "w-70 border-r-4" : "hidden"
+        } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
       >
         {/* 属性か関数かの選択 */}
         <div className="flex mt-7 mb-4 w-45 justify-between">
@@ -55,19 +54,16 @@ export default function Select() {
 
         {/* 選択肢 */}
         <div className="w-full flex flex-col gap-2 items-center mt-4 overflow-y-scroll hidden-scrollbar">
-          <Asset
-            title={"天気予報"}
-            assetsType={"String"}
-            className="w-[80%]"
-            detail="テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト"
-            info={[
-              { title: "オーナー", text: "AirBee" },
-              { title: "更新日", text: "2025/10/4" },
-            ]}
-          />
-          <Asset title={"気温"} assetsType={"Number"} className="w-[80%]" />
-          <Asset title={"昼間"} assetsType={"Boolean"} className="w-[80%]" />
-          <Asset title={"高速道路"} assetsType={"String"} className="w-[80%]" />
+          {Object.entries(SpaceTimeIDDataList)
+            .filter(([key]) => key.includes(assetsSearch))
+            .map(([titleKey]) => (
+              <Asset
+                key={titleKey}
+                className="w-[80%]"
+                title={titleKey}
+                assetsType={"String"}
+              />
+            ))}
         </div>
       </ResizableBox>
     </div>
