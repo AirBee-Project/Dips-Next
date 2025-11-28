@@ -19,6 +19,7 @@ import {
   type Parser,
 } from "../common/ColoredInput";
 import ColorPickerButton from "../common/ColorPickerButton";
+import IdInput from "../common/IdInput";
 
 const spaceOrCommaParser: Parser = (text: string): ParsedPart[] => {
   const parts: string[] = [];
@@ -57,6 +58,8 @@ export default function Value() {
 
   //検索
   const [assetsSearch, setAssetsSearch] = useState("");
+
+  const [ids, setIds] = useState<string[]>([]);
 
   //Keyを追加するときはここであれこれする
   function addTextKey(key: string) {
@@ -120,7 +123,7 @@ export default function Value() {
           </div>
           <div className="mt-3 w-full flex flex-col items-center">
             <div
-              className="relative border-3 w-[80%] border-gray-100 rounded-md p-3 
+              className="relative w-[80%] rounded-md p-3 transition-all duration-200 border-[3px] border-gray-100 focus-within:border-accent-200/50
             "
             >
               <ColorPickerButton
@@ -132,13 +135,11 @@ export default function Value() {
                 className="text-2xl text-gray-400 w-full pt-1 pb-3 placeholder-gray-100 outline-none"
                 placeholder="値を入力"
               />
-              <ColoredInput
-                value={text}
-                onChange={setText}
-                parser={spaceOrCommaParser}
-                placeholder="16/300/3/44_3600/300....."
-                colors={["#d6d6d6"]}
-                className="outline-none text-1xl w-full"
+              <IdInput
+                value={ids}
+                onChange={setIds}
+                className="mt-1"
+                placeholder="IDを入力"
               />
             </div>
           </div>
