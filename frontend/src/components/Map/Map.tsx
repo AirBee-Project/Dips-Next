@@ -1,6 +1,10 @@
 import { useEffect, useRef, useMemo } from "react";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
-import { Viewer as CesiumViewer, UrlTemplateImageryProvider } from "cesium";
+import {
+  Viewer as CesiumViewer,
+  Color,
+  UrlTemplateImageryProvider,
+} from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
@@ -9,8 +13,11 @@ import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
-import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
-import * as Cesium from "cesium";
+import {
+  useSpaceTimeID,
+  type SpaceTimeIDCollection,
+} from "../../context/SpaceTimeID";
+import { drawMultipleVoxelCollections } from "../../ulits/cesium/drawVoxels";
 
 export default function Map() {
   const {
@@ -35,6 +42,71 @@ export default function Map() {
     });
   }, [tileId]);
 
+  const { getVisibleCollections, addCollection } = useSpaceTimeID();
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    const visibleCollections = getVisibleCollections();
+    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
+  }, [getVisibleCollections]);
+
+  // === SpaceTimeID描画 ===
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    const visibleCollections = getVisibleCollections();
+    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
+  }, [getVisibleCollections]);
+
+  // === サンプルデータをContextに追加（テスト用） ===
+  useEffect(() => {
+    const sampleCollections: SpaceTimeIDCollection[] = [
+      {
+        id: "sample-1",
+        spaceTimeIDs: [
+          { z: 10, f: 5, x: 512, y: 512 },
+          { z: 10, f: 5, x: 513, y: 512 },
+          { z: 10, f: 5, x: 512, y: 513 },
+        ],
+        style: {
+          color: Color.AZURE,
+          alpha: 0.5,
+          outlineColor: Color.BLACK,
+        },
+        visible: true,
+      },
+      {
+        id: "sample-2",
+        spaceTimeIDs: [
+          { z: 10, f: 6, x: 513, y: 513 },
+          { z: 10, f: 6, x: 514, y: 513 },
+          { z: 10, f: 6, x: 513, y: 514 },
+        ],
+        style: {
+          color: Color.BLUE,
+          alpha: 0.6,
+          outlineColor: Color.BLACK,
+        },
+        visible: true,
+      },
+      {
+        id: "sample-3",
+        spaceTimeIDs: [
+          { z: 10, f: 7, x: 514, y: 512 },
+          { z: 10, f: 7, x: 515, y: 512 },
+          { z: 10, f: 7, x: 514, y: 514 },
+        ],
+        style: {
+          color: Color.BLUE,
+          alpha: 0.6,
+          outlineColor: Color.BLACK,
+        },
+        visible: true,
+      },
+    ];
+
+    sampleCollections.forEach((collection) => addCollection(collection));
+  }, []);
+
   // === Viewer初期化 ===
   const handleViewerRef = (ref: CesiumComponentRef<CesiumViewer> | null) => {
     if (!ref?.cesiumElement || isInitialized.current) return;
@@ -47,22 +119,6 @@ export default function Map() {
     attachClockListener(viewerRef, setCurrentTime, setIsPaused);
 
     isInitialized.current = true;
-
-    // === デバッグ情報 ===
-    console.log("Scene mode:", viewer.scene.mode);
-    console.log("Camera position:", viewer.camera.position);
-    console.log("Primitives collection:", viewer.scene.primitives.length);
-
-    const voxels: SpaceTimeID[] = [];
-    for (let x = 0; x < 100; x++) {
-      for (let y = 0; y < 100; y++) {
-        voxels.push({ z: 10, f: 0, x: x, y: y });
-      }
-    }
-
-    drawVoxels(viewer, voxels);
-
-    console.log("Primitives collection:", viewer.scene.primitives);
   };
 
   // === SceneMode変更 ===

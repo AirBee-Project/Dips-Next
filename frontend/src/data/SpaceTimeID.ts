@@ -6,15 +6,16 @@ export type SpaceTimeIDData = {
   owner?: string;
 };
 
+//空間IDのデータ一覧を管理する
 export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
   天気予報: {
     key_type: "text",
-    json_url: "",
+    json_url: "/test",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
   天気予報2: {
     key_type: "text",
-    json_url: "",
+    json_url: "/test",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
 };

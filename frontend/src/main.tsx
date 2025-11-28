@@ -17,7 +17,7 @@ import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
-import Test from "./pages/test";
+import { SpaceTimeProvider } from "./context/SpaceTimeID";
 
 /* --- ページラッパー --- */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -88,14 +88,6 @@ const AnimatedRoutes: React.FC = () => {
             </PageWrapper>
           }
         />
-        <Route
-          path="/test"
-          element={
-            <PageWrapper>
-              <Test />
-            </PageWrapper>
-          }
-        />
       </Routes>
     </div>
   );
@@ -105,15 +97,17 @@ createRoot(document.getElementById("root")!).render(
   <MenuProvider>
     <BrowserRouter>
       <CesiumProvider>
-        <div className="flex">
-          <div className="z-200">
-            <Menu />
+        <SpaceTimeProvider>
+          <div className="flex">
+            <div className="z-200">
+              <Menu />
+            </div>
+            <div>
+              <AnimatedRoutes />
+            </div>
+            <Map />
           </div>
-          <div>
-            <AnimatedRoutes />
-          </div>
-          <Map />
-        </div>
+        </SpaceTimeProvider>
       </CesiumProvider>
     </BrowserRouter>
   </MenuProvider>
