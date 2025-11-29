@@ -9,6 +9,9 @@ type BlockProps = {
   // onDropOnItem: (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => void;
 };
 
+/**
+ * 最も基礎的なNode
+ */
 const Block: React.FC<BlockProps> = ({
   item,
   index,

@@ -8,6 +8,9 @@ type NodeRendererProps = {
   onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
 };
 
+/**
+ * 演算を行ってできたNode
+ */
 export const NodeRenderer: React.FC<NodeRendererProps> = ({
   node,
   index,
