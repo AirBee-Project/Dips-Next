@@ -1,11 +1,14 @@
 import { useEffect, useRef, useMemo } from "react";
-import { Viewer, ImageryLayer, Cesium3DTileset,type CesiumComponentRef } from "resium";
-import { Viewer as CesiumViewer, UrlTemplateImageryProvider, Cesium3DTileStyle } from "cesium";
-import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
+import {
+  Viewer,
+  ImageryLayer,
+  Cesium3DTileset,
+  type CesiumComponentRef,
+} from "resium";
 import {
   Viewer as CesiumViewer,
-  Color,
   UrlTemplateImageryProvider,
+  Cesium3DTileStyle,
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
@@ -16,12 +19,7 @@ import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
 import { useMapObject } from "../../context/MapObjectContext";
-import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
-import * as Cesium from "cesium";
-import {
-  useSpaceTimeID,
-  type SpaceTimeIDCollection,
-} from "../../context/SpaceTimeID";
+import { useSpaceTimeID } from "../../context/SpaceTimeID";
 import { drawMultipleVoxelCollections } from "../../ulits/cesium/drawVoxels";
 
 export default function Map() {
@@ -35,7 +33,7 @@ export default function Map() {
   } = useMap();
 
   const isInitialized = useRef(false);
-  const {layers} = useMapObject();
+  const { layers } = useMapObject();
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -47,15 +45,6 @@ export default function Map() {
       }),
     });
   }, [tileId]);
-
-  const { getVisibleCollections } = useSpaceTimeID();
-
-  //時空間IDの描画
-  useEffect(() => {
-    if (!viewerRef.current) return;
-    const visibleCollections = getVisibleCollections();
-    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
-  }, [getVisibleCollections]);
 
   // === Viewer初期化 ===
   const handleViewerRef = (ref: CesiumComponentRef<CesiumViewer> | null) => {
@@ -90,6 +79,15 @@ export default function Map() {
     }
   }, [sceneMode, viewerRef]);
 
+  const { getVisibleCollections } = useSpaceTimeID();
+
+  //時空間IDの描画
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    const visibleCollections = getVisibleCollections();
+    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
+  }, [getVisibleCollections]);
+
   return (
     <div className={`w-full h-full overflow-clip relative`}>
       <Viewer
@@ -108,24 +106,25 @@ export default function Map() {
         shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
-      
 
-      {layers.map((layer)=> {
-        if (!layer.visible) return null;
-        if(layer.data.format === "3DTiles"){
-          return (
-            <Cesium3DTileset
-            key={layer.instanceId}
-            url={layer.data.url}
-            style={new Cesium3DTileStyle({
-              color: `color('${layer.color}', ${layer.opacity/100})`
-            })}
-            onReady={(tileset)=> viewerRef.current?.zoomTo(tileset)}
-            />
-          );
-        }
-        return null;
-      })}
+        {layers.map((layer) => {
+          if (!layer.visible) return null;
+          if (layer.data.format === "3DTiles") {
+            return (
+              <Cesium3DTileset
+                key={layer.instanceId}
+                url={layer.data.url}
+                style={
+                  new Cesium3DTileStyle({
+                    color: `color('${layer.color}', ${layer.opacity / 100})`,
+                  })
+                }
+                onReady={(tileset) => viewerRef.current?.zoomTo(tileset)}
+              />
+            );
+          }
+          return null;
+        })}
       </Viewer>
 
       {/* === UI コンポーネント群 === */}
