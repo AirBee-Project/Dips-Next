@@ -1,6 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
-import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
-import { Viewer as CesiumViewer, UrlTemplateImageryProvider } from "cesium";
+import { Viewer, ImageryLayer, Cesium3DTileset,type CesiumComponentRef } from "resium";
+import { Viewer as CesiumViewer, UrlTemplateImageryProvider, Cesium3DTileStyle } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
@@ -9,6 +9,7 @@ import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
+import { useMapObject } from "../../context/MapObjectContext";
 import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
 import * as Cesium from "cesium";
 
@@ -23,6 +24,7 @@ export default function Map() {
   } = useMap();
 
   const isInitialized = useRef(false);
+  const {layers} = useMapObject();
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -48,22 +50,7 @@ export default function Map() {
 
     isInitialized.current = true;
 
-    // === デバッグ情報 ===
-    console.log("Scene mode:", viewer.scene.mode);
-    console.log("Camera position:", viewer.camera.position);
-    console.log("Primitives collection:", viewer.scene.primitives.length);
-
-    const voxels: SpaceTimeID[] = [];
-    for (let x = 0; x < 8; x++) {
-      for (let y = 0; y < 8; y++) {
-        voxels.push({ z: 3, f: 0, x: x, y: y });
-        voxels.push({ z: 3, f: 1, x: x, y: y });
-      }
-    }
-
-    drawVoxels(viewer, voxels);
-
-    console.log("Primitives collection:", viewer.scene.primitives);
+  
   };
 
   // === SceneMode変更 ===
@@ -103,6 +90,24 @@ export default function Map() {
         shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
+      
+
+      {layers.map((layer)=> {
+        if (!layer.visible) return null;
+        if(layer.data.format === "3DTiles"){
+          return (
+            <Cesium3DTileset
+            key={layer.instanceId}
+            url={layer.data.url}
+            style={new Cesium3DTileStyle({
+              color: `color('${layer.color}', ${layer.opacity/100})`
+            })}
+            onReady={(tileset)=> viewerRef.current?.zoomTo(tileset)}
+            />
+          );
+        }
+        return null;
+      })}
       </Viewer>
 
       {/* === UI コンポーネント群 === */}
