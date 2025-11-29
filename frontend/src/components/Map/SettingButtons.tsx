@@ -1,7 +1,7 @@
 import { IconClock, IconMinus, IconPlus, IconWorld } from "@tabler/icons-react";
 import { useMap } from "../../context/Map";
 import { Cartographic } from "cesium";
-import { zoomInAdaptive, zoomOutAdaptive } from "../../ulits/cesium/zoom";
+import { zoomInAdaptive, zoomOutAdaptive } from "../../utils/cesium/zoom";
 
 export default function SettingButtons() {
   const { setWindowMode, windowMode, viewerRef } = useMap();

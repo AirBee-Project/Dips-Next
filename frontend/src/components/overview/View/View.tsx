@@ -10,7 +10,7 @@ import { useSpaceTimeID } from "../../../context/SpaceTimeID";
 import { NodeRenderer } from "./NodeRenderer";
 import { useViewTree } from "../../../hooks/view/useViewTree";
 import { useDragDrop } from "../../../hooks/view/useDragDrop";
-import { loadJson } from "../../../ulits/loadJson";
+import { loadJson } from "../../../utils/loadJson";
 
 export type DroppedItem = {
   id: string; // titleKey
