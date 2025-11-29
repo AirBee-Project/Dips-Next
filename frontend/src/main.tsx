@@ -32,9 +32,8 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
   return (
     <div
-      className={`w-full h-full transition-opacity duration-100 ease-in-out ${
-        fadeIn ? "opacity-100" : "opacity-0"
-      }`}
+      className={`w-full h-full transition-opacity duration-100 ease-in-out ${fadeIn ? "opacity-100" : "opacity-0"
+        }`}
     >
       {children}
     </div>
@@ -107,22 +106,24 @@ const AnimatedRoutes: React.FC = () => {
 
 createRoot(document.getElementById("root")!).render(
   <MenuProvider>
-    <BrowserRouter>
-      <CesiumProvider>
-        <SpaceTimeProvider>
-          <KasaneProvider>
-            <div className="flex">
-              <div className="z-200">
-                <Menu />
+    <MapObjectProvider>
+      <BrowserRouter>
+        <CesiumProvider>
+          <SpaceTimeProvider>
+            <KasaneProvider>
+              <div className="flex">
+                <div className="z-200">
+                  <Menu />
+                </div>
+                <div>
+                  <AnimatedRoutes />
+                </div>
+                <Map />
               </div>
-              <div>
-                <AnimatedRoutes />
-              </div>
-              <Map />
-            </div>
-          </KasaneProvider>
-        </SpaceTimeProvider>
-      </CesiumProvider>
-    </BrowserRouter>
+            </KasaneProvider>
+          </SpaceTimeProvider>
+        </CesiumProvider>
+      </BrowserRouter>
+    </MapObjectProvider>
   </MenuProvider>
 );
