@@ -72,8 +72,7 @@ const Block: React.FC<BlockProps> = ({
       onDragStart={(e) => onDragStart(e, index)}
       // onDrop={(e) => onDropOnItem(e, index,)}
       onDragOver={(e) => e.preventDefault()}
-      // onClick={() => onSelect(item.id)}
-      onClick={() => console.log("hihi")}
+      onClick={() => onSelect(item.id)}
 
       className="p-2 border rounded bg-gray-1 cursor-pointer hover:bg-gray-200 select-none"
     >
@@ -83,3 +82,4 @@ const Block: React.FC<BlockProps> = ({
 };
 
 export default Block;
+// export default React.memo(Block);

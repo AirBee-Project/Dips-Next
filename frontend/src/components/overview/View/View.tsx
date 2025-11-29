@@ -6,11 +6,58 @@ import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
 import Block from "./Block"
 import type { Node } from "./types"
 import BlockNode from "./Block";
-import type { Calculation } from "../../../context/Kasane";
+import { useKasane, type Calculation } from "../../../context/Kasane";
 import { showStid } from "./showCalculated";
+import { useSpaceTimeID } from "../../../context/SpaceTimeID";
 export type DroppedItem = {
   id: string; // titleKey
 };
+
+type NodeRendererProps = {
+  node: Node;
+  index: number;
+  onSelect: (id: string) => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
+};
+const NodeRenderer: React.FC<NodeRendererProps> = ({
+  node,
+  index,
+  onSelect,
+  onDragStart,
+}) => {
+  if (node.type === "block") {
+    return (
+      <Block
+        key={node.id}
+        item={{ id: node.id }}
+        index={index}
+        onSelect={onSelect}
+        onDragStart={onDragStart}
+      />
+    );
+  } else {
+    return (
+      <div className="group-node">
+        <span>{node.groupType}</span>
+        <div className="children">
+          {node.children.map((child, i) => (
+            <NodeRenderer
+              key={i}
+              node={child}
+              index={i}
+              onSelect={onSelect}
+              onDragStart={onDragStart}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+};
+
+
+
+
 
 export default function View() {
   const { isMenuOpen } = useMenu();
@@ -18,13 +65,17 @@ export default function View() {
   const [width, setWidth] = useState(280);
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [calculation, setCalculation] = useState<string>("");
+  const [calculation, setCalculation] = useState<"AND" | "OR" | "">("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const [rootNodes, setRootNodes] = useState<Node[]>([]);
   // const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
 
+  const { addCollection, focusCameraOnCollection } = useSpaceTimeID();
+  const { processCalculation, isReady } = useKasane();
+
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    console.log("handleDrop")
     e.preventDefault();
     const data = e.dataTransfer.getData("text/plain");
     if (!data) return;
@@ -42,6 +93,7 @@ export default function View() {
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log("handleDragOver")
     e.preventDefault();
   };
 
@@ -50,6 +102,7 @@ export default function View() {
     e: React.DragEvent<HTMLDivElement>,
     index: number
   ) => {
+    console.log("handleDragStart")
     e.dataTransfer.setData("dragIndex", index.toString());
   };
 
@@ -78,6 +131,7 @@ export default function View() {
   // };
 
   const loadJson = async (id: string) => {
+    console.log("hand")
     const item = SpaceTimeIDDataList[id];
     if (!item?.json_url) return null;
 
@@ -91,12 +145,14 @@ export default function View() {
   };
 
   const hundleAnd = () => {
+    console.log("handedvs")
     console.log("huuand")
     setIsEditMode(true);
     setSelectedItems([]);
     setCalculation("AND")
   }
   const hundleOr = () => {
+    console.log("handleDragOegdeg")
     setIsEditMode(true);
     setSelectedItems([]);
     setCalculation("OR")
@@ -126,12 +182,20 @@ export default function View() {
       //   (item) => !newSelected.includes(item.id)
       // );
 
-      showStid("test", calculation, jsonA, jsonB)
+      showStid({
+        addCollection,
+        processCalculation,
+        stid_set_id: "test",
+        calculation,
+        value1: jsonA,
+        value2: jsonB,
+      });
 
       // 結合した二つを削除
       // setDroppedItems(remaining);
       // rootNodes に追加
-      const node = createNodeFromSelected(newSelected, "AND");
+      if (calculation === "") { return }
+      const node = createNodeFromSelected(newSelected, calculation);
       // setRootNodes([...rootNodes, node]);
       setRootNodes((prev) => [...prev, node]);
       // Edit モード終了
@@ -160,34 +224,36 @@ export default function View() {
   // };
 
   const createNodeFromSelected = (selected: string[], type: "AND" | "OR"): Node => {
+    console.log("haaerehsthbOver")
     const children: Node[] = selected.map(id => ({ type: "block", id }));
     return { type: "group", groupType: type, children };
   };
 
   // const NodeRenderer = ({ node, onSelect, index }: { node: Node; onSelect: (id: string) => void; index: number }) => {
-  const NodeRenderer = ({ node, index }: { node: Node; index: number }) => {
-    if (node.type === "block") {
-      return <Block key={node.id}
-        item={{ id: node.id }}
-        index={index}
-        onSelect={handleSelectItem}
-        // onSelect={onSelect}
-        onDragStart={handleDragStart}
-      // onDropOnItem={handleDropOnItem} 
-      />;
-    } else {
-      return (
-        <div className="group-node">
-          <span>{node.groupType}</span>
-          <div className="children">
-            {node.children.map((child, i) => (
-              <NodeRenderer key={i} node={child} index={i} />
-            ))}
-          </div>
-        </div>
-      );
-    }
-  };
+  // const NodeRenderer = ({ node, index }: { node: Node; index: number }) => {
+  //   console.log("arehfhetfbhandleDragOver")
+  //   if (node.type === "block") {
+  //     return <Block key={node.id}
+  //       item={{ id: node.id }}
+  //       index={index}
+  //       onSelect={handleSelectItem}
+  //       // onSelect={onSelect}
+  //       onDragStart={handleDragStart}
+  //     // onDropOnItem={handleDropOnItem} 
+  //     />;
+  //   } else {
+  //     return (
+  //       <div className="group-node">
+  //         <span>{node.groupType}</span>
+  //         <div className="children">
+  //           {node.children.map((child, i) => (
+  //             <NodeRenderer key={i} node={child} index={i} />
+  //           ))}
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  // };
 
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
@@ -230,10 +296,12 @@ export default function View() {
               <NodeRenderer
                 key={index}
                 node={node}
+                onSelect={handleSelectItem}
                 // onSelect={(n) => {
                 //   if (node.type === "block") handleSelectItem(n);
                 //   else handleSelectNode(node);
                 // }}
+                onDragStart={handleDragStart}
                 index={index}
               />
             ))}
