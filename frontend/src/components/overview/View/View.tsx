@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
+import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
 
 type DroppedItem = {
   id: string; // titleKey
@@ -12,9 +13,22 @@ export default function View() {
   const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [width, setWidth] = useState(280);
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const data = e.dataTransfer.getData("text/plain");
+
+    // 並べ替え時に下の値はundefinedになる
+    const itemData = SpaceTimeIDDataList[data];
+    if (itemData?.json_url) {
+      try {
+        const res = await fetch(itemData.json_url);
+        const json = await res.json();
+        console.log("JSON内容:", json);
+      } catch (err) {
+        console.error("JSON読み込みエラー:", err);
+      }
+    }
+
 
     if (data && !droppedItems.find((item) => item.id === data)) {
       setDroppedItems([...droppedItems, { id: data }]);
@@ -47,6 +61,12 @@ export default function View() {
     setDroppedItems(newItems);
   };
 
+  const hundleAnd = () => {
+
+  }
+  const hundleOr = () => {
+
+  }
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
       <div className="flex z-50">
@@ -63,10 +83,14 @@ export default function View() {
             />
           }
           handleSize={[10, 10]}
-          className={`${
-            isMenuOpen ? "w-70 border-r-4" : "hidden"
-          } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
+          className={`${isMenuOpen ? "w-70 border-r-4" : "hidden"
+            } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
         >
+          {/* and or ボタン */}
+          <div>
+            <button onClick={hundleAnd} className="m-2 border-1">and</button>
+            <button onClick={hundleOr} className="m-2 border-1">or</button>
+          </div>
           <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
