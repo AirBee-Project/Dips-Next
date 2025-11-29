@@ -2,8 +2,6 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
-import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
-import type { Node } from "./types"
 import { useKasane } from "../../../context/Kasane";
 import { showStid } from "./showCalculated";
 import { useSpaceTimeID } from "../../../context/SpaceTimeID";
