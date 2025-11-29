@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Select from "../components/overview/Select/Select";
 import { useMap } from "../context/Map";
+import View from "../components/overview/View/View";
 
 export default function Overview() {
   const { setMapVisible } = useMap();
@@ -14,6 +15,7 @@ export default function Overview() {
     <div className="flex overflow-x-hidden">
       <div className="flex z-10">
         <Select />
+        <View />
       </div>
     </div>
   );

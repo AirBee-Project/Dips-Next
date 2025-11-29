@@ -19,12 +19,15 @@ type Props = {
   className?: string;
   info?: { title: string; text: string }[];
 };
-
 export default function Asset(props: Props) {
   const [isOpenAsset, setIsOpenAsset] = useState(false);
 
   return (
     <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData("text/plain", props.title);
+      }}
       className={`group border-gray-100 border-3 rounded-md px-4.5 pt-2.5 transition-all ${props.className} hover:border-gray-200`}
     >
       <div className="flex items-center justify-between">
