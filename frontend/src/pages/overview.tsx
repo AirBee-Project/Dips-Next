@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Select from "../components/overview/Select/Select";
 import { useMap } from "../context/Map";
 import View from "../components/overview/View/View";
-import { useSpaceTimeID } from "../context/SpaceTimeID";
+import { useSpaceTimeID, type SpaceTimeID } from "../context/SpaceTimeID";
 import { Color } from "cesium";
 
 export default function Overview() {
@@ -12,25 +12,18 @@ export default function Overview() {
   //テストでID群を表示
 
   useEffect(() => {
-    addCollection({
-      id: "my-collection",
-      spaceTimeIDs: [
-        { z: 10, f: 5, x: 512, y: 512 },
-        { z: 10, f: 5, x: 513, y: 512 },
-        { z: 10, f: 5, x: 514, y: 512 },
-      ],
-      style: { color: Color.AQUA, alpha: 0.5, outlineColor: Color.AZURE },
-      visible: true,
-    });
+    let ids: SpaceTimeID[] = [];
+
+    for (let x = 0; x < 10; x++) {
+      for (let y = 0; y < 100; y++) {
+        ids.push({ z: 10, f: 5, x, y: y + 100 });
+      }
+    }
 
     addCollection({
-      id: "my-collection-2",
-      spaceTimeIDs: [
-        { z: 10, f: 7, x: 512, y: 512 },
-        { z: 10, f: 7, x: 513, y: 512 },
-        { z: 10, f: 7, x: 514, y: 512 },
-      ],
-      style: { color: Color.AQUA, alpha: 0.5, outlineColor: Color.AZURE },
+      id: "my-collection",
+      spaceTimeIDs: ids,
+      style: { color: Color.AQUA, alpha: 0.5, outlineColor: Color.BLACK },
       visible: true,
     });
   }, []);

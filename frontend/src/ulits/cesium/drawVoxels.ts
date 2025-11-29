@@ -83,7 +83,7 @@ function slerpCartesian3(
 function generateCurveOnEllipsoid(
   start: Cesium.Cartesian3,
   end: Cesium.Cartesian3,
-  segments = 16
+  segments = 1
 ): Cesium.Cartesian3[] {
   const positions: Cesium.Cartesian3[] = [];
   const magStart = Cesium.Cartesian3.magnitude(start);
