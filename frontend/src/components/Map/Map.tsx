@@ -17,10 +17,10 @@ import SettingMap from "./SettingMap";
 import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
-import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
+import { attachClockListener } from "../../utils/cesium/cesiumClockController";
 import { useMapObject } from "../../context/MapObjectContext";
 import { useSpaceTimeID } from "../../context/SpaceTimeID";
-import { drawMultipleVoxelCollections } from "../../ulits/cesium/drawVoxels";
+import { drawMultipleVoxelCollections } from "../../utils/cesium/drawVoxels";
 
 export default function Map() {
   const {

@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 import RadioButtons from "../common/RadioButtons";
 import { TimeZoneList } from "../../data/TimeZone";
 import RangeInput from "../common/RangeInput";
-import { setCesiumSpeed } from "../../ulits/cesium/cesiumClockController";
+import { setCesiumSpeed } from "../../utils/cesium/cesiumClockController";
 
 export default function SettingTime() {
   const {
@@ -37,11 +37,10 @@ export default function SettingTime() {
 
   return (
     <div
-      className={`${
-        windowMode === "Time"
+      className={`${windowMode === "Time"
           ? "opacity-100 pointer-events-auto"
           : "opacity-0 pointer-events-none hidden"
-      } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
+        } bg-white-100 rounded-md w-full pt-5 pb-7 px-5`}
     >
       <div>
         <div className="flex items-center justify-between mb-5">

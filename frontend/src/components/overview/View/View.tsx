@@ -3,50 +3,52 @@ import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
 import RouteSearch from "../RouteSearch";
+import { useKasane } from "../../../context/Kasane";
+import { showStid } from "./showCalculated";
+import { useSpaceTimeID } from "../../../context/SpaceTimeID";
+import { NodeRenderer } from "./NodeRenderer";
+import { useViewTree } from "../../../hooks/view/useViewTree";
+import { useDragDrop } from "../../../hooks/view/useDragDrop";
+import { loadJson } from "../../../utils/loadJson";
 
-type DroppedItem = {
+export type DroppedItem = {
   id: string; // titleKey
 };
 
 export default function View() {
   const { isMenuOpen } = useMenu();
-  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [width, setWidth] = useState(280);
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData("text/plain");
+  const { addCollection } = useSpaceTimeID();
+  const { processCalculation } = useKasane();
 
-    if (data && !droppedItems.find((item) => item.id === data)) {
-      setDroppedItems([...droppedItems, { id: data }]);
-    }
+  const handlePairSelected = async (idA: string, idB: string, calculation: any) => {
+    const jsonA = await loadJson(idA);
+    const jsonB = await loadJson(idB);
+
+    showStid({
+      addCollection,
+      processCalculation,
+      stid_set_id: "test",
+      calculation,
+      value1: jsonA,
+      value2: jsonB,
+    });
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
+  const { rootNodes, addNode, startEdit, handleSelectItem } = useViewTree({
+    onPairSelected: handlePairSelected,
+  });
 
-  // 並び替え用ハンドラ
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    index: number
-  ) => {
-    e.dataTransfer.setData("dragIndex", index.toString());
-  };
+  const { handleDrop, handleDragOver, handleDragStart } = useDragDrop({
+    // ドロップ時に、新しいノードを追加する
+    onDropItem: addNode,
+  });
 
-  const handleDropOnItem = (
-    e: React.DragEvent<HTMLDivElement>,
-    targetIndex: number
-  ) => {
-    e.preventDefault();
-    const dragIndex = Number(e.dataTransfer.getData("dragIndex"));
-    if (dragIndex === targetIndex) return;
-
-    const newItems = [...droppedItems];
-    const [movedItem] = newItems.splice(dragIndex, 1);
-    newItems.splice(targetIndex, 0, movedItem);
-    setDroppedItems(newItems);
-  };
+  // ライブラリ側の処理に渡すため、nativeEventに強制的に変換
+  const handleDropTyped = (e: React.DragEvent<HTMLDivElement>) => handleDrop(e.nativeEvent as DragEvent);
+  const handleDragOverTyped = (e: React.DragEvent<HTMLDivElement>) => handleDragOver(e.nativeEvent as DragEvent);
+  const handleDragStartTyped = (e: React.DragEvent<HTMLDivElement>, index: number) => handleDragStart(e.nativeEvent as DragEvent, index);
 
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
@@ -54,7 +56,7 @@ export default function View() {
         <ResizableBox
           width={width}
           axis="x"
-          onResize={(e, data) => setWidth(data.size.width)}
+          onResize={(_e, data) => setWidth(data.size.width)}
           minConstraints={[240, 200]}
           maxConstraints={[500, 200]}
           handle={
@@ -67,26 +69,28 @@ export default function View() {
           className={`${isMenuOpen ? "w-70 border-r-4" : "hidden"
             } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
         >
+          {/* and と or のボタン */}
+          <div>
+            <button onClick={() => startEdit("AND")} className="m-2 border-1 hover:border-2">and</button>
+            <button onClick={() => startEdit("OR")} className="m-2 border-1 hover:border-2">or</button>
+          </div>
           <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             className="w-full h-4/5 p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
           >
-            {droppedItems.length === 0 && (
+            {rootNodes.length === 0 && (
               <p className="text-gray-400 text-center mt-20">ここにドロップ</p>
             )}
 
-            {droppedItems.map((item, index) => (
-              <div
-                key={item.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, index)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => handleDropOnItem(e, index)}
-                className="border p-2 rounded bg-gray-100 cursor-grab active:cursor-grabbing"
-              >
-                {item.id}
-              </div>
+            {rootNodes.map((node, index) => (
+              <NodeRenderer
+                key={index}
+                node={node}
+                onSelect={handleSelectItem}
+                onDragStart={handleDragStartTyped}
+                index={index}
+              />
             ))}
           </div>
           <div className="w-full border-2 border-gray-100 "></div>
