@@ -1,85 +1,63 @@
-import React from "react";
+// import React from "react";
+// import type { Node } from "./types";
+// import BlockNode from "./Block";
 
-type AssetItem = { id: string };
-type GroupType = "AND" | "OR" | "NOT";
+// type Props = {
+//   node: Extract<Node, { type: "group" }>;
+//   setNode: (newNode: Node) => void;
+// };
 
-type Props = {
-  groupId: string;
-  type: GroupType;
-  items: AssetItem[];
-  onCycleType: (groupId: string) => void;
-  onDeleteGroup: (groupId: string) => void;
-  onDeleteAsset: (groupId: string, assetId: string) => void;
-  onDropToGroup: (e: React.DragEvent<HTMLDivElement>, groupId: string) => void;
-  onDragStart: (
-    e: React.DragEvent<HTMLDivElement>,
-    groupId: string,
-    index: number
-  ) => void;
-  onDropOnItem: (
-    e: React.DragEvent<HTMLDivElement>,
-    targetGroupId: string,
-    targetIndex: number
-  ) => void;
-};
+// export default function GroupNode({ node, setNode }: Props) {
+//   const toggleGroupType = () => {
+//     setNode({
+//       ...node,
+//       groupType: node.groupType === "AND" ? "OR" : "AND",
+//     });
+//   };
 
-export default function GroupComponent({
-  groupId,
-  type,
-  items,
-  onCycleType,
-  onDeleteGroup,
-  onDeleteAsset,
-  onDropToGroup,
-  onDragStart,
-  onDropOnItem,
-}: Props) {
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) =>
-    e.preventDefault();
+//   const updateChild = (index: number, newChild: Node) => {
+//     const updated = [...node.children];
+//     updated[index] = newChild;
+//     setNode({ ...node, children: updated });
+//   };
 
-  return (
-    <div
-      onDrop={(e) => onDropToGroup(e, groupId)}
-      onDragOver={handleDragOver}
-      className="border-2 border-dashed p-2 rounded bg-gray-50"
-    >
-      <div className="flex justify-between items-center mb-2">
-        <span>Group ({type})</span>
-        <div className="flex gap-2">
-          <button
-            className="text-sm px-2 py-1 border rounded"
-            onClick={() => onCycleType(groupId)}
-          >
-            切替
-          </button>
-          <button
-            className="text-sm px-2 py-1 border rounded text-red-500"
-            onClick={() => onDeleteGroup(groupId)}
-          >
-            削除
-          </button>
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        {items.map((item, index) => (
-          <div
-            key={item.id}
-            draggable
-            onDragStart={(e) => onDragStart(e, groupId, index)}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => onDropOnItem(e, groupId, index)}
-            className="bg-white p-1 border rounded flex justify-between items-center cursor-grab"
-          >
-            <span>{item.id}</span>
-            <button
-              className="text-red-500 text-sm px-1"
-              onClick={() => onDeleteAsset(groupId, item.id)}
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+//   const deleteChild = (index: number) => {
+//     const updated = node.children.filter((_, i) => i !== index);
+//     setNode({ ...node, children: updated });
+//   };
+
+//   return (
+//     <div className="border p-2 rounded bg-gray-50 mt-2">
+//       {/* ヘッダー */}
+//       <div className="flex justify-between items-center mb-2">
+//         <span className="font-semibold">Group ({node.groupType})</span>
+
+//         <button
+//           className="px-2 py-1 border rounded text-sm"
+//           onClick={toggleGroupType}
+//         >
+//           切替
+//         </button>
+//       </div>
+
+//       {/* 子ノードたち */}
+//       <div className="flex flex-col gap-2 ml-4">
+//         {node.children.map((child, index) => (
+//           <div key={index} className="relative">
+//             {child.type === "block" ? (
+//               <BlockNode
+//                 node={child}
+//                 setNode={(newChild: Node) => updateChild(index, newChild)}
+//               />
+//             ) : (
+//               <GroupNode
+//                 node={child}
+//                 setNode={(newChild) => updateChild(index, newChild)}
+//               />
+//             )}
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
