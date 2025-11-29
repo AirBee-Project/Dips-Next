@@ -9,8 +9,8 @@ import init, { process_calculation } from "../pkg/calc_wasm";
 import type { SpaceTimeID } from "./SpaceTimeID";
 
 export type Calculation =
-  | { type: "AND"; value1: Calculation[]; value2: Calculation[] }
-  | { type: "OR"; value1: Calculation[]; value2: Calculation[] }
+  | { type: "AND"; value1: Calculation; value2: Calculation }
+  | { type: "OR"; value1: Calculation; value2: Calculation }
   | { type: "IDs"; value: SpaceTimeID[] };
 
 interface KasaneContextType {
