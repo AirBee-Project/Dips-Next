@@ -19,6 +19,8 @@ import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
 import { MapObjectProvider } from "./context/MapObjectContext";
 import { SpaceTimeProvider } from "./context/SpaceTimeID";
+import { KasaneProvider } from "./context/Kasane";
+import Example from "./pages/example";
 
 /* --- ページラッパー --- */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -89,6 +91,15 @@ const AnimatedRoutes: React.FC = () => {
             </PageWrapper>
           }
         />
+
+        <Route
+          path="/example"
+          element={
+            <PageWrapper>
+              <Example />
+            </PageWrapper>
+          }
+        />
       </Routes>
     </div>
   );
@@ -99,15 +110,17 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <CesiumProvider>
         <SpaceTimeProvider>
-          <div className="flex">
-            <div className="z-200">
-              <Menu />
+          <KasaneProvider>
+            <div className="flex">
+              <div className="z-200">
+                <Menu />
+              </div>
+              <div>
+                <AnimatedRoutes />
+              </div>
+              <Map />
             </div>
-            <div>
-              <AnimatedRoutes />
-            </div>
-            <Map />
-          </div>
+          </KasaneProvider>
         </SpaceTimeProvider>
       </CesiumProvider>
     </BrowserRouter>
