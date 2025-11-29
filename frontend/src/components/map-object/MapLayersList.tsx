@@ -58,14 +58,6 @@ export default function MapLayersList() {
                   />
                 </div>
 
-                {/*画面focus*/}
-                <button
-                  onClick={() => updateLayer(layer.instanceId, { visible: true })}
-                  className="p-1 text-gray-400 hover:text-accent-300 hover:bg-accent-50 rounded transition-colors"
-                >
-                  <IconViewfinder size={17} />
-                </button>
-
                 {/*表示切り替え*/}
                 <button
                   onClick={() => updateLayer(layer.instanceId, { visible: !layer.visible })}
@@ -77,7 +69,7 @@ export default function MapLayersList() {
                 {/*削除*/}
                 <button
                   onClick={() => removeLayer(layer.instanceId)}
-                  className="p-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                  className="p-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
                 >
                   <IconTrash size={18} />
                 </button>
