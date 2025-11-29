@@ -1,53 +1,3 @@
-// import { useState } from "react";
-// import type { DroppedItem } from "./View"
-
-// type BlockProps = {
-//   item: DroppedItem;
-//   index: number;
-//   onSelect: (id: string) => void;
-//   onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
-//   onDropOnItem: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
-// };
-
-// export default function BlockNode({
-//   item,
-//   index,
-//   onSelect,
-//   onDragStart,
-//   onDropOnItem,
-// }: BlockProps) {
-//   return (
-//     <div
-//       key={item.id}
-//       draggable
-//       onDragStart={(e) => onDragStart(e, index)}
-//       onDragOver={(e) => e.preventDefault()}
-//       onDrop={(e) => onDropOnItem(e, index)}
-//       onClick={() => onSelect(item.id)}
-//       className="border p-2 rounded bg-gray-100 cursor-grab active:cursor-grabbing"
-//     >
-//       {item.id}
-//     </div>
-//   );
-// }
-
-// import React from "react";
-// import type { Node } from "./types";
-
-// type Props = {
-//   node: Extract<Node, { type: "block" }>;
-//   setNode: (newNode: Node) => void;
-// };
-
-// export default function BlockNode({ node }: Props) {
-//   return (
-//     <div className="border p-2 rounded bg-white">
-//       {node.id}
-//     </div>
-//   );
-// }
-
-
 import React from "react";
 import type { DroppedItem } from "./View";
 
@@ -82,4 +32,3 @@ const Block: React.FC<BlockProps> = ({
 };
 
 export default Block;
-// export default React.memo(Block);
