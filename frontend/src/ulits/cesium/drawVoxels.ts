@@ -1,13 +1,8 @@
 import * as Cesium from "cesium";
-
-export type SpaceTimeID = {
-  z: number;
-  f: number;
-  x: number;
-  y: number;
-  t_start?: number;
-  t_end?: number;
-};
+import type {
+  SpaceTimeID,
+  SpaceTimeIDCollection,
+} from "../../context/SpaceTimeID";
 
 type Coordinates = {
   latitude: [number, number];
@@ -38,116 +33,222 @@ function coordinates(spaceTime: SpaceTimeID): Coordinates {
   };
 }
 
+function ellipsoidOffset(
+  lon: number,
+  lat: number,
+  height: number
+): Cesium.Cartesian3 {
+  const ellipsoid = Cesium.Ellipsoid.WGS84;
+  const surface = Cesium.Cartesian3.fromDegrees(lon, lat);
+  const normal = ellipsoid.geodeticSurfaceNormal(surface);
+  return Cesium.Cartesian3.add(
+    surface,
+    Cesium.Cartesian3.multiplyByScalar(normal, height, new Cesium.Cartesian3()),
+    new Cesium.Cartesian3()
+  );
+}
+
+function slerpCartesian3(
+  start: Cesium.Cartesian3,
+  end: Cesium.Cartesian3,
+  t: number
+): Cesium.Cartesian3 {
+  const startNorm = Cesium.Cartesian3.normalize(start, new Cesium.Cartesian3());
+  const endNorm = Cesium.Cartesian3.normalize(end, new Cesium.Cartesian3());
+
+  const dot = Cesium.Cartesian3.dot(startNorm, endNorm);
+  const theta = Math.acos(Math.min(Math.max(dot, -1.0), 1.0));
+
+  if (theta < 1e-6) {
+    return Cesium.Cartesian3.lerp(start, end, t, new Cesium.Cartesian3());
+  }
+
+  const sinTheta = Math.sin(theta);
+  const factor1 = Math.sin((1 - t) * theta) / sinTheta;
+  const factor2 = Math.sin(t * theta) / sinTheta;
+
+  const part1 = Cesium.Cartesian3.multiplyByScalar(
+    startNorm,
+    factor1,
+    new Cesium.Cartesian3()
+  );
+  const part2 = Cesium.Cartesian3.multiplyByScalar(
+    endNorm,
+    factor2,
+    new Cesium.Cartesian3()
+  );
+  return Cesium.Cartesian3.add(part1, part2, new Cesium.Cartesian3());
+}
+
+function generateCurveOnEllipsoid(
+  start: Cesium.Cartesian3,
+  end: Cesium.Cartesian3,
+  segments = 1
+): Cesium.Cartesian3[] {
+  const positions: Cesium.Cartesian3[] = [];
+  const magStart = Cesium.Cartesian3.magnitude(start);
+  const magEnd = Cesium.Cartesian3.magnitude(end);
+
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const dir = slerpCartesian3(start, end, t);
+    const h = magStart * (1 - t) + magEnd * t;
+    positions.push(
+      Cesium.Cartesian3.multiplyByScalar(
+        Cesium.Cartesian3.normalize(dir, new Cesium.Cartesian3()),
+        h,
+        new Cesium.Cartesian3()
+      )
+    );
+  }
+
+  return positions;
+}
+
 export function drawVoxels(viewer: Cesium.Viewer, spaceTimeIDs: SpaceTimeID[]) {
   if (!spaceTimeIDs.length) return;
+
+  const collections: SpaceTimeIDCollection[] = [
+    {
+      id: "default",
+      spaceTimeIDs,
+      style: {
+        color: Cesium.Color.RED,
+        alpha: 0.5,
+        outlineColor: Cesium.Color.BLACK,
+      },
+      visible: true,
+    },
+  ];
+
+  drawMultipleVoxelCollections(viewer, collections);
+}
+
+export function drawMultipleVoxelCollections(
+  viewer: Cesium.Viewer,
+  collections: SpaceTimeIDCollection[]
+) {
+  if (!collections.length) return;
 
   const voxelInstances: Cesium.GeometryInstance[] = [];
   const outlineInstances: Cesium.GeometryInstance[] = [];
   const positionsForCamera: Cesium.Cartesian3[] = [];
 
-  for (const stid of spaceTimeIDs) {
-    const { latitude, longitude, altitude } = coordinates(stid);
+  for (const collection of collections) {
+    const { color, alpha, outlineColor } = collection.style;
+    const colorWithAlpha = color.withAlpha(alpha);
 
-    const latMin = latitude[0],
-      latMax = latitude[1];
-    const lonMin = longitude[0],
-      lonMax = longitude[1];
-    const altMin = altitude[0],
-      altMax = altitude[1];
+    for (const stid of collection.spaceTimeIDs) {
+      const { latitude, longitude, altitude } = coordinates(stid);
 
-    const topPositions = [
-      Cesium.Cartesian3.fromDegrees(lonMin, latMin, altMax),
-      Cesium.Cartesian3.fromDegrees(lonMax, latMin, altMax),
-      Cesium.Cartesian3.fromDegrees(lonMax, latMax, altMax),
-      Cesium.Cartesian3.fromDegrees(lonMin, latMax, altMax),
-    ];
+      const latMin = latitude[0],
+        latMax = latitude[1];
+      const lonMin = longitude[0],
+        lonMax = longitude[1];
+      const altMin = altitude[0],
+        altMax = altitude[1];
 
-    const bottomPositions = [
-      Cesium.Cartesian3.fromDegrees(lonMin, latMin, altMin),
-      Cesium.Cartesian3.fromDegrees(lonMax, latMin, altMin),
-      Cesium.Cartesian3.fromDegrees(lonMax, latMax, altMin),
-      Cesium.Cartesian3.fromDegrees(lonMin, latMax, altMin),
-    ];
+      const topPositions = [
+        ellipsoidOffset(lonMin, latMin, altMax),
+        ellipsoidOffset(lonMax, latMin, altMax),
+        ellipsoidOffset(lonMax, latMax, altMax),
+        ellipsoidOffset(lonMin, latMax, altMax),
+      ];
 
-    positionsForCamera.push(...topPositions, ...bottomPositions);
+      const bottomPositions = [
+        ellipsoidOffset(lonMin, latMin, altMin),
+        ellipsoidOffset(lonMax, latMin, altMin),
+        ellipsoidOffset(lonMax, latMax, altMin),
+        ellipsoidOffset(lonMin, latMax, altMin),
+      ];
 
-    // *** 本体（側面＋底面を自動生成） ***
-    voxelInstances.push(
-      new Cesium.GeometryInstance({
-        geometry: new Cesium.PolygonGeometry({
-          polygonHierarchy: new Cesium.PolygonHierarchy(topPositions),
-          perPositionHeight: true,
-          extrudedHeight: altMin,
-        }),
-        attributes: {
-          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            Cesium.Color.RED.withAlpha(0.5)
-          ),
-        },
-        id: `${stid.z}/${stid.x}/${stid.y}/${stid.f}`,
-      })
-    );
+      positionsForCamera.push(...topPositions, ...bottomPositions);
 
-    // *** 全面アウトライン ***
-    for (let i = 0; i < 4; i++) {
-      const next = (i + 1) % 4;
-
-      // 上面
-      outlineInstances.push(
+      // ボクセル本体
+      voxelInstances.push(
         new Cesium.GeometryInstance({
-          geometry: new Cesium.PolylineGeometry({
-            positions: [topPositions[i], topPositions[next]],
-            width: 2,
+          geometry: new Cesium.PolygonGeometry({
+            polygonHierarchy: new Cesium.PolygonHierarchy(topPositions),
+            perPositionHeight: true,
+            extrudedHeight: altMin,
           }),
           attributes: {
-            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-              Cesium.Color.BLACK
-            ),
+            color:
+              Cesium.ColorGeometryInstanceAttribute.fromColor(colorWithAlpha),
           },
+          id: `${collection.id}/${stid.z}/${stid.x}/${stid.y}/${stid.f}`,
         })
       );
 
-      // 底面
-      outlineInstances.push(
-        new Cesium.GeometryInstance({
-          geometry: new Cesium.PolylineGeometry({
-            positions: [bottomPositions[i], bottomPositions[next]],
-            width: 2,
-          }),
-          attributes: {
-            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-              Cesium.Color.BLACK
-            ),
-          },
-        })
-      );
+      // アウトライン
+      for (let i = 0; i < 4; i++) {
+        const next = (i + 1) % 4;
 
-      // 垂直
-      outlineInstances.push(
-        new Cesium.GeometryInstance({
-          geometry: new Cesium.PolylineGeometry({
-            positions: [bottomPositions[i], topPositions[i]],
-            width: 2,
-          }),
-          attributes: {
-            color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-              Cesium.Color.BLACK
-            ),
-          },
-        })
-      );
+        // 上面
+        outlineInstances.push(
+          new Cesium.GeometryInstance({
+            geometry: new Cesium.PolylineGeometry({
+              positions: generateCurveOnEllipsoid(
+                topPositions[i],
+                topPositions[next],
+                16
+              ),
+              width: 2,
+            }),
+            attributes: {
+              color:
+                Cesium.ColorGeometryInstanceAttribute.fromColor(outlineColor),
+            },
+          })
+        );
+
+        // 底面
+        outlineInstances.push(
+          new Cesium.GeometryInstance({
+            geometry: new Cesium.PolylineGeometry({
+              positions: generateCurveOnEllipsoid(
+                bottomPositions[i],
+                bottomPositions[next],
+                16
+              ),
+              width: 2,
+            }),
+            attributes: {
+              color:
+                Cesium.ColorGeometryInstanceAttribute.fromColor(outlineColor),
+            },
+          })
+        );
+
+        // 垂直（側面）
+        outlineInstances.push(
+          new Cesium.GeometryInstance({
+            geometry: new Cesium.PolylineGeometry({
+              positions: generateCurveOnEllipsoid(
+                bottomPositions[i],
+                topPositions[i],
+                16
+              ),
+              width: 2,
+            }),
+            attributes: {
+              color:
+                Cesium.ColorGeometryInstanceAttribute.fromColor(outlineColor),
+            },
+          })
+        );
+      }
     }
   }
 
-  // ************ 描画 ************
-
+  // 描画
   viewer.scene.primitives.add(
     new Cesium.Primitive({
       geometryInstances: voxelInstances,
       appearance: new Cesium.PerInstanceColorAppearance({
         flat: true,
         translucent: true,
-        closed: false, // ← 全面透明になる重要設定
+        closed: false,
       }),
     })
   );
@@ -158,17 +259,4 @@ export function drawVoxels(viewer: Cesium.Viewer, spaceTimeIDs: SpaceTimeID[]) {
       appearance: new Cesium.PolylineColorAppearance({ translucent: false }),
     })
   );
-
-  // ************ カメラ調整 ************
-  if (positionsForCamera.length > 0) {
-    const boundingSphere = Cesium.BoundingSphere.fromPoints(positionsForCamera);
-    viewer.camera.viewBoundingSphere(
-      boundingSphere,
-      new Cesium.HeadingPitchRange(
-        viewer.camera.heading,
-        -Cesium.Math.PI_OVER_FOUR,
-        0
-      )
-    );
-  }
 }

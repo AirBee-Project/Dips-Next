@@ -1,6 +1,12 @@
 import { useEffect, useRef, useMemo } from "react";
 import { Viewer, ImageryLayer, Cesium3DTileset,type CesiumComponentRef } from "resium";
 import { Viewer as CesiumViewer, UrlTemplateImageryProvider, Cesium3DTileStyle } from "cesium";
+import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
+import {
+  Viewer as CesiumViewer,
+  Color,
+  UrlTemplateImageryProvider,
+} from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
 import SettingButtons from "./SettingButtons";
@@ -12,6 +18,11 @@ import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
 import { useMapObject } from "../../context/MapObjectContext";
 import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
 import * as Cesium from "cesium";
+import {
+  useSpaceTimeID,
+  type SpaceTimeIDCollection,
+} from "../../context/SpaceTimeID";
+import { drawMultipleVoxelCollections } from "../../ulits/cesium/drawVoxels";
 
 export default function Map() {
   const {
@@ -37,6 +48,15 @@ export default function Map() {
     });
   }, [tileId]);
 
+  const { getVisibleCollections } = useSpaceTimeID();
+
+  //時空間IDの描画
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    const visibleCollections = getVisibleCollections();
+    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
+  }, [getVisibleCollections]);
+
   // === Viewer初期化 ===
   const handleViewerRef = (ref: CesiumComponentRef<CesiumViewer> | null) => {
     if (!ref?.cesiumElement || isInitialized.current) return;
@@ -49,8 +69,6 @@ export default function Map() {
     attachClockListener(viewerRef, setCurrentTime, setIsPaused);
 
     isInitialized.current = true;
-
-  
   };
 
   // === SceneMode変更 ===

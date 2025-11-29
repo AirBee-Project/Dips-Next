@@ -18,6 +18,7 @@ import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
 import { MapObjectProvider } from "./context/MapObjectContext";
+import { SpaceTimeProvider } from "./context/SpaceTimeID";
 
 /* --- ページラッパー --- */
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -28,7 +29,11 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return () => clearTimeout(timeout);
   }, []);
   return (
-    <div className={`w-full h-full transition-opacity duration-100 ease-in-out ${fadeIn ? "opacity-100" : "opacity-0"}`}>
+    <div
+      className={`w-full h-full transition-opacity duration-100 ease-in-out ${
+        fadeIn ? "opacity-100" : "opacity-0"
+      }`}
+    >
       {children}
     </div>
   );
@@ -40,7 +45,7 @@ const AnimatedRoutes: React.FC = () => {
   const isLicensePage = location.pathname === "/license";
 
   const { isMenuOpen } = useMenu();
-  const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4;//サイドバー分を左に開けるため
+  const sidebarWidth = isMenuOpen ? 65 * 4 : 14 * 4; //サイドバー分を左に開けるため
 
   return (
     <div
@@ -91,20 +96,20 @@ const AnimatedRoutes: React.FC = () => {
 
 createRoot(document.getElementById("root")!).render(
   <MenuProvider>
-    <MapObjectProvider>
-     <BrowserRouter>
-       <CesiumProvider>
-         <div className="flex">
-           <div className="z-200">
-             <Menu />
-           </div>
-           <div>
-             <AnimatedRoutes />
-           </div>
-           <Map />
-         </div>
-       </CesiumProvider>
-     </BrowserRouter>
-    </MapObjectProvider>
+    <BrowserRouter>
+      <CesiumProvider>
+        <SpaceTimeProvider>
+          <div className="flex">
+            <div className="z-200">
+              <Menu />
+            </div>
+            <div>
+              <AnimatedRoutes />
+            </div>
+            <Map />
+          </div>
+        </SpaceTimeProvider>
+      </CesiumProvider>
+    </BrowserRouter>
   </MenuProvider>
 );
