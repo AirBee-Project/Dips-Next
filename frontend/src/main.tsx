@@ -17,6 +17,7 @@ import License from "./pages/license";
 import Map from "./components/Map/Map";
 import MyData from "./pages/my-data";
 import { useEffect, useState } from "react";
+import { MapObjectProvider } from "./context/MapObjectContext";
 import { SpaceTimeProvider } from "./context/SpaceTimeID";
 
 /* --- ページラッパー --- */

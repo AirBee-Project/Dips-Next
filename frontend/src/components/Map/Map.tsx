@@ -1,4 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
+import { Viewer, ImageryLayer, Cesium3DTileset,type CesiumComponentRef } from "resium";
+import { Viewer as CesiumViewer, UrlTemplateImageryProvider, Cesium3DTileStyle } from "cesium";
 import { Viewer, ImageryLayer, type CesiumComponentRef } from "resium";
 import {
   Viewer as CesiumViewer,
@@ -13,6 +15,9 @@ import SettingTime from "./SettingTime";
 import { useMap } from "../../context/Map";
 import { ZXYTileMapList } from "../../data/ZXYTailMap";
 import { attachClockListener } from "../../ulits/cesium/cesiumClockController";
+import { useMapObject } from "../../context/MapObjectContext";
+import { drawVoxels, type SpaceTimeID } from "../../ulits/cesium/drawVoxels";
+import * as Cesium from "cesium";
 import {
   useSpaceTimeID,
   type SpaceTimeIDCollection,
@@ -30,6 +35,7 @@ export default function Map() {
   } = useMap();
 
   const isInitialized = useRef(false);
+  const {layers} = useMapObject();
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -102,6 +108,24 @@ export default function Map() {
         shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
+      
+
+      {layers.map((layer)=> {
+        if (!layer.visible) return null;
+        if(layer.data.format === "3DTiles"){
+          return (
+            <Cesium3DTileset
+            key={layer.instanceId}
+            url={layer.data.url}
+            style={new Cesium3DTileStyle({
+              color: `color('${layer.color}', ${layer.opacity/100})`
+            })}
+            onReady={(tileset)=> viewerRef.current?.zoomTo(tileset)}
+            />
+          );
+        }
+        return null;
+      })}
       </Viewer>
 
       {/* === UI コンポーネント群 === */}

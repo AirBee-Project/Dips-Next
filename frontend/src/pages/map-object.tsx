@@ -1,19 +1,25 @@
 import { useEffect } from "react";
 import { useMap } from "../context/Map";
+import MapObjectList from "../components/map-object/MapObjectList"; // 子コンポーネント
+import MapLayersList from "../components/map-object/MapLayersList";
 
 export default function MapObject() {
   const { setMapVisible, viewerRef } = useMap();
 
   useEffect(() => {
-    setMapVisible(true); // 表示
-
+    setMapVisible(true);
     const viewer = viewerRef.current;
     if (!viewer) return;
-
-    // 🔹 ここが重要
-    viewer.resize(); // canvasサイズ再計算
-    viewer.scene.requestRender(); // 描画
+    viewer.resize();
+    viewer.scene.requestRender();
   }, [setMapVisible, viewerRef]);
 
-  return <div className="flex overflow-x-hidden"></div>;
+  return (
+    <div className="flex overflow-x-hidden w-full h-full z-[9999]">
+      <div className="flex z-10">
+        <MapObjectList />
+        <MapLayersList />
+      </div>
+    </div>
+  );
 }
