@@ -6,20 +6,23 @@ import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
 import Block from "./Block"
 import type { Node } from "./types"
 import BlockNode from "./Block";
+import type { Calculation } from "../../../context/Kasane";
+import { showStid } from "./showCalculated";
 export type DroppedItem = {
   id: string; // titleKey
 };
 
 export default function View() {
   const { isMenuOpen } = useMenu();
-  const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
+  // const [droppedItems, setDroppedItems] = useState<DroppedItem[]>([]);
   const [width, setWidth] = useState(280);
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [calculation, setCalculation] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const [rootNodes, setRootNodes] = useState<Node[]>([]);
-  const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
+  // const [selectedNodes, setSelectedNodes] = useState<Node[]>([]);
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -28,11 +31,12 @@ export default function View() {
     // 並べ替え時に下の値はundefinedになる
     const json = loadJson(data)
 
-    if (data && !droppedItems.find((item) => item.id === data)) {
-      setDroppedItems([...droppedItems, { id: data }]);
-    }
+    // if (data && !droppedItems.find((item) => item.id === data)) {
+    //   setDroppedItems([...droppedItems, { id: data }]);
+    // }
     const newNode: Node = { type: "block", id: data };
-    setRootNodes([...rootNodes, newNode]);
+    // setRootNodes([...rootNodes, newNode]);
+    setRootNodes((prev) => [...prev, newNode]);
     console.log(rootNodes)
 
   };
@@ -87,17 +91,21 @@ export default function View() {
   };
 
   const hundleAnd = () => {
+    console.log("huuand")
     setIsEditMode(true);
     setSelectedItems([]);
+    setCalculation("AND")
   }
   const hundleOr = () => {
     setIsEditMode(true);
     setSelectedItems([]);
+    setCalculation("OR")
   }
 
   const handleSelectItem = async (id: string) => {
+    console.log("huug")
     if (!isEditMode) return;
-
+    console.log("huu")
     // すでに選択済みなら無視
     if (selectedItems.includes(id)) return;
 
@@ -114,48 +122,56 @@ export default function View() {
       console.log("選択 JSON A:", jsonA);
       console.log("選択 JSON B:", jsonB);
 
-      const remaining = droppedItems.filter(
-        (item) => !newSelected.includes(item.id)
-      );
+      // const remaining = droppedItems.filter(
+      //   (item) => !newSelected.includes(item.id)
+      // );
+
+      showStid("test", calculation, jsonA, jsonB)
+
       // 結合した二つを削除
-      setDroppedItems(remaining);
+      // setDroppedItems(remaining);
       // rootNodes に追加
       const node = createNodeFromSelected(newSelected, "AND");
-      setRootNodes([...rootNodes, node]);
+      // setRootNodes([...rootNodes, node]);
+      setRootNodes((prev) => [...prev, node]);
       // Edit モード終了
       setIsEditMode(false);
       setSelectedItems([]);
     }
   };
 
-  const handleSelectNode = (node: Node) => {
-    if (!isEditMode) return;
-    if (selectedNodes.includes(node)) return;
+  // const handleSelectNode = (node: Node) => {
+  //   console.log("guug")
+  //   if (!isEditMode) return;
+  //   console.log("guu")
+  //   if (selectedNodes.includes(node)) return;
 
-    const newSelected = [...selectedNodes, node];
-    setSelectedNodes(newSelected);
+  //   const newSelected = [...selectedNodes, node];
+  //   setSelectedNodes(newSelected);
 
-    if (newSelected.length >= 2) {
-      const combinedNode: Node = { type: "group", groupType: "AND", children: newSelected };
-      // rootNodes 更新
-      const remainingNodes = rootNodes.filter(n => !newSelected.includes(n));
-      setRootNodes([...remainingNodes, combinedNode]);
-      setSelectedNodes([]);
-      setIsEditMode(false);
-    }
-  };
+  //   if (newSelected.length >= 2) {
+  //     const combinedNode: Node = { type: "group", groupType: "AND", children: newSelected };
+  //     // rootNodes 更新
+  //     const remainingNodes = rootNodes.filter(n => !newSelected.includes(n));
+  //     setRootNodes([...remainingNodes, combinedNode]);
+  //     setSelectedNodes([]);
+  //     setIsEditMode(false);
+  //   }
+  // };
 
   const createNodeFromSelected = (selected: string[], type: "AND" | "OR"): Node => {
     const children: Node[] = selected.map(id => ({ type: "block", id }));
     return { type: "group", groupType: type, children };
   };
 
-  const NodeRenderer = ({ node, onSelect, index }: { node: Node; onSelect: (n: Node) => void; index: number }) => {
+  // const NodeRenderer = ({ node, onSelect, index }: { node: Node; onSelect: (id: string) => void; index: number }) => {
+  const NodeRenderer = ({ node, index }: { node: Node; index: number }) => {
     if (node.type === "block") {
       return <Block key={node.id}
         item={{ id: node.id }}
         index={index}
         onSelect={handleSelectItem}
+        // onSelect={onSelect}
         onDragStart={handleDragStart}
       // onDropOnItem={handleDropOnItem} 
       />;
@@ -165,13 +181,14 @@ export default function View() {
           <span>{node.groupType}</span>
           <div className="children">
             {node.children.map((child, i) => (
-              <NodeRenderer key={i} node={child} onSelect={onSelect} index={i} />
+              <NodeRenderer key={i} node={child} index={i} />
             ))}
           </div>
         </div>
       );
     }
   };
+
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
       <div className="flex z-50">
@@ -201,12 +218,24 @@ export default function View() {
             onDragOver={handleDragOver}
             className="w-full h-full p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
           >
-            {droppedItems.length === 0 && (
+            {rootNodes.length === 0 && (
               <p className="text-gray-400 text-center mt-20">ここにドロップ</p>
             )}
 
-            {rootNodes.map((node, index) => (
+            {/* {rootNodes.map((node, index) => (
               <NodeRenderer key={index} node={node} onSelect={handleSelectNode} index={index} />
+            ))} */}
+
+            {rootNodes.map((node, index) => (
+              <NodeRenderer
+                key={index}
+                node={node}
+                // onSelect={(n) => {
+                //   if (node.type === "block") handleSelectItem(n);
+                //   else handleSelectNode(node);
+                // }}
+                index={index}
+              />
             ))}
 
             {/* {droppedItems.map((item, index) => (

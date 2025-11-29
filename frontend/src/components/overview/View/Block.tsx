@@ -72,8 +72,10 @@ const Block: React.FC<BlockProps> = ({
       onDragStart={(e) => onDragStart(e, index)}
       // onDrop={(e) => onDropOnItem(e, index,)}
       onDragOver={(e) => e.preventDefault()}
-      onClick={() => onSelect(item.id)}
-      className="p-2 border rounded bg-gray-100 cursor-pointer hover:bg-gray-200 select-none"
+      // onClick={() => onSelect(item.id)}
+      onClick={() => console.log("hihi")}
+
+      className="p-2 border rounded bg-gray-1 cursor-pointer hover:bg-gray-200 select-none"
     >
       {item.id}
     </div>
