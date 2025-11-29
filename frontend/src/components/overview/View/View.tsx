@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
+import RouteSearch from "../RouteSearch";
 import { useKasane } from "../../../context/Kasane";
 import { showStid } from "./showCalculated";
 import { useSpaceTimeID } from "../../../context/SpaceTimeID";
@@ -74,9 +75,9 @@ export default function View() {
             <button onClick={() => startEdit("OR")} className="m-2 border-1 hover:border-2">or</button>
           </div>
           <div
-            onDrop={handleDropTyped}
-            onDragOver={handleDragOverTyped}
-            className="w-full h-full p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            className="w-full h-4/5 p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
           >
             {rootNodes.length === 0 && (
               <p className="text-gray-400 text-center mt-20">ここにドロップ</p>
@@ -91,6 +92,10 @@ export default function View() {
                 index={index}
               />
             ))}
+          </div>
+          <div className="w-full border-2 border-gray-100 "></div>
+          <div className="w-full flex-1 bg-white">
+            <RouteSearch />
           </div>
         </ResizableBox>
       </div>
