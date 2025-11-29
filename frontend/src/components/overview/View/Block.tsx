@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { DroppedItem } from "./View";
 import { CheckBox } from "./BlockDetail/checkbox";
 import { loadJson } from "../../../utils/loadJson";
+import { IconChevronDown } from "@tabler/icons-react";
 
 type BlockProps = {
   item: DroppedItem;
@@ -39,9 +40,25 @@ const Block: React.FC<BlockProps> = ({
       onDragOver={(e) => e.preventDefault()}
       onClick={() => onSelect(item.id)}
 
-      className="p-2 border rounded bg-gray-1 cursor-pointer hover:bg-gray-200 select-none"
+      className="p-2 border rounded bg-gray-1 cursor-pointer hover:bg-gray-200 select-none "
     >
-      {item.id}
+      <div className="flex justify-between">
+        {item.id}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpenBlock(!isOpenBlock);
+          }}
+          className="cursor-pointer "
+        >
+          <IconChevronDown
+            className={`text-gray-200 hover:text-gray-400 transition-transform ${isOpenBlock ? "rotate-180" : ""
+              }`}
+          />
+
+        </button>
+      </div>
       {isOpenBlock && (
         <div>
           <CheckBox id={item.id} />
