@@ -10,12 +10,12 @@ export type SpaceTimeIDData = {
 export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
   天気予報: {
     key_type: "text",
-    json_url: "/test",
+    json_url: "/SpaceTimeID/test.json",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
   天気予報2: {
     key_type: "text",
-    json_url: "/test",
+    json_url: "/SpaceTimeID/test.json",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
 };

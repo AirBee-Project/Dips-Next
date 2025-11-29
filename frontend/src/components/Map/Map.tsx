@@ -42,70 +42,14 @@ export default function Map() {
     });
   }, [tileId]);
 
-  const { getVisibleCollections, addCollection } = useSpaceTimeID();
+  const { getVisibleCollections } = useSpaceTimeID();
 
+  //時空間IDの描画
   useEffect(() => {
     if (!viewerRef.current) return;
     const visibleCollections = getVisibleCollections();
     drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
   }, [getVisibleCollections]);
-
-  // === SpaceTimeID描画 ===
-  useEffect(() => {
-    if (!viewerRef.current) return;
-    const visibleCollections = getVisibleCollections();
-    drawMultipleVoxelCollections(viewerRef.current, visibleCollections);
-  }, [getVisibleCollections]);
-
-  // === サンプルデータをContextに追加（テスト用） ===
-  useEffect(() => {
-    const sampleCollections: SpaceTimeIDCollection[] = [
-      {
-        id: "sample-1",
-        spaceTimeIDs: [
-          { z: 10, f: 5, x: 512, y: 512 },
-          { z: 10, f: 5, x: 513, y: 512 },
-          { z: 10, f: 5, x: 512, y: 513 },
-        ],
-        style: {
-          color: Color.AZURE,
-          alpha: 0.5,
-          outlineColor: Color.BLACK,
-        },
-        visible: true,
-      },
-      {
-        id: "sample-2",
-        spaceTimeIDs: [
-          { z: 10, f: 6, x: 513, y: 513 },
-          { z: 10, f: 6, x: 514, y: 513 },
-          { z: 10, f: 6, x: 513, y: 514 },
-        ],
-        style: {
-          color: Color.BLUE,
-          alpha: 0.6,
-          outlineColor: Color.BLACK,
-        },
-        visible: true,
-      },
-      {
-        id: "sample-3",
-        spaceTimeIDs: [
-          { z: 10, f: 7, x: 514, y: 512 },
-          { z: 10, f: 7, x: 515, y: 512 },
-          { z: 10, f: 7, x: 514, y: 514 },
-        ],
-        style: {
-          color: Color.BLUE,
-          alpha: 0.6,
-          outlineColor: Color.BLACK,
-        },
-        visible: true,
-      },
-    ];
-
-    sampleCollections.forEach((collection) => addCollection(collection));
-  }, []);
 
   // === Viewer初期化 ===
   const handleViewerRef = (ref: CesiumComponentRef<CesiumViewer> | null) => {

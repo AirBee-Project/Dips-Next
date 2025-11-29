@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBox from "../../common/SearchBox";
 import { ResizableBox } from "react-resizable";
 import Asset from "./Asset";
 import { useMenu } from "../../../context/Menu";
 import { SpaceTimeIDDataList } from "../../../data/SpaceTimeID";
+import {
+  useSpaceTimeID,
+  type SpaceTimeIDCollection,
+} from "../../../context/SpaceTimeID";
+import { Color } from "cesium";
+import { useMap } from "../../../context/Map";
 
 type Pattern = "function" | "assets";
 
@@ -56,12 +62,13 @@ export default function Select() {
         <div className="w-full flex flex-col gap-2 items-center mt-4 overflow-y-scroll hidden-scrollbar">
           {Object.entries(SpaceTimeIDDataList)
             .filter(([key]) => key.includes(assetsSearch))
-            .map(([titleKey]) => (
+            .map(([titleKey, data]) => (
               <Asset
                 key={titleKey}
                 className="w-[80%]"
                 title={titleKey}
-                assetsType={"String"}
+                assetsType={data.key_type}
+                detail={data.detail}
               />
             ))}
         </div>

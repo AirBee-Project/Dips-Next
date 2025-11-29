@@ -2,16 +2,19 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { useState } from "react";
 
 type AssetsType = "String" | "Number" | "Boolean";
-
-export const assetsTypeInfo: Record<AssetsType, { text: string }> = {
-  String: { text: "文字列" },
-  Number: { text: "数値" },
-  Boolean: { text: "真偽値" },
+export const assetsTypeInfo: Record<
+  "float" | "int" | "text" | "boolean",
+  { text: string }
+> = {
+  float: { text: "小数" },
+  int: { text: "整数" },
+  text: { text: "文字列" },
+  boolean: { text: "真偽値" },
 };
 
 type Props = {
   title: string;
-  assetsType: AssetsType;
+  assetsType: "float" | "int" | "text" | "boolean";
   detail?: string;
   className?: string;
   info?: { title: string; text: string }[];
