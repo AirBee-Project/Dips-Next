@@ -57,10 +57,7 @@ export default function MapObjectList() {
           isMenuOpen ? "w-70 border-r-4" : "hidden"
         } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
       >
-        {/* ヘッダー */}
-        <div className="w-full p-4 border-b border-gray-100">
-          <h2 className="text-xl font-bold text-gray-700 ">Map Object</h2>
-        </div>
+
         
         {/* 検索 */}
         <div className="mt-3 w-[80%]">

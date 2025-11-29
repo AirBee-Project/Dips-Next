@@ -33,10 +33,6 @@ export default function MapLayersList() {
         handleSize={[10, 10]}
         className={`${isMenuOpen ? "" : "hidden"} h-screen bg-white-100 border-r-4 border-gray-100 flex flex-col`}
       >
-        {/* ヘッダー */}
-        <div className="p-4 border-b border-gray-100 bg-accent-50/30 flex items-center">
-          <h2 className="text-xl font-bold text-gray-700">Layers</h2>
-        </div>
 
         {/* リスト */}
         <div className="flex-1 overflow-y-auto p-2 space-y-2 hidden-scrollbar">
@@ -51,7 +47,7 @@ export default function MapLayersList() {
               </div>
 
               {/*下段*/}
-              <div className="flex items-center gap-2 h-6">
+              <div className="flex items-center gap-2 h-2">
                 
                 {/*カラーピッカー*/}
                 <div className="flex-shrink-0">
