@@ -4,7 +4,7 @@ import type {
   SpaceTimeIDCollection,
 } from "../../context/SpaceTimeID";
 
-type Coordinates = {
+export type Coordinates = {
   latitude: [number, number];
   longitude: [number, number];
   altitude: [number, number];
