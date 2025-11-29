@@ -17,12 +17,16 @@ export const CheckBox = (props: Props) => {
         checked: false
       }));
 
-      console.log(checkBoxItems);
+      // console.log(checkBoxItems);
       setCheckBoxItems(checkBoxItems);
     };
 
     fetchItems();
   }, [])
+
+  useEffect(() => {
+    //  ここで監視して再計算かな
+  }, [checkBoxItems])
 
   const handleChange = (name: string) => {
     setCheckBoxItems((prevItems) =>
@@ -36,7 +40,7 @@ export const CheckBox = (props: Props) => {
     <div>
       {checkBoxItems?.map((item) => {
         return (
-          <div>
+          <div className="flex justify-start">
             <input type="checkbox" checked={item.checked} onChange={() => handleChange(item.name)} />
             <div>{item.name}</div>
           </div>

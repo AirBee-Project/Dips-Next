@@ -1,10 +1,10 @@
 import Block from "./Block";
-import type { Node } from "./types"
+import type { Node } from "./Node"
 
 type NodeRendererProps = {
   node: Node;
   index: number;
-  onSelect: (id: string) => void;
+  onSelect: (node: Node) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
 };
 
@@ -21,7 +21,7 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
     return (
       <Block
         key={node.id}
-        item={{ id: node.id }}
+        node={node}
         index={index}
         onSelect={onSelect}
         onDragStart={onDragStart}

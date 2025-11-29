@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
@@ -9,10 +9,7 @@ import { NodeRenderer } from "./NodeRenderer";
 import { useViewTree } from "../../../hooks/view/useViewTree";
 import { useDragDrop } from "../../../hooks/view/useDragDrop";
 import { loadJson } from "../../../utils/loadJson";
-
-export type DroppedItem = {
-  id: string; // titleKey
-};
+import { getMinOrder, type Node } from "./Node";
 
 export default function View() {
   const { isMenuOpen } = useMenu();
@@ -21,14 +18,17 @@ export default function View() {
   const { addCollection } = useSpaceTimeID();
   const { processCalculation } = useKasane();
 
-  const handlePairSelected = async (idA: string, idB: string, calculation: any) => {
-    const jsonA = await loadJson(idA);
-    const jsonB = await loadJson(idB);
+  const handlePairSelected = async (nodeA: Node, nodeB: Node, calculation: any) => {
+    if (nodeA.type !== "block" || nodeB.type !== "block") { return }
+    const jsonA = await loadJson(nodeA.id);
+    const jsonB = await loadJson(nodeB.id);
 
+    const minOrder = String(Math.min(getMinOrder(nodeA), getMinOrder(nodeB)));
+    console.log(String(minOrder));
     showStid({
       addCollection,
       processCalculation,
-      stid_set_id: "test",
+      stid_set_id: minOrder,
       calculation,
       value1: jsonA,
       value2: jsonB,
@@ -38,6 +38,10 @@ export default function View() {
   const { rootNodes, addNode, startEdit, handleSelectItem } = useViewTree({
     onPairSelected: handlePairSelected,
   });
+
+  useEffect(() => {
+    console.log(rootNodes)
+  }, [rootNodes])
 
   const { handleDrop, handleDragOver, handleDragStart } = useDragDrop({
     // ドロップ時に、新しいノードを追加する
