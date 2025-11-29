@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
+import RouteSearch from "../RouteSearch";
 
 type DroppedItem = {
   id: string; // titleKey
@@ -63,14 +64,13 @@ export default function View() {
             />
           }
           handleSize={[10, 10]}
-          className={`${
-            isMenuOpen ? "w-70 border-r-4" : "hidden"
-          } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
+          className={`${isMenuOpen ? "w-70 border-r-4" : "hidden"
+            } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
         >
           <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="w-full h-full p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
+            className="w-full h-4/5 p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
           >
             {droppedItems.length === 0 && (
               <p className="text-gray-400 text-center mt-20">ここにドロップ</p>
@@ -88,6 +88,10 @@ export default function View() {
                 {item.id}
               </div>
             ))}
+          </div>
+          <div className="w-full border-2 border-gray-100 "></div>
+          <div className="w-full flex-1 bg-white">
+            <RouteSearch />
           </div>
         </ResizableBox>
       </div>
