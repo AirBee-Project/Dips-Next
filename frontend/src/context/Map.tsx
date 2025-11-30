@@ -40,6 +40,12 @@ interface MapContextType {
   routeEnd: RoutePoint;
   setRouteEnd: (point: RoutePoint) => void;
 
+  routeStartColor: string;
+  setRouteStartColor: (color: string) => void;
+  routeEndColor: string;
+  setRouteEndColor: (color: string) => void;
+
+
   /** Cesium Viewer インスタンス共有用 */
   viewerRef: React.MutableRefObject<CesiumViewer | null>;
 
@@ -84,6 +90,11 @@ const defaultValues: MapContextType = {
   routeEnd: null,
   setRouteEnd: () => { },
 
+  routeStartColor: "#63c993",
+  setRouteStartColor: () => { },
+  routeEndColor: "#ed1414",
+  setRouteEndColor: () => { },
+
 };
 
 // === Context作成 ===
@@ -105,6 +116,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const [mapVisible, setMapVisible] = useState(true);
   const [routeStart, setRouteStart] = useState<RoutePoint>(null);
   const [routeEnd, setRouteEnd] = useState<RoutePoint>(null);
+  const [routeStartColor, setRouteStartColor] = useState<string>("#63c993");
+  const [routeEndColor, setRouteEndColor] = useState<string>("#ed1414");
 
   return (
     <MapContext.Provider
@@ -132,6 +145,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         setRouteStart,
         routeEnd,
         setRouteEnd,
+        routeStartColor, setRouteStartColor,
+        routeEndColor, setRouteEndColor,
 
       }}
     >

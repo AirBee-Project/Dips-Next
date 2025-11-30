@@ -37,7 +37,7 @@ export default function Map() {
 
   const isInitialized = useRef(false);
   const { layers } = useMapObject();
-  const { routeStart, routeEnd } = useMap();
+  const { routeStart, routeEnd, routeStartColor, routeEndColor } = useMap();
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -114,14 +114,14 @@ export default function Map() {
         {routeStart && (
           <Entity
             position={Cartesian3.fromDegrees(routeStart.lon, routeStart.lat, routeStart.height)}
-            point={{ pixelSize: 15, color: Color.fromCssColorString("#63c993") }}
+            point={{ pixelSize: 15, color: Color.fromCssColorString(routeStartColor) }}
           />
         )}
 
         {routeEnd && (
           <Entity
             position={Cartesian3.fromDegrees(routeEnd.lon, routeEnd.lat, routeEnd.height)}
-            point={{ pixelSize: 15, color: Color.fromCssColorString("#ed1414") }}
+            point={{ pixelSize: 15, color: Color.fromCssColorString(routeEndColor) }}
           />
         )}
 
