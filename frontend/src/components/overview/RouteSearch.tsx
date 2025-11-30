@@ -26,7 +26,7 @@ export default function RouteSearch() {
     setFunc: (p: any) => void
   ) => {
     if (e.key === "Enter") {
-      const parts = text.split(/,|\s+/).map((s) => parseFloat(s.trim()));
+      const parts = text.split(/[,\s/]+/).map((s) => parseFloat(s.trim()));
 
       if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
         setFunc({
@@ -104,7 +104,7 @@ export default function RouteSearch() {
             value={startPoint}
             onChange={(e) => setStartPoint(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, startPoint, setRouteStart)}
-            placeholder="緯度,経度,高度"
+            placeholder="緯度/経度/高度"
             className="gap-2 pl-2 w-2/3 pr-3 py-2 border-2 border-gray-100 rounded-md text-xs text-gray-100 outline-none focus:border-accent-300 transition-all placeholder-gray-200 text-gray-700"
           />
         </div>
@@ -123,7 +123,7 @@ export default function RouteSearch() {
             value={endPoint}
             onChange={(e) => setEndPoint(e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, endPoint, setRouteEnd)}
-            placeholder="緯度,経度,高度"
+            placeholder="緯度/経度/高度"
             className="gap-2 pl-2 w-2/3 pr-3 py-2 border-2 border-gray-100 rounded-md text-xs text-gray-100 outline-none focus:border-accent-300 transition-all placeholder-gray-200 text-gray-700"
           />
         </div>
