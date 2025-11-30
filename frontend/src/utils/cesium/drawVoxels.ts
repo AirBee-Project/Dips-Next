@@ -4,9 +4,16 @@ import type {
 	SpaceTimeIDCollection,
 } from "../../context/SpaceTimeID";
 
-// Track previously added primitives so they can be removed when collections change
-let previousVoxelPrimitive: Cesium.Primitive | null = null;
-let previousOutlinePrimitive: Cesium.Primitive | null = null;
+// Track previously added primitives per viewer so they can be removed when collections change
+// Using WeakMap to avoid memory leaks when viewers are destroyed
+const previousVoxelPrimitives = new WeakMap<
+	Cesium.Viewer,
+	Cesium.Primitive | null
+>();
+const previousOutlinePrimitives = new WeakMap<
+	Cesium.Viewer,
+	Cesium.Primitive | null
+>();
 
 export type Coordinates = {
 	latitude: [number, number];
@@ -133,17 +140,19 @@ export function drawMultipleVoxelCollections(
 	collections: SpaceTimeIDCollection[],
 ) {
 	// Remove previously added primitives to allow for proper updates/removals
+	const previousVoxelPrimitive = previousVoxelPrimitives.get(viewer);
 	if (previousVoxelPrimitive) {
 		viewer.scene.primitives.remove(previousVoxelPrimitive);
-		previousVoxelPrimitive = null;
+		previousVoxelPrimitives.set(viewer, null);
 	}
+	const previousOutlinePrimitive = previousOutlinePrimitives.get(viewer);
 	if (previousOutlinePrimitive) {
 		viewer.scene.primitives.remove(previousOutlinePrimitive);
-		previousOutlinePrimitive = null;
+		previousOutlinePrimitives.set(viewer, null);
 	}
 
 	// If no collections to draw, just return after cleanup
-	if (!collections.length) return;
+	if (collections.length === 0) return;
 
 	const voxelInstances: Cesium.GeometryInstance[] = [];
 	const outlineInstances: Cesium.GeometryInstance[] = [];
@@ -257,7 +266,7 @@ export function drawMultipleVoxelCollections(
 	}
 
 	// 描画
-	previousVoxelPrimitive = new Cesium.Primitive({
+	const newVoxelPrimitive = new Cesium.Primitive({
 		geometryInstances: voxelInstances,
 		appearance: new Cesium.PerInstanceColorAppearance({
 			flat: true,
@@ -265,11 +274,13 @@ export function drawMultipleVoxelCollections(
 			closed: false,
 		}),
 	});
-	viewer.scene.primitives.add(previousVoxelPrimitive);
+	viewer.scene.primitives.add(newVoxelPrimitive);
+	previousVoxelPrimitives.set(viewer, newVoxelPrimitive);
 
-	previousOutlinePrimitive = new Cesium.Primitive({
+	const newOutlinePrimitive = new Cesium.Primitive({
 		geometryInstances: outlineInstances,
 		appearance: new Cesium.PolylineColorAppearance({ translucent: false }),
 	});
-	viewer.scene.primitives.add(previousOutlinePrimitive);
+	viewer.scene.primitives.add(newOutlinePrimitive);
+	previousOutlinePrimitives.set(viewer, newOutlinePrimitive);
 }
