@@ -12,6 +12,7 @@ import { loadJson } from "../../../utils/loadJson";
 import { findParentGroupFromRootNodes, getMinOrder, type Node } from "./Node";
 import type { CheckBoxItems } from "./BlockDetail/types";
 import RouteSearch from "../RouteSearch";
+import ButtonWithCircle from "./AndOrButton";
 
 export default function View() {
   const { isMenuOpen } = useMenu();
@@ -113,10 +114,7 @@ export default function View() {
             } h-screen bg-white-100 flex flex-col items-center border-gray-100`}
         >
           {/* and と or のボタン */}
-          <div>
-            <button onClick={() => startEdit("AND")} className="m-2 border-1 hover:border-2">and</button>
-            <button onClick={() => startEdit("OR")} className="m-2 border-1 hover:border-2">or</button>
-          </div>
+          <ButtonWithCircle onEdit={startEdit} />
           <div
             onDrop={handleDropTyped}
             onDragOver={handleDragOverTyped}
