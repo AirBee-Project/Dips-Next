@@ -28,4 +28,9 @@ export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
     json_url: "/SpaceTimeID/kankuu2.json",
     detail: "大阪国際空港",
   },
+  大阪ヘリポート: {
+    key_type: "text",
+    json_url: "/SpaceTimeID/1.json",
+    detail: "大阪ヘリポート",
+  },
 };
