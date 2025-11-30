@@ -1,5 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import {
+  Entity,
   Viewer,
   ImageryLayer,
   Cesium3DTileset,
@@ -9,6 +10,8 @@ import {
   Viewer as CesiumViewer,
   UrlTemplateImageryProvider,
   Cesium3DTileStyle,
+  Cartesian3,
+  Color,
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Time from "./Time";
@@ -34,6 +37,7 @@ export default function Map() {
 
   const isInitialized = useRef(false);
   const { layers } = useMapObject();
+  const { routeStart, routeEnd } = useMap();
 
   // === タイルプロバイダ ===
   const osmProvider = useMemo(() => {
@@ -106,6 +110,20 @@ export default function Map() {
         shouldAnimate={true}
       >
         <ImageryLayer imageryProvider={osmProvider} />
+
+        {routeStart && (
+          <Entity
+            position={Cartesian3.fromDegrees(routeStart.lon, routeStart.lat, routeStart.height)}
+            point={{ pixelSize: 15, color: Color.fromCssColorString("#63c993") }}
+          />
+        )}
+
+        {routeEnd && (
+          <Entity
+            position={Cartesian3.fromDegrees(routeEnd.lon, routeEnd.lat, routeEnd.height)}
+            point={{ pixelSize: 15, color: Color.fromCssColorString("#ed1414") }}
+          />
+        )}
 
         {layers.map((layer) => {
           if (!layer.visible) return null;
