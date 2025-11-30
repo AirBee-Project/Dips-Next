@@ -150,7 +150,9 @@ export const showStid = ({
       id: stid_set_id,
       spaceTimeIDs: stids,
       style: {
-        color: Color.fromCssColorString(getRandomColor()),
+        // color: Color.fromCssColorString(getRandomColor()),
+        color: Color.AQUA,
+
         alpha: 0.5,
         outlineColor: Color.BLACK,
       },
@@ -199,7 +201,8 @@ export const showOneStid = ({
     id: stid_set_id,
     spaceTimeIDs: stids,
     style: {
-      color: Color.fromCssColorString(getRandomColor()),
+      // color: Color.fromCssColorString(getRandomColor()),
+      color: Color.AQUA,
       alpha: 0.5,
       outlineColor: Color.BLACK,
     },
