@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ColorPickerButton from "../common/ColorPickerButton";
+import { IconHandFinger } from "@tabler/icons-react";
 
 export default function RouteSearch() {
     const [startPoint, setStartPoint] = useState("");
@@ -17,6 +18,9 @@ export default function RouteSearch() {
                         storageKey="route-search-color"
                         defaultColor="#4599a4"
                     />
+                </div>
+                <div className="ml-auto">
+                    <IconHandFinger size={20} />
                 </div>
             </div>
 
