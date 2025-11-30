@@ -48,5 +48,9 @@ export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
     json_url: "/SpaceTimeID/vline.json",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
-
+  関西国際空港: {
+    key_type: "text",
+    json_url: "/SpaceTimeID/kankuu2.json",
+    detail: "大阪国際空港",
+  },
 };
