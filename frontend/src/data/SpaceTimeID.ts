@@ -33,4 +33,10 @@ export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
     json_url: "/SpaceTimeID/test.json",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
+  links_1: {
+    key_type: "text",
+    json_url: "/SpaceTimeID/links_a.json",
+    detail: "テキストテキストテキストテキストテキストテキスト",
+  },
+
 };
