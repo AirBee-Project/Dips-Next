@@ -11,6 +11,7 @@ import { useDragDrop } from "../../../hooks/view/useDragDrop";
 import { loadJson } from "../../../utils/loadJson";
 import { getMinOrder, type Node } from "./Node";
 import type { CheckBoxItems } from "./BlockDetail/types";
+import RouteSearch from "../RouteSearch";
 
 export default function View() {
   const { isMenuOpen } = useMenu();
@@ -99,7 +100,7 @@ export default function View() {
           <div
             onDrop={handleDropTyped}
             onDragOver={handleDragOverTyped}
-            className="w-full h-full p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
+            className="w-full h-4/5 p-4 flex flex-col gap-2 border-2 border-dashed border-gray-300 overflow-y-auto"
           >
             {rootNodes.length === 0 && (
               <p className="text-gray-400 text-center mt-20">ここにドロップ</p>
@@ -115,6 +116,10 @@ export default function View() {
                 onChangeBlock={handleBlockChanged}
               />
             ))}
+          </div>
+          <div className="w-full border-2 border-gray-100 "></div>
+          <div className="w-full flex-1 bg-white">
+            <RouteSearch />
           </div>
         </ResizableBox>
       </div>
