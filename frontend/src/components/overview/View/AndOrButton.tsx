@@ -8,6 +8,9 @@ export default function ButtonWithCircle({ onEdit }: ButtonWithCircleProps) {
   const [selected, setSelected] = useState<"AND" | "OR" | "">("");
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const colorInHexAnd = "#5e70ef";
+  const colorInHexOr = "#63c993";
+
   const handleClick = (type: "AND" | "OR") => {
     setSelected(type);
     onEdit(type);
@@ -39,14 +42,14 @@ export default function ButtonWithCircle({ onEdit }: ButtonWithCircleProps) {
   return (
     <div ref={containerRef} className="flex gap-3">
       <div className="flex justify-start items-center cursor-pointer" onClick={() => handleClick("AND")}>
-        <div className="relative w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+        <div className="relative w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: colorInHexAnd }}>
           {selected === "AND" && <div className="w-3 h-3 rounded-full bg-white" />}
         </div>
         <button className="m-2" data-key="0">AND</button>
       </div>
 
       <div className="flex justify-start items-center cursor-pointer" onClick={() => handleClick("OR")}>
-        <div className="relative w-6 h-6 rounded-full bg-green-400 flex items-center justify-center">
+        <div className="relative w-6 h-6 rounded-full bg-green-400 flex items-center justify-center" style={{ backgroundColor: colorInHexOr }}>
           {selected === "OR" && <div className="w-3 h-3 rounded-full bg-white" />}
         </div>
         <button className="m-2" data-key="1">OR</button>

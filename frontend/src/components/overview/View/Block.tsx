@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { CheckBox } from "./BlockDetail/checkbox";
+import { CheckBox } from "./BlockDetail/Checkbox";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { Node } from "./Node";
 import type { CheckBoxItems } from "./BlockDetail/types";
+import { useSpaceTimeID } from "../../../context/SpaceTimeID";
+import { useMap } from "../../../context/Map";
 
 type BlockProps = {
   node: Node
@@ -26,6 +28,8 @@ const Block: React.FC<BlockProps> = ({
 }) => {
   const [isOpenBlock, setIsOpenBlock] = useState(true);
 
+  const { focusCameraOnCollection } = useSpaceTimeID();
+  const { viewerRef } = useMap();
   return (
     <div
       draggable
@@ -34,6 +38,14 @@ const Block: React.FC<BlockProps> = ({
       onDragOver={(e) => e.preventDefault()}
       onClick={() => onSelect(node)}
 
+      onDoubleClick={(e) => {
+        e.stopPropagation(); // 親イベントへ伝播しない
+        console.log(node);
+        if (!viewerRef.current) {
+          return
+        }
+        focusCameraOnCollection(viewerRef.current, node.type === "block" ? String(node.order) : "")
+      }}
       className="p-2 border rounded bg-gray-1 cursor-pointer hover:bg-gray-200 select-none "
     >
       <div className="flex justify-between">

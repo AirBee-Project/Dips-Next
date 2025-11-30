@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { getMaxOrder, type Node } from "../../components/overview/View/Node"
+import { useSpaceTimeID } from "../../context/SpaceTimeID";
+import { loadJson } from "../../utils/loadJson";
 
 /**
  * ビューツリー(Node全体)の構築・選択・編集モード管理を行うカスタムフック
@@ -16,7 +18,6 @@ export function useViewTree({ onPairSelected }: { onPairSelected?: (a: Node, b: 
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [calculation, setCalculation] = useState<"AND" | "OR" | "">("");
-
   const startEdit = (mode: "AND" | "OR") => {
     setIsEditMode(true);
     setCalculation(mode);
@@ -26,7 +27,7 @@ export function useViewTree({ onPairSelected }: { onPairSelected?: (a: Node, b: 
   /**
    * 最も基礎的な単一ノードを追加する
    */
-  const addNode = (id: string) => {
+  const addNode = async (id: string) => {
     setRootNodes((prev: any) => [...prev, { type: "block", id, order: getMaxOrder(prev) + 1 }]);
   };
 

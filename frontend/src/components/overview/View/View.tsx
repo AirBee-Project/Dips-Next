@@ -3,13 +3,13 @@ import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../../context/Menu";
 import SubFeatureTab from "../../common/SubFeatureTab";
 import { useKasane } from "../../../context/Kasane";
-import { showStid } from "./showCalculated";
+import { showOneStid, showStid } from "./showCalculated";
 import { useSpaceTimeID } from "../../../context/SpaceTimeID";
 import { NodeRenderer } from "./NodeRenderer";
 import { useViewTree } from "../../../hooks/view/useViewTree";
 import { useDragDrop } from "../../../hooks/view/useDragDrop";
 import { loadJson } from "../../../utils/loadJson";
-import { findParentGroupFromRootNodes, getMinOrder, type Node } from "./Node";
+import { findParentGroupFromRootNodes, getMaxOrder, getMinOrder, type Node } from "./Node";
 import type { CheckBoxItems } from "./BlockDetail/types";
 import RouteSearch from "../RouteSearch";
 import ButtonWithCircle from "./AndOrButton";
@@ -27,7 +27,7 @@ export default function View() {
     const jsonB = await loadJson(nodeB.id);
 
     const minOrder = String(Math.min(getMinOrder(nodeA), getMinOrder(nodeB)));
-    console.log(String(minOrder));
+    // console.log(String(minOrder));
     showStid({
       addCollection,
       removeCollection,
@@ -48,17 +48,30 @@ export default function View() {
     if (node.type !== "block") return;
     node.rule = items;
     // チェック状態に応じて計算処理実行
-    console.log(rootNodes)
-    console.log(node)
-    console.log(items)
-    //次のタスク！！！！！！！
-    //チェックボックスに合わせて描画
+
+    // console.log(rootNodes)
+    // console.log(node)
+    // console.log(items)
     const nextGroup = findParentGroupFromRootNodes(rootNodes, node)
-    console.log(nextGroup)
-    if (!nextGroup) { return }
+    // console.log(nextGroup)
+
+    if (!nextGroup) {
+      console.log("block")
+      showOneStid({
+        addCollection,
+        removeCollection,
+        updateCollection,
+        processCalculation,
+        // stid_set_id: String(getMaxOrder(rootNodes) + 1),
+        stid_set_id: String(node.order),
+        value1: await loadJson(node.id),
+        rule1: items,
+      })
+      return
+    }
     const jsonA = await loadJson(nextGroup.children[0].type === "block" ? nextGroup.children[0].id : "");
     const jsonB = await loadJson(nextGroup.children[1].type === "block" ? nextGroup.children[1].id : "");
-    console.log(String(getMinOrder(nextGroup)));
+    // console.log(String(getMinOrder(nextGroup)));
 
     showStid({
       addCollection,

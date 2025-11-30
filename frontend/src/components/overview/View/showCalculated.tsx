@@ -2,6 +2,8 @@ import { Color } from "cesium";
 import { type Calculation } from "../../../context/Kasane";
 import { useSpaceTimeID, type SpaceTimeID, type SpaceTimeIDCollection } from "../../../context/SpaceTimeID";
 import type { CheckBoxItems } from "./BlockDetail/types";
+import { getRandomColor } from "../../../data/Colors";
+
 
 // 元のデータの型　要変更
 type CheckBoxJson = Record<
@@ -48,10 +50,10 @@ export type ShowStidParams = {
   stid_set_id: string;
   calculation: "AND" | "OR" | "";
   value1: CheckBoxJson;
-  value2: CheckBoxJson;
+  value2?: CheckBoxJson;
   // rule: CheckBoxItems
   rule1: CheckBoxItems; // 👈 value1用
-  rule2: CheckBoxItems;
+  rule2?: CheckBoxItems;
 };
 
 /**
@@ -105,74 +107,102 @@ export const showStid = ({
   calculation,
   value1,
   value2,
-  // rule,
   rule1,
   rule2
 }: ShowStidParams) => {
   if (calculation === "") return;
+  if (value2 === undefined || rule2 === undefined) {
 
-  removeCollection(stid_set_id);
-  const checkedNames1 = rule1.filter(i => i.checked).map(i => i.name);
-  const checkedNames2 = rule2.filter(i => i.checked).map(i => i.name);
-
-
-  console.log(checkedNames1)
-  console.log(checkedNames2)
-  // console.log(value1)
-  // console.log(value2)
-
-  const formula: Calculation = {
-    type: calculation,
-    // value1: {
-    //   type: "IDs",
-    //   value: parseSelectJson(value1, checkedNames),
-    // },
-    // value2: {
-    //   type: "IDs",
-    //   value: parseSelectJson(value2, checkedNames),
-    // },
-    value1: {
-      type: "IDs",
-      value: parseSelectJson(value1, rule1.filter(i => i.checked).map(i => i.name)),
-    },
-    value2: {
-      type: "IDs",
-      value: parseSelectJson(value2, rule2.filter(i => i.checked).map(i => i.name)),
-    },
-  };
-  console.log(formula)
-  const result = processCalculation(formula);
-  const stids = extractIds(result);
-  console.log(stids)
-  if (stids.length === 0) {
-    removeCollection("stid_set_id");
-    // console.log(stid_set_id);
-    console.log()
-    console.log("remove!!!!!")
-    console.log(getVisibleCollections());
-    return
   }
+  else {
+    removeCollection(stid_set_id);
+    // const checkedNames1 = rule1.filter(i => i.checked).map(i => i.name);
+    // const checkedNames2 = rule2.filter(i => i.checked).map(i => i.name);
+
+
+    // console.log(checkedNames1)
+    // console.log(checkedNames2)
+    // console.log(value1)
+    // console.log(value2)
+
+    const formula: Calculation = {
+      type: calculation,
+      value1: {
+        type: "IDs",
+        value: parseSelectJson(value1, rule1.filter(i => i.checked).map(i => i.name)),
+      },
+      value2: {
+        type: "IDs",
+        value: parseSelectJson(value2, rule2.filter(i => i.checked).map(i => i.name)),
+      },
+    };
+    console.log(formula)
+    const result = processCalculation(formula);
+    const stids = extractIds(result);
+    console.log(stids)
+    if (stids.length === 0) {
+      removeCollection(stid_set_id);
+      // console.log(getVisibleCollections());
+      return
+    }
+
+    addCollection({
+      id: stid_set_id,
+      spaceTimeIDs: stids,
+      style: {
+        color: Color.fromCssColorString(getRandomColor()),
+        alpha: 0.5,
+        outlineColor: Color.BLACK,
+      },
+      visible: true,
+    });
+    console.log(getVisibleCollections());
+  }
+};
+
+export type ShowOneStidParams = {
+  addCollection: (collection: {
+    id: string;
+    spaceTimeIDs: SpaceTimeID[];
+    style: { color: any; alpha: number; outlineColor: any };
+    visible: boolean;
+  }) => void;
+  removeCollection: (collectionId: string) => void;
+  updateCollection: (
+    collectionId: string,
+    updates: Partial<{
+      id: string;
+      spaceTimeIDs: SpaceTimeID[];
+      style: { color: any; alpha: number; outlineColor: any };
+      visible: boolean;
+    }>
+  ) => void;
+  processCalculation: (formula: Calculation) => SpaceTimeID[] | Record<string, SpaceTimeID[]>;
+
+  stid_set_id: string;
+  value1: CheckBoxJson;
+  rule1: CheckBoxItems;
+};
+export const showOneStid = ({
+  addCollection,
+  removeCollection,
+  updateCollection,
+  stid_set_id,
+  value1,
+  rule1,
+}: ShowOneStidParams) => {
+  removeCollection(stid_set_id)
+  const stids: SpaceTimeID[] = parseSelectJson(value1, rule1.filter(i => i.checked).map(i => i.name))
+  console.log(stids)
+  if (stids.length === 0) { return }
   addCollection({
-    id: "stid_set_id",
-    // id: stid_set_id,
+    id: stid_set_id,
     spaceTimeIDs: stids,
     style: {
-      color: Color.AQUA,
+      color: Color.fromCssColorString(getRandomColor()),
       alpha: 0.5,
       outlineColor: Color.BLACK,
     },
     visible: true,
   });
-  console.log(getVisibleCollections());
-
-  // updateCollection(stid_set_id, {
-  //   id: stid_set_id,
-  //   spaceTimeIDs: stids,
-  //   style: {
-  //     color: Color.AQUA,
-  //     alpha: 0.5,
-  //     outlineColor: Color.BLACK,
-  //   },
-  //   visible: true,
-  // })
-};
+}

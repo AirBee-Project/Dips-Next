@@ -67,16 +67,11 @@ export function findParentGroupFromRootNodes(
     current: Node,
     parentGroup: Extract<Node, { type: "group" }> | null
   ): Extract<Node, { type: "group" }> | null {
-    // if (current === target) {
-    //   return parentGroup;
-    // }
-    console.log(current)
-    console.log(target)
 
     if (current == target) {
-      console.log("OKOK")
       return parentGroup;
     }
+
     // if (
     //   current.type === "block" &&
     //   target.type === "block" &&

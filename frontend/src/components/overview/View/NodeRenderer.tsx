@@ -33,9 +33,9 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
     );
   } else {
     return (
-      <div className="group-node">
+      <div className="group-node ">
         <span>{node.groupType}</span>
-        <div className="children">
+        <div className="children border-4 border-accent-200 rounded-md">
           {node.children.map((child, i) => (
             <NodeRenderer
               key={i}
