@@ -1,4 +1,5 @@
 import Block from "./Block";
+import type { CheckBoxItems } from "./BlockDetail/types";
 import type { Node } from "./Node"
 
 type NodeRendererProps = {
@@ -6,6 +7,7 @@ type NodeRendererProps = {
   index: number;
   onSelect: (node: Node) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
+  onChangeBlock: (node: Node, items: CheckBoxItems) => void;
 };
 
 /**
@@ -16,6 +18,7 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
   index,
   onSelect,
   onDragStart,
+  onChangeBlock,
 }) => {
   if (node.type === "block") {
     return (
@@ -25,6 +28,7 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
         index={index}
         onSelect={onSelect}
         onDragStart={onDragStart}
+        onBlockChanged={onChangeBlock}
       />
     );
   } else {
@@ -39,6 +43,7 @@ export const NodeRenderer: React.FC<NodeRendererProps> = ({
               index={i}
               onSelect={onSelect}
               onDragStart={onDragStart}
+              onChangeBlock={onChangeBlock}
             />
           ))}
         </div>

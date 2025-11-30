@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { CheckBox } from "./BlockDetail/checkbox";
 import { IconChevronDown } from "@tabler/icons-react";
 import type { Node } from "./Node";
+import type { CheckBoxItems } from "./BlockDetail/types";
 
 type BlockProps = {
   node: Node
@@ -9,6 +10,7 @@ type BlockProps = {
   onSelect: (node: Node) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
   // onDropOnItem: (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => void;
+  onBlockChanged: (node: Node, items: CheckBoxItems) => void;
 };
 
 /**
@@ -20,6 +22,7 @@ const Block: React.FC<BlockProps> = ({
   onSelect,
   onDragStart,
   // onDropOnItem,
+  onBlockChanged
 }) => {
   const [isOpenBlock, setIsOpenBlock] = useState(true);
 
@@ -52,7 +55,7 @@ const Block: React.FC<BlockProps> = ({
       </div>
       {isOpenBlock && (
         <div>
-          <CheckBox id={node.type === "block" ? node.id : ""} />
+          <CheckBox node={node} onChange={(items) => onBlockChanged?.(node, items)} />
           {/* {props.info && (
             <div className="text-1xl text-gray-200 py-2 border-t-2 border-gray-100">
               <table>

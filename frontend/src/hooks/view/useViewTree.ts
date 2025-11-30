@@ -7,7 +7,7 @@ import { getMaxOrder, type Node } from "../../components/overview/View/Node"
  * @param onPairSelected - AND,ORで2つのノードが選択された際に呼ばれるコールバック
  *                         (idA, idB, calculationType) の形式で通知される。
  */
-export function useViewTree({ onPairSelected }: { onPairSelected: (a: Node, b: Node, calculation: "AND" | "OR") => void }) {
+export function useViewTree({ onPairSelected }: { onPairSelected?: (a: Node, b: Node, calculation: "AND" | "OR") => void } = {}) {
 
   // 表示中のツリー構造のnode
   const [rootNodes, setRootNodes] = useState<Node[]>([]);
@@ -56,7 +56,7 @@ export function useViewTree({ onPairSelected }: { onPairSelected: (a: Node, b: N
         setIsEditMode(false);
         setSelectedItems([]);
         // 親にペア選択完了を通知 => stidを表示してもらう
-        onPairSelected(newSel[0], newSel[1], calculation);
+        onPairSelected?.(newSel[0], newSel[1], calculation);
       }
     }
   };

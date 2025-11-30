@@ -10,6 +10,7 @@ import { useViewTree } from "../../../hooks/view/useViewTree";
 import { useDragDrop } from "../../../hooks/view/useDragDrop";
 import { loadJson } from "../../../utils/loadJson";
 import { getMinOrder, type Node } from "./Node";
+import type { CheckBoxItems } from "./BlockDetail/types";
 
 export default function View() {
   const { isMenuOpen } = useMenu();
@@ -33,6 +34,9 @@ export default function View() {
       value1: jsonA,
       value2: jsonB,
     });
+    // console.log(rootNodes)
+    // console.log(nodeA)
+    // console.log(nodeB)
   };
 
   const { rootNodes, addNode, startEdit, handleSelectItem } = useViewTree({
@@ -52,6 +56,21 @@ export default function View() {
   const handleDropTyped = (e: React.DragEvent<HTMLDivElement>) => handleDrop(e.nativeEvent as DragEvent);
   const handleDragOverTyped = (e: React.DragEvent<HTMLDivElement>) => handleDragOver(e.nativeEvent as DragEvent);
   const handleDragStartTyped = (e: React.DragEvent<HTMLDivElement>, index: number) => handleDragStart(e.nativeEvent as DragEvent, index);
+
+  const handleBlockChanged = (node: Node, items: CheckBoxItems) => {
+    // チェック状態に応じて計算処理実行
+    console.log(rootNodes)
+    console.log(node)
+    console.log(items)
+    // showStid({
+    //   addCollection,
+    //   processCalculation,
+    //   stid_set_id: node.id,
+    //   calculation: items, // 必要に応じて加工
+    //   value1: null,
+    //   value2: null,
+    // });
+  };
 
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
@@ -93,6 +112,7 @@ export default function View() {
                 onSelect={handleSelectItem}
                 onDragStart={handleDragStartTyped}
                 index={index}
+                onChangeBlock={handleBlockChanged}
               />
             ))}
           </div>
