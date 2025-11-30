@@ -13,6 +13,7 @@ export default function RouteSearch() {
   const [zoomLevel, setZoomLevel] = useState("");
 
   const { addCollection, removeCollection } = useSpaceTimeID();
+  const { getAllSpaceTimeIDs } = useSpaceTimeID();
 
   useEffect(() => {
     init().then(() => {
@@ -39,14 +40,16 @@ export default function RouteSearch() {
   };
 
   const handleSearch = () => {
+    removeCollection("route");
+
     // ban_list は例として空配列
-    const banList: string[] = [];
+    const banList: string[] = getAllSpaceTimeIDs();
 
     // Wasm 呼び出し
     const route: SpaceTimeID[] = wasm_get_drone_route(
       20,
-      "35.6895/139.6917/1000",
-      "35.6812/139.7671/100",
+      "35.630152/139.74044000000004/10",
+      "35.681382/139.76608399999998/1000",
       banList
     ).map((r) => ({
       z: Number(r.z),
@@ -56,8 +59,6 @@ export default function RouteSearch() {
     }));
 
     console.log(route);
-
-    removeCollection("route");
 
     // 地図コンテキストにセット
     addCollection({

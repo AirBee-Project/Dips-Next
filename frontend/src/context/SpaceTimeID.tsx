@@ -64,6 +64,7 @@ type SpaceTimeContextType = {
   clearAllCollections: () => void;
   getVisibleCollections: () => SpaceTimeIDCollection[];
   focusCameraOnCollection: (viewer: CesiumViewer, collectionId: string) => void;
+  getAllSpaceTimeIDs: () => string[]; // ← ここを追加
 };
 
 const SpaceTimeContext = createContext<SpaceTimeContextType | undefined>(
@@ -186,6 +187,20 @@ export const SpaceTimeProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   /**
+   * 登録されているすべての SpaceTimeID を文字列化して返す
+   * @returns "z/f/x/y" 形式の文字列配列
+   */
+  const getAllSpaceTimeIDs = useCallback((): string[] => {
+    const result: string[] = [];
+    collections.forEach((collection) => {
+      collection.spaceTimeIDs.forEach((stid) => {
+        result.push(`${stid.z}/${stid.f}/${stid.x}/${stid.y}`);
+      });
+    });
+    return result;
+  }, [collections]);
+
+  /**
    * 指定されたIDの集合の表示/非表示を切り替え
    * @param collectionId - トグルする集合のID
    */
@@ -247,6 +262,7 @@ export const SpaceTimeProvider: React.FC<{ children: React.ReactNode }> = ({
     clearAllCollections,
     getVisibleCollections,
     focusCameraOnCollection,
+    getAllSpaceTimeIDs,
   };
 
   return (
