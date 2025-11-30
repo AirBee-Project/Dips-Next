@@ -123,7 +123,7 @@ export default function Value() {
           </div>
           <div className="mt-3 w-full flex flex-col items-center">
             <div
-              className="relative w-[80%] rounded-md p-3 transition-all duration-200 border-[3px] border-gray-100 focus-within:border-accent-200/50
+              className="relative w-[80%] rounded-md p-3 transition-all duration-200 border-[3px] border-gray-100 focus-within:border-accent-300
             "
             >
               <ColorPickerButton
