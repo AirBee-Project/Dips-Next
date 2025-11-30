@@ -1,11 +1,30 @@
 import { useState } from "react";
 import ColorPickerButton from "../common/ColorPickerButton";
 import { IconHandFinger } from "@tabler/icons-react";
+import { useMap } from "../../context/Map";
 
 export default function RouteSearch() {
+    const { setRouteStart, setRouteEnd } = useMap();
     const [startPoint, setStartPoint] = useState("");
     const [endPoint, setEndPoint] = useState("");
     const [zoomLevel, setZoomLevel] = useState("");
+
+    const handleKeyDown = (e: React.KeyboardEvent, text: string, setFunc: (p: any) => void) => {
+        if (e.key === "Enter") {
+            const parts = text.split(/,|\s+/).map(s => parseFloat(s.trim()));
+
+            if (parts.length >= 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                setFunc({
+                    lat: parts[0],
+                    lon: parts[1],
+                    height: parts[2] || 0
+                });
+            }
+
+        }
+    };
+
+
 
     return (
         <div className="flex flex-col h-full p-3 bg-white">
@@ -40,7 +59,8 @@ export default function RouteSearch() {
                         type="text"
                         value={startPoint}
                         onChange={(e) => setStartPoint(e.target.value)}
-                        placeholder="緯度/経度/高度"
+                        onKeyDown={(e) => handleKeyDown(e, startPoint, setRouteStart)}
+                        placeholder="緯度,経度,高度"
                         className="gap-2 pl-2 w-2/3 pr-3 py-2 border-2 border-gray-100 rounded-md text-xs text-gray-100 outline-none focus:border-accent-300 transition-all placeholder-gray-200 text-gray-700"
                     />
                 </div>
@@ -58,7 +78,8 @@ export default function RouteSearch() {
                         type="text"
                         value={endPoint}
                         onChange={(e) => setEndPoint(e.target.value)}
-                        placeholder="緯度/経度/高度"
+                        onKeyDown={(e) => handleKeyDown(e, endPoint, setRouteEnd)}
+                        placeholder="緯度,経度,高度"
                         className="gap-2 pl-2 w-2/3 pr-3 py-2 border-2 border-gray-100 rounded-md text-xs text-gray-100 outline-none focus:border-accent-300 transition-all placeholder-gray-200 text-gray-700"
                     />
                 </div>

@@ -4,6 +4,11 @@ import React, { createContext, useContext, useState, useRef } from "react";
 // === 型定義 ===
 export type SceneMode = "3D" | "2D" | "Columbus";
 export type WindowMode = "Hide" | "Map" | "Time";
+export type RoutePoint = {
+  lat: number;
+  lon: number;
+  height: number;
+} | null;
 
 interface MapContextType {
   windowMode: WindowMode;
@@ -29,6 +34,11 @@ interface MapContextType {
 
   timeZone: string;
   setTimeZone: (timezone: string) => void;
+
+  routeStart: RoutePoint;
+  setRouteStart: (point: RoutePoint) => void;
+  routeEnd: RoutePoint;
+  setRouteEnd: (point: RoutePoint) => void;
 
   /** Cesium Viewer インスタンス共有用 */
   viewerRef: React.MutableRefObject<CesiumViewer | null>;
@@ -69,6 +79,11 @@ const defaultValues: MapContextType = {
   mapVisible: true,
   setMapVisible: () => { },
 
+  routeStart: null,
+  setRouteStart: () => { },
+  routeEnd: null,
+  setRouteEnd: () => { },
+
 };
 
 // === Context作成 ===
@@ -88,6 +103,8 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
   const [timeZone, setTimeZone] = useState("Asia/Tokyo");
   const viewerRef = useRef<CesiumViewer | null>(null);
   const [mapVisible, setMapVisible] = useState(true);
+  const [routeStart, setRouteStart] = useState<RoutePoint>(null);
+  const [routeEnd, setRouteEnd] = useState<RoutePoint>(null);
 
   return (
     <MapContext.Provider
@@ -111,6 +128,10 @@ export const CesiumProvider: React.FC<{ children: React.ReactNode }> = ({
         viewerRef,
         mapVisible,
         setMapVisible,
+        routeStart,
+        setRouteStart,
+        routeEnd,
+        setRouteEnd,
 
       }}
     >
