@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ResizableBox } from "react-resizable";
 import { useMenu } from "../../context/Menu";
 import {
-  IconEye, IconEyeOff, IconTrash, IconViewfinder
+  IconEye, IconEyeOff, IconTrash
 } from "@tabler/icons-react";
 
 import ColorPickerButton from "../common/ColorPickerButton";
@@ -35,11 +35,11 @@ export default function MapLayersList() {
       >
 
         {/* リスト */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-2 hidden-scrollbar">
+        <div className="mt-1 flex-1 overflow-y-auto p-2 space-y-2 hidden-scrollbar">
           {layers.map((layer) => (
             <div key={layer.instanceId} className="bg-white border-2 border-gray-100 rounded-lg p-3 hover:border-accent-200 ">
 
-              {/*冗談*/}
+              {/*上段*/}
               <div className="flex items-center gap-2 mb-3">
                 <span className={`text-sm font-bold truncate ${layer.visible ? "text-gray-700" : "text-gray-400"}`}>
                   {layer.data.name}
