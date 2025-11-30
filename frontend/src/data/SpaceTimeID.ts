@@ -8,45 +8,20 @@ export type SpaceTimeIDData = {
 
 //空間IDのデータ一覧を管理する
 export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
-  天気予報: {
+  テスト: {
     key_type: "text",
     json_url: "/SpaceTimeID/test.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
-  },
-  天気予報2: {
-    key_type: "text",
-    json_url: "/SpaceTimeID/test.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
-  },
-  天気予報3: {
-    key_type: "text",
-    json_url: "/SpaceTimeID/test.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
-  },
-  天気予報4: {
-    key_type: "text",
-    json_url: "/SpaceTimeID/test.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
-  },
-  天気予報5: {
-    key_type: "text",
-    json_url: "/SpaceTimeID/test.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
-  },
-  links_1: {
-    key_type: "text",
-    json_url: "/SpaceTimeID/links_a.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
+    detail: "テスト用の空間ID群",
   },
   障害物: {
     key_type: "text",
     json_url: "/SpaceTimeID/obstacle.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
+    detail: "集合演算の障害物",
   },
   太い線: {
     key_type: "text",
     json_url: "/SpaceTimeID/vline.json",
-    detail: "テキストテキストテキストテキストテキストテキスト",
+    detail: "集合演算の線部分",
   },
   関西国際空港: {
     key_type: "text",
