@@ -1,8 +1,11 @@
+import type { CheckBoxItems } from "./BlockDetail/types";
+
 export type Node =
   | {
     type: "block";
     id: string;
     order: number;
+    rule: CheckBoxItems;
   }
   | {
     type: "group";
@@ -50,4 +53,52 @@ export function getMinOrder(node: Node): number {
 
   dfs(node);
   return minOrder;
+}
+
+/**
+ * leafNode が属する直近の group ノードを返す。
+ * 見つからなければ null。
+ */
+export function findParentGroupFromRootNodes(
+  rootNodes: Node[],
+  target: Node
+): Extract<Node, { type: "group" }> | null {
+  function dfs(
+    current: Node,
+    parentGroup: Extract<Node, { type: "group" }> | null
+  ): Extract<Node, { type: "group" }> | null {
+    // if (current === target) {
+    //   return parentGroup;
+    // }
+    console.log(current)
+    console.log(target)
+
+    if (current == target) {
+      console.log("OKOK")
+      return parentGroup;
+    }
+    // if (
+    //   current.type === "block" &&
+    //   target.type === "block" &&
+    //   current.id === target.id
+    // ) {
+    //   return parentGroup;
+    // }
+
+    if (current.type === "group") {
+      for (const child of current.children) {
+        const found = dfs(child, current);
+        if (found) return found;
+      }
+    }
+
+    return null;
+  }
+
+  for (const root of rootNodes) {
+    const group = dfs(root, null);
+    if (group) return group;
+  }
+
+  return null;
 }

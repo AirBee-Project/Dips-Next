@@ -9,14 +9,14 @@ import { NodeRenderer } from "./NodeRenderer";
 import { useViewTree } from "../../../hooks/view/useViewTree";
 import { useDragDrop } from "../../../hooks/view/useDragDrop";
 import { loadJson } from "../../../utils/loadJson";
-import { getMinOrder, type Node } from "./Node";
+import { findParentGroupFromRootNodes, getMinOrder, type Node } from "./Node";
 import type { CheckBoxItems } from "./BlockDetail/types";
 
 export default function View() {
   const { isMenuOpen } = useMenu();
   const [width, setWidth] = useState(280);
 
-  const { addCollection } = useSpaceTimeID();
+  const { addCollection, removeCollection, updateCollection, getVisibleCollections } = useSpaceTimeID();
   const { processCalculation } = useKasane();
 
   const handlePairSelected = async (nodeA: Node, nodeB: Node, calculation: any) => {
@@ -28,15 +28,50 @@ export default function View() {
     console.log(String(minOrder));
     showStid({
       addCollection,
+      removeCollection,
+      updateCollection,
+      getVisibleCollections,
       processCalculation,
       stid_set_id: minOrder,
       calculation,
       value1: jsonA,
       value2: jsonB,
+      // rule: []
+      rule1: nodeA.type === "block" ? nodeA.rule : [],
+      rule2: nodeB.type === "block" ? nodeB.rule : [],
     });
-    // console.log(rootNodes)
-    // console.log(nodeA)
-    // console.log(nodeB)
+  };
+
+  const handleBlockChanged = async (node: Node, items: CheckBoxItems) => {
+    if (node.type !== "block") return;
+    node.rule = items;
+    // チェック状態に応じて計算処理実行
+    console.log(rootNodes)
+    console.log(node)
+    console.log(items)
+    //次のタスク！！！！！！！
+    //チェックボックスに合わせて描画
+    const nextGroup = findParentGroupFromRootNodes(rootNodes, node)
+    console.log(nextGroup)
+    if (!nextGroup) { return }
+    const jsonA = await loadJson(nextGroup.children[0].type === "block" ? nextGroup.children[0].id : "");
+    const jsonB = await loadJson(nextGroup.children[1].type === "block" ? nextGroup.children[1].id : "");
+    console.log(String(getMinOrder(nextGroup)));
+
+    showStid({
+      addCollection,
+      removeCollection,
+      updateCollection,
+      getVisibleCollections,
+      processCalculation,
+      stid_set_id: String(getMinOrder(nextGroup)),
+      calculation: nextGroup.groupType, // 必要に応じて加工
+      value1: jsonA,
+      value2: jsonB,
+      // rule: items,
+      rule1: nextGroup.children[0].type === "block" ? nextGroup.children[0].rule : [],
+      rule2: nextGroup.children[1].type === "block" ? nextGroup.children[1].rule : [],
+    });
   };
 
   const { rootNodes, addNode, startEdit, handleSelectItem } = useViewTree({
@@ -56,21 +91,6 @@ export default function View() {
   const handleDropTyped = (e: React.DragEvent<HTMLDivElement>) => handleDrop(e.nativeEvent as DragEvent);
   const handleDragOverTyped = (e: React.DragEvent<HTMLDivElement>) => handleDragOver(e.nativeEvent as DragEvent);
   const handleDragStartTyped = (e: React.DragEvent<HTMLDivElement>, index: number) => handleDragStart(e.nativeEvent as DragEvent, index);
-
-  const handleBlockChanged = (node: Node, items: CheckBoxItems) => {
-    // チェック状態に応じて計算処理実行
-    console.log(rootNodes)
-    console.log(node)
-    console.log(items)
-    // showStid({
-    //   addCollection,
-    //   processCalculation,
-    //   stid_set_id: node.id,
-    //   calculation: items, // 必要に応じて加工
-    //   value1: null,
-    //   value2: null,
-    // });
-  };
 
   return (
     <SubFeatureTab mainFeature={"Overview"} subFeature={"ViewManager"}>
