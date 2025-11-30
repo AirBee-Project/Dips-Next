@@ -38,5 +38,15 @@ export const SpaceTimeIDDataList: Record<string, SpaceTimeIDData> = {
     json_url: "/SpaceTimeID/links_a.json",
     detail: "テキストテキストテキストテキストテキストテキスト",
   },
+  障害物: {
+    key_type: "text",
+    json_url: "/SpaceTimeID/obstacle.json",
+    detail: "テキストテキストテキストテキストテキストテキスト",
+  },
+  太い線: {
+    key_type: "text",
+    json_url: "/SpaceTimeID/vline.json",
+    detail: "テキストテキストテキストテキストテキストテキスト",
+  },
 
 };
