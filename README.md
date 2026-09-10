@@ -5,6 +5,9 @@
 
 Dips-Next は時空間 ID の演算技術を用いて現行の[ドローン情報基盤システム 2.0](https://www.ossportal.dips.mlit.go.jp/portal/top/)を代替し、緻密な時空間の共有する可能性を示すために作成された WEB アプリケーションです。
 
+![](frontend/public/Screenshot%202026-02-24%20at%2018.23.09.png)
+![](frontend/public/Screenshot%202026-09-10%20at%2023.29.23.png)
+
 # 開発環境
 
 ## 必要なソフトウェア
